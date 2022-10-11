@@ -1,0 +1,40 @@
+#title {
+    margin: auto 8px;
+}
+
+#board {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+#identity {
+    padding: 4px;
+    font-size: 0.5em;
+}
+
+#menu ul {
+    padding: 0;
+    list-style-type: none;
+    font-size: 0.5em;
+}
+
+#menu li {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+#menu li a {
+    padding-left: 4px;
+    padding-right: 4px;
+    border-color: #ffc66d;
+    border-left: 2px solid;
+    color: #ffc66d;
+    text-decoration: none;
+}
+
+#menu li :hover {
+    background-color: #be7731;
+}

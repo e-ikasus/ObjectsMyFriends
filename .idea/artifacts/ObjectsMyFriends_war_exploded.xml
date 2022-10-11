@@ -31,7 +31,11 @@
           <element id="library" level="project" name="Maven: org.jvnet.staxex:stax-ex:1.8" />
           <element id="library" level="project" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" />
           <element id="library" level="project" name="Maven: org.jetbrains:annotations:23.0.0" />
+          <element id="library" level="project" name="javax.servlet.jstl" />
+          <element id="library" level="project" name="javax.servlet.jsp.jstl.api" />
+          <element id="library" level="project" name="javax.servlet.api" />
         </element>
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/java/fr/eikasus/objectsmyfriends/view" />
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/ObjectsMyFriends-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />

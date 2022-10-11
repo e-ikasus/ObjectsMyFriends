@@ -403,11 +403,11 @@ public class UserManager
 		if (((string = user.getUsername()) == null) || (!pseudoCheck.matcher(string).matches()) || (string.length() > User.MAX_LENGTH_USERNAME))
 			exception.add(ModelError.INVALID_USER_PSEUDO);
 
-		// Check the lastname validity.
+		// Check the last name validity.
 		if (((string = user.getLastName()) == null) || (!nameCheck.matcher(string).matches()) || (string.length() > User.MAX_LENGTH_LASTNAME))
 			exception.add(ModelError.INVALID_USER_LASTNAME);
 
-		// Check the first validity.
+		// Check the first name validity.
 		if (((string = user.getFirstName()) == null) || (!nameCheck.matcher(string).matches()) || (string.length() > User.MAX_LENGTH_FIRSTNAME))
 			exception.add(ModelError.INVALID_USER_FIRSTNAME);
 
