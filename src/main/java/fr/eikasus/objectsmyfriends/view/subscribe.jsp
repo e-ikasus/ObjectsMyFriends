@@ -5,11 +5,11 @@
 <fmt:setBundle basename="locale" var="r"/>
 
 <jsp:include page="header.jsp">
-	<jsp:param name="cssFiles" value="subscribe"/>
+	<jsp:param name="cssFiles" value="forms,subscribe"/>
 	<jsp:param name="jsFiles" value=""/>
 </jsp:include>
 
-<form id="subscribe" method="post" action="${pageContext.request.contextPath}/subscribe">
+<form id="subscribe" class="formApp" method="post" action="${pageContext.request.contextPath}/subscribe">
 
 	<div id="formTitle"><fmt:message key="TITLE_SUBSCRIBE_FORM" bundle="${r}"/> </div>
 

@@ -5,11 +5,11 @@
 <fmt:setBundle basename="locale" var="r"/>
 
 <jsp:include page="header.jsp">
-	<jsp:param name="cssFiles" value="subscribe,modify_profile"/>
+	<jsp:param name="cssFiles" value="forms,subscribe,modify_profile"/>
 	<jsp:param name="jsFiles" value=""/>
 </jsp:include>
 
-<form id="subscribe" method="post" action="${pageContext.request.contextPath}/modify_profile">
+<form id="subscribe" class="formApp" method="post" action="${pageContext.request.contextPath}/modify_profile">
 
 	<div id="formTitle"><fmt:message key="TITLE_MODIFY_PROFILE_FORM" bundle="${r}"/></div>
 

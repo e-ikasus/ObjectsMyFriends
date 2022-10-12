@@ -1,0 +1,26 @@
+#contentDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 350px;
+    margin: 32px;
+}
+
+.labelInputDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.propertyName {
+    margin: 0 0 16px 0;
+    color: var(--label-text-color);
+    font-size: 1.1em;
+}
+
+.propertyValue {
+    margin: 0 0 16px 0;
+    color: var(--input-text-color);
+    font-size: 1.1em;
+}
