@@ -140,6 +140,7 @@
 
 	<div id="buttonsDiv">
 		<input id="update" name="update" type="submit" value="<fmt:message key="UPDATE" bundle="${r}"/>">
+		<input id="delete" name="delete" type="submit" value="<fmt:message key="DELETE" bundle="${r}"/>">
 		<input id="cancel" name="cancel" type="submit" value="<fmt:message key="CANCEL" bundle="${r}"/>">
 	</div>
 

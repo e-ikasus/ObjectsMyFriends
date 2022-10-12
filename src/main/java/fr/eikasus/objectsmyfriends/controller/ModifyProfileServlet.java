@@ -62,7 +62,7 @@ public class ModifyProfileServlet extends HttpServlet
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// Retrieve the connected user. At this stage, there is always one because
 		// of the filter servlet.
@@ -120,6 +120,32 @@ public class ModifyProfileServlet extends HttpServlet
 					controllerSupport.putFormError((ModelException) exc, request, formParameters);
 				else
 					controllerSupport.putFormError((ControllerException) exc, request, formParameters);
+
+				// Return to the profile update page and display errors.
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");
+				requestDispatcher.forward(request, response);
+			}
+		}
+		else if (request.getParameter("delete") != null)
+		{
+			try
+			{
+				// Try to delete the user by archiving it.
+				UserManager.getInstance().delete(user, true);
+
+				// Return to the logout page as the user is disconnected.
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/logOut.jsp");
+				requestDispatcher.forward(request, response);
+			}
+			catch (ModelException exc)
+			{
+				ControllerSupport controllerSupport = ControllerSupport.getInstance();
+
+				// Transform parameters to attributes for saving the form.
+				controllerSupport.saveForm(request, formParameters);
+
+				// Put the error in the form.
+				controllerSupport.putFormError((ModelException) exc, request, formParameters);
 
 				// Return to the profile update page and display errors.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");

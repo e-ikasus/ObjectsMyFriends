@@ -8,11 +8,13 @@
     --background-color: #3c3f41;
     --header-background-color: #2b2b2b;
     --footer-background-color: #2b2b2b;
-    --confirm-button-background-color: #ca7731;
-    --confirm-button-border-color: #c0722f;
+    --confirm-button-background-color: #9876aa;
+    --confirm-button-border-color: #8a6b9a;
     --cancel-button-background-color: #62b543;
     --cancel-button-border-color: #559b3a;
     --update-button-background-color: #9876aa;
     --update-button-border-color: #8a6b9a;
+    --delete-button-background-color: #ca7731;
+    --delete-button-border-color: #c0722f;
     --form-title-color: white;
 }

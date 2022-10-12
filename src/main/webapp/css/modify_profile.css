@@ -8,3 +8,8 @@
     background-color: var(--update-button-background-color);
     border: 2px solid var(--update-button-border-color);
 }
+
+#delete {
+    background-color: var(--delete-button-background-color);
+    border: 2px solid var(--delete-button-border-color);
+}
