@@ -46,7 +46,7 @@
 						</c:if>
 
 						<c:if test="${sessionScope.user != null && !sessionScope.user.admin}">
-							<li><a href="${pageContext.request.contextPath}/profile"><fmt:message key="PROFILE" bundle="${r}"/></a></li><!--
+							<li><a href="${pageContext.request.contextPath}/modify_profile"><fmt:message key="PROFILE" bundle="${r}"/></a></li><!--
 					 --><li><a href="${pageContext.request.contextPath}/logout"><fmt:message key="LOG_OUT" bundle="${r}"/></a></li>
 						</c:if>
 

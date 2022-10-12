@@ -3,6 +3,7 @@ package fr.eikasus.objectsmyfriends.controller;
 import fr.eikasus.objectsmyfriends.model.bll.UserManager;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,14 +18,14 @@ public class LogInServlet extends HttpServlet
 	private static final int USERNAME_COOKIE_AGE = 60 * 60 * 24 * 7;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/logIn.jsp");
 		requestDispatcher.forward(request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		request.setCharacterEncoding("UTF-8");
 

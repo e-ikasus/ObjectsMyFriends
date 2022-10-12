@@ -5,6 +5,13 @@
     align-items: center;
 }
 
+#formTitle{
+    background-color: var(--form-border-color);
+    padding: 8px;
+    text-transform: uppercase;
+    color: var(--form-title-color)
+}
+
 #subscribe {
     border: 2px solid var(--form-border-color);
     margin: 32px;
@@ -31,12 +38,14 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .labelInputDiv input {
     background-color: var(--input-backgound-color);
     color: var(--input-text-color);
     border-width: 0 0 1px 0;
+    padding: 5px;
 }
 
 .error {
@@ -45,6 +54,13 @@
     font-size: 0.8em;
     margin-top: 8px;
     margin-bottom: 16px;
+}
+
+#genericErrorDiv {
+    color: var(--error-text-color);
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0px 32px 32px 32px;
 }
 
 #buttonsDiv {

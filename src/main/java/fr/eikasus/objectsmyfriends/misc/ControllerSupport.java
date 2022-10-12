@@ -71,7 +71,7 @@ public class ControllerSupport
 	 * @param parameters Parameters list.
 	 */
 
-	public void saveForm(@NotNull HttpServletRequest request, HashMap<Object, String> parameters)
+	public void saveForm(@NotNull HttpServletRequest request, @NotNull HashMap<Object, String> parameters)
 	{
 		// Copy parameters to attributes.
 		parameters.forEach((key, value) -> request.setAttribute(value, request.getParameter(value)));

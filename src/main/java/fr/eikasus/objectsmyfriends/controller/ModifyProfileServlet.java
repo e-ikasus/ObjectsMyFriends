@@ -15,8 +15,8 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.HashMap;
 
-@WebServlet(name = "SubscribeServlet", value = "/subscribe")
-public class SubscribeServlet extends HttpServlet
+@WebServlet(name = "ModifyProfileServlet", value = "/modify_profile")
+public class ModifyProfileServlet extends HttpServlet
 {
 	HashMap<Object, String> formParameters = new HashMap<>();
 
@@ -24,7 +24,7 @@ public class SubscribeServlet extends HttpServlet
 	{
 		super.init();
 
-		formParameters.put(ModelError.UNABLE_TO_CREATE_USER, "genericError");
+		formParameters.put(ModelError.UNABLE_TO_UPDATE_USER, "genericError");
 		formParameters.put(ModelError.INVALID_USER_PSEUDO, "username");
 		formParameters.put(ModelError.INVALID_USER_LASTNAME, "lastName");
 		formParameters.put(ModelError.INVALID_USER_FIRSTNAME, "firstName");
@@ -33,28 +33,47 @@ public class SubscribeServlet extends HttpServlet
 		formParameters.put(ModelError.INVALID_USER_STREET, "street");
 		formParameters.put(ModelError.INVALID_USER_ZIPCODE, "zipCode");
 		formParameters.put(ModelError.INVALID_USER_CITY, "city");
-		formParameters.put(ModelError.INVALID_USER_PASSWORD, "password");
-		formParameters.put(ModelError.INVALID_USER_PASSWORD_TO_LIGHT, "password");
+		formParameters.put(ModelError.INVALID_USER_PASSWORD, "newPassword");
+		formParameters.put(ModelError.INVALID_USER_PASSWORD_TO_LIGHT, "newPassword");
 		formParameters.put(ControllerError.PASSWORD_DOESNT_MATCH, "confirmPassword");
+		formParameters.put(null, "credit");
 	}
 
 	@Override
 	protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/subscribe.jsp");
+		// Retrieve the connected user. At this stage, there is always one because
+		// of the filter servlet.
+		User user = (User) request.getSession().getAttribute("user");
+
+		// Fill the form with user information.
+		request.setAttribute("username", user.getUsername());
+		request.setAttribute("lastName", user.getLastName());
+		request.setAttribute("firstName", user.getFirstName());
+		request.setAttribute("email", user.getEmail());
+		request.setAttribute("phoneNumber", user.getPhoneNumber());
+		request.setAttribute("street", user.getStreet());
+		request.setAttribute("zipCode", user.getZipCode());
+		request.setAttribute("city", user.getCity());
+		request.setAttribute("credits", user.getCredit());
+
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");
 		requestDispatcher.forward(request, response);
 	}
 
 	@Override
-	protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the connected user. At this stage, there is always one because
+		// of the filter servlet.
+		User user = (User) request.getSession().getAttribute("user");
+
 		request.setCharacterEncoding("UTF-8");
 
-		// Check if the user confirm the connexion or not.
-		if (request.getParameter("confirm") != null)
+		// Check if the user confirm the update.
+		if (request.getParameter("update") != null)
 		{
 			// Retrieve received user information.
-			String username = request.getParameter("username");
 			String lastName = request.getParameter("lastName");
 			String firstName = request.getParameter("firstName");
 			String email = request.getParameter("email");
@@ -62,20 +81,29 @@ public class SubscribeServlet extends HttpServlet
 			String street = request.getParameter("street");
 			String zipCode = request.getParameter("zipCode");
 			String city = request.getParameter("city");
-			String password = request.getParameter("password");
+			String newPassword = request.getParameter("newPassword");
 			String confirmPassword = request.getParameter("confirmPassword");
 
 			try
 			{
-				if (password.compareTo(confirmPassword) != 0)
+				if (newPassword.compareTo(confirmPassword) != 0)
 					throw new ControllerException(null, ControllerError.PASSWORD_DOESNT_MATCH);
 
-				// Try to create a user.
-				User user = UserManager.getInstance().add(username, firstName, lastName, email, phoneNumber, street, zipCode, city, password, 0, false);
+				// Create list that will receive new properties.
+				HashMap<String, Object> newProperties = new HashMap<>();
 
-				// Success, so save it to the user session.
-				HttpSession session = request.getSession();
-				session.setAttribute("user", user);
+				// Find the modified properties to put into the list.
+				if (user.getLastName().compareTo(lastName) != 0) newProperties.put("lastName", lastName);
+				if (user.getFirstName().compareTo(firstName) != 0) newProperties.put("firstName", firstName);
+				if (user.getEmail().compareTo(email) != 0) newProperties.put("email", email);
+				if (user.getPhoneNumber().compareTo(phoneNumber) != 0) newProperties.put("phoneNumber", phoneNumber);
+				if (user.getStreet().compareTo(street) != 0) newProperties.put("street", street);
+				if (user.getZipCode().compareTo(zipCode) != 0) newProperties.put("zipCode", zipCode);
+				if (user.getCity().compareTo(city) != 0) newProperties.put("city", city);
+				if (newPassword.length() != 0) newProperties.put("plainPassword", newPassword);
+
+				// Try to update the user.
+				UserManager.getInstance().update(user, newProperties);
 
 				// Return to the welcome page with a connected user.
 				response.sendRedirect(request.getContextPath() + "/welcome");
@@ -93,8 +121,9 @@ public class SubscribeServlet extends HttpServlet
 				else
 					controllerSupport.putFormError((ControllerException) exc, request, formParameters);
 
-				// Return to the profile creation page and display errors.
-				doGet(request, response);
+				// Return to the profile update page and display errors.
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");
+				requestDispatcher.forward(request, response);
 			}
 		}
 		else

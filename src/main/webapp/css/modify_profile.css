@@ -1,0 +1,10 @@
+#creditDiv {
+    text-align: center;
+    margin: 32px;
+    color: var(--label-text-color);
+}
+
+#update {
+    background-color: var(--update-button-background-color);
+    border: 2px solid var(--update-button-border-color);
+}

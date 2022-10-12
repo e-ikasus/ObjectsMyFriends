@@ -5,10 +5,20 @@
     align-items: center;
 }
 
+#formTitle{
+    background-color: var(--form-border-color);
+    padding: 8px;
+    text-transform: uppercase;
+    color: var(--form-title-color)
+}
+
 #logIn {
-    width: 300px;
+    width: 364px;
     border: 2px solid var(--form-border-color);
-    padding: 32px;
+}
+
+#inputsDiv {
+    margin: 32px;
 }
 
 #logIn label {
@@ -20,12 +30,14 @@
     background-color: var(--input-backgound-color);
     color: var(--input-text-color);
     border-width: 0 0 1px 0;
+    padding: 5px;
 }
 
 #pseudoDiv, #passwordDiv {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 #rememberMeDiv {
@@ -40,7 +52,7 @@
     display: flex;
     flex-direction: row;
     justify-content: end;
-    margin-top: 16px;
+    margin: 32px;
 }
 
 .error {

@@ -11,5 +11,8 @@
     --confirm-button-background-color: #ca7731;
     --confirm-button-border-color: #c0722f;
     --cancel-button-background-color: #62b543;
-    --cancel-button-border-color: #64b261;
+    --cancel-button-border-color: #559b3a;
+    --update-button-background-color: #9876aa;
+    --update-button-border-color: #8a6b9a;
+    --form-title-color: white;
 }

@@ -5,13 +5,13 @@
 <fmt:setBundle basename="locale" var="r"/>
 
 <jsp:include page="header.jsp">
-	<jsp:param name="cssFiles" value="subscribe"/>
+	<jsp:param name="cssFiles" value="subscribe,modify_profile"/>
 	<jsp:param name="jsFiles" value=""/>
 </jsp:include>
 
-<form id="subscribe" method="post" action="${pageContext.request.contextPath}/subscribe">
+<form id="subscribe" method="post" action="${pageContext.request.contextPath}/modify_profile">
 
-	<div id="formTitle"><fmt:message key="TITLE_SUBSCRIBE_FORM" bundle="${r}"/> </div>
+	<div id="formTitle"><fmt:message key="TITLE_MODIFY_PROFILE_FORM" bundle="${r}"/></div>
 
 	<div id="inputsDiv">
 		<div id="leftPart">
@@ -61,12 +61,12 @@
 
 			<div>
 				<div class="labelInputDiv">
-					<label for="password"><fmt:message key="PASSWORD" bundle="${r}"/></label>
-					<input id="password" name="password" type="text" value="${requestScope.password}"/>
+					<label for="newPassword"><fmt:message key="NEW_PASSWORD" bundle="${r}"/></label>
+					<input id="newPassword" name="newPassword" type="text" value="${requestScope.newPassword}"/>
 				</div>
 				<div class="error">
-					<c:if test="${requestScope.errorPassword != null}">${requestScope.errorPassword}</c:if>
-					<c:if test="${requestScope.errorPassword == null}">&nbsp;</c:if>
+					<c:if test="${requestScope.errorNewPassword != null}">${requestScope.errorNewPassword}</c:if>
+					<c:if test="${requestScope.errorNewPassword == null}">&nbsp;</c:if>
 				</div>
 			</div>
 		</div>
@@ -129,13 +129,17 @@
 		</div>
 	</div>
 
+	<div id="creditDiv">
+		<span id="credit"><fmt:message key="CREDITS" bundle="${r}"/> ${requestScope.credit}</span>
+	</div>
+
 	<div id="genericErrorDiv">
 		<c:if test="${requestScope.errorGenericError != null}">${requestScope.errorGenericError}</c:if>
 		<c:if test="${requestScope.errorGenericError == null}">&nbsp;</c:if>
 	</div>
 
 	<div id="buttonsDiv">
-		<input id="confirm" name="confirm" type="submit" value="<fmt:message key="CREATE" bundle="${r}"/>">
+		<input id="update" name="update" type="submit" value="<fmt:message key="UPDATE" bundle="${r}"/>">
 		<input id="cancel" name="cancel" type="submit" value="<fmt:message key="CANCEL" bundle="${r}"/>">
 	</div>
 
