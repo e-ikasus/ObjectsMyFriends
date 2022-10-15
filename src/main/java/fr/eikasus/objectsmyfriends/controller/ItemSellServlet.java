@@ -49,6 +49,15 @@ public class ItemSellServlet extends HttpServlet
 	/* Methods implemented */
 	/* ******************* */
 
+	/**
+	 * Initialise the servlet.
+	 * <p></p>
+	 * This method does initialisation stuff for the controller handling the item
+	 * sell form. It fills the formParameters property of links between error
+	 * codes and fields in the form that references user data and HTML elements
+	 * containing translated error messages.
+	 */
+
 	@Override public void init() throws ServletException
 	{
 		super.init();
