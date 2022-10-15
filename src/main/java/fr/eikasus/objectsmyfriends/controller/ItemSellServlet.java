@@ -276,5 +276,10 @@ public class ItemSellServlet extends HttpServlet
 				requestDispatcher.forward(request, response);
 			}
 		}
+		else
+		{
+			// The user cancels the process, so return to the welcome page.
+			response.sendRedirect(request.getContextPath() + "/welcome");
+		}
 	}
 }
