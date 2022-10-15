@@ -5,6 +5,8 @@ import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -15,6 +17,10 @@ import java.util.HashMap;
  * method for simplify error handling in forms.
  *
  * @see #getInstance()
+ * @see #parseDateParameter(HttpServletRequest, String) parseDateParameter()
+ * @see #parseIntegerParameter(HttpServletRequest, String)
+ * parseIntegerParameter()
+ * @see #parseLongParameter(HttpServletRequest, String) parseLongParameter()
  * @see #saveForm(HttpServletRequest, HashMap) saveForm()
  * @see #putFormError(ModelException, HttpServletRequest, HashMap)
  * putFormError()
@@ -57,6 +63,87 @@ public class ControllerSupport
 		if (instance == null) instance = new ControllerSupport();
 
 		return instance;
+	}
+
+	/**
+	 * Get an date parameter.
+	 * <p></p>
+	 * This method take a parameter from an HttpServletRequest request. This
+	 * parameter is expected to be a date inside a String. If the content of that
+	 * string doesn't conform to a date, no exception is generated but a null
+	 * value is returned.
+	 *
+	 * @param request Request to deal with.
+	 * @param name    Parameter name.
+	 *
+	 * @return Value of the parameter or null.
+	 */
+
+	public Date parseDateParameter(@NotNull HttpServletRequest request, @NotNull String name)
+	{
+		// Formatter for the date.
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+		try
+		{
+			return dateFormat.parse(request.getParameter(name));
+		}
+		catch (Exception exc)
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Get an integer parameter.
+	 * <p></p>
+	 * This method take a parameter from an HttpServletRequest request. This
+	 * parameter is expected to be an integer inside a String. If the content of
+	 * that string doesn't conform to an integer, no exception is generated but a
+	 * zero value is returned.
+	 *
+	 * @param request Request to deal with.
+	 * @param name    Parameter name.
+	 *
+	 * @return Value of the parameter or zero.
+	 */
+
+	public int parseIntegerParameter(@NotNull HttpServletRequest request, @NotNull String name)
+	{
+		try
+		{
+			return Integer.parseInt(request.getParameter(name));
+		}
+		catch (Exception exc)
+		{
+			return 0;
+		}
+	}
+
+	/**
+	 * Get a long parameter.
+	 * <p></p>
+	 * This method take a parameter from an HttpServletRequest request. This
+	 * parameter is expected to be a long inside a String. If the content of that
+	 * string doesn't conform to a long, no exception is generated but a zero
+	 * value is returned.
+	 *
+	 * @param request Request to deal with.
+	 * @param name    Parameter name.
+	 *
+	 * @return Value of the parameter or zero.
+	 */
+
+	public long parseLongParameter(@NotNull HttpServletRequest request, @NotNull String name)
+	{
+		try
+		{
+			return Long.parseLong(request.getParameter(name));
+		}
+		catch (Exception exc)
+		{
+			return 0;
+		}
 	}
 
 	/**

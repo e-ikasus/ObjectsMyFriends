@@ -1,8 +1,3 @@
-#subscribe label {
-    color: var(--label-text-color);
-    font-size: 1.1em;
-}
-
 #inputsDiv {
     display: flex;
     flex-direction: row;
@@ -13,18 +8,4 @@
 #leftPart, #rightPart {
     width: 350px;
     margin: 32px 32px 0 32px;
-}
-
-.labelInputDiv {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.labelInputDiv input {
-    background-color: var(--input-backgound-color);
-    color: var(--input-text-color);
-    border-width: 0 0 1px 0;
-    padding: 5px;
 }

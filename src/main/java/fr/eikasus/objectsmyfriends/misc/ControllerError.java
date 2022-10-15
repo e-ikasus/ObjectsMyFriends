@@ -4,8 +4,10 @@ public enum ControllerError
 {
 	// General error codes.
 	UNKNOWN_ERROR_CODE(0x10400),
+	UNATTENDED_ERROR(0x10401),
 
 	PASSWORD_DOESNT_MATCH(0x10410);
+
 
 	private final int value;
 

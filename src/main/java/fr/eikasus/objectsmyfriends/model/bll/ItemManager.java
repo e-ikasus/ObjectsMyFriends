@@ -9,6 +9,7 @@ import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
  *
  * @see #getInstance() getInstance()
  * @see #add(String, String, Date, Date, int, User, Category) add()
+ * @see #find(Long) find()
  * @see #findByCriteria(User, UserRole, Search, Category, String)
  * findByCriteria()
  * @see #delete(List) delete()
@@ -140,6 +142,40 @@ public class ItemManager
 
 		// Return the newly created item.
 		return item;
+	}
+
+	/**
+	 * Search a specific item.
+	 * <p></p>
+	 * Search a specific item in the database whose identifier is the one supplied
+	 * in parameter. If this supplied parameter is null, then all items are
+	 * returned by this method.
+	 *
+	 * @param identifier Item identifier or null for all.
+	 *
+	 * @return List of items found.
+	 *
+	 * @throws ModelException In case of pb.
+	 */
+
+	public List<Item> find(Long identifier) throws ModelException
+	{
+		List<Item> items = new ArrayList<>();
+
+		try
+		{
+			// Find a specific item or all.
+			if (identifier == null) items = dao.find();
+			else items.add(dao.find(identifier));
+		}
+		catch (ModelException me)
+		{
+			// Add generic error.
+			throw me.add(ModelError.ITEM_NOT_FOUND);
+		}
+
+		// Return the result
+		return items;
 	}
 
 	/**
@@ -412,7 +448,7 @@ public class ItemManager
 				exception.add(ModelError.INVALID_ITEM_START_DATE);
 
 			// The bidding end date can't be before the bidding start date.
-			if (item.getBiddingEnd().compareTo(item.getBiddingStart()) <= 0)
+			if ((item.getBiddingEnd() == null) || (item.getBiddingEnd().compareTo(item.getBiddingStart()) <= 0))
 				exception.add(ModelError.INVALID_ITEM_END_DATE);
 
 			// If there is an error, don't do the remainder.

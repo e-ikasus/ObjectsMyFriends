@@ -18,5 +18,7 @@
     --delete-button-border-color: #c0722f;
     --modify-button-background-color: #9876aa;
     --modify-button-border-color: #8a6b9a;
+    --save-button-background-color: #9876aa;
+    --save-button-border-color: #8a6b9a;
     --form-title-color: white;
 }

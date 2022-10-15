@@ -29,7 +29,7 @@ public class LogInFilter implements Filter
 		// Url in lower case.
 		String url = httpServletRequest.getServletPath().toLowerCase();
 
-		if ( (url.lastIndexOf(".css") != -1) || (url.lastIndexOf(".js") != -1) || (url.lastIndexOf(".html") != -1) )
+		if ( (url.lastIndexOf(".css") != -1) || (url.lastIndexOf(".js") != -1) || (url.lastIndexOf(".html") != -1) || (url.lastIndexOf(".jsp") != -1) )
 			chain.doFilter(request, response);
 		else if ((url.contains("modify_profile")) && (!connected))
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
@@ -38,6 +38,8 @@ public class LogInFilter implements Filter
 		else if ((url.contains("logout")) && (!connected))
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
 		else if ((url.contains("login")) && (connected))
+			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
+		else if ((url.contains("item_sell")) && (!connected))
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
 		else
 			chain.doFilter(request, response);

@@ -1,0 +1,66 @@
+#inputsDiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.topLabel {
+    align-items: start;
+}
+
+#leftPart {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 32px 32px 16px 32px;
+}
+
+#rightPart {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 400px;
+    margin: 32px 32px 16px 32px;
+}
+
+#itemPicturesFieldset, #itemPropertiesFieldset, #salePropertiesFieldset, #pickupPlacePropertiesFieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-color: var(--form-border-color);
+    border-width: 2px 0 0 0;
+    margin: 0;
+    padding: 8px 0 0 0;
+}
+
+#itemPicturesFieldset {
+    flex-direction: row;
+}
+
+legend {
+    color: var(--form-border-color);
+    text-transform: uppercase;
+    padding: 0 4px 0 0;
+}
+
+#itemPicturesFieldset textarea {
+    resize: none;
+}
+
+#picturesDiv {
+    background-color: var(--input-backgound-color);
+}
+
+@media (max-width: 800px ) {
+    #picturesDiv {
+        width: 400px;
+        height: 128px;
+    }
+}
+
+@media (min-width: 800px ) {
+    #picturesDiv {
+        width: 200px;
+    }
+}

@@ -47,11 +47,13 @@
 
 						<c:if test="${sessionScope.user != null && !sessionScope.user.admin}">
 							<li><a href="${pageContext.request.contextPath}/show_profile"><fmt:message key="PROFILE" bundle="${r}"/></a></li><!--
+					 --><li><a href="${pageContext.request.contextPath}/item_sell"><fmt:message key="ITEM_SELL" bundle="${r}"/></a></li><!--
 					 --><li><a href="${pageContext.request.contextPath}/logout"><fmt:message key="LOG_OUT" bundle="${r}"/></a></li>
 						</c:if>
 
 						<c:if test="${sessionScope.user != null && sessionScope.user.admin}">
 							<li><a href="${pageContext.request.contextPath}/show_profile"><fmt:message key="PROFILE" bundle="${r}"/></a></li><!--
+					 --><li><a href="${pageContext.request.contextPath}/item_sell"><fmt:message key="ITEM_SELL" bundle="${r}"/></a></li><!--
 					 --><li><a href="${pageContext.request.contextPath}/logout"><fmt:message key="LOG_OUT" bundle="${r}"/></a></li><!--
 					 --><li><a href="${pageContext.request.contextPath}/admin"><fmt:message key="ADMIN" bundle="${r}"/></a></li>
 						</c:if>
