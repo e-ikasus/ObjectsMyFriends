@@ -39,7 +39,7 @@
 		<div>
 			<div id="rememberMeDiv">
 				<label for="rememberMe"><fmt:message key="REMEMBER_ME" bundle="${r}"/></label>
-				<input id="rememberMe" name="rememberMe" type="checkbox"/>
+				<input id="rememberMe" name="rememberMe" type="checkbox" <c:if test="${cookie.username != null}"> checked</c:if>/>
 			</div>
 		</div>
 	</div>
