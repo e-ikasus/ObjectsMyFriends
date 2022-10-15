@@ -18,7 +18,24 @@ import java.util.HashMap;
 @WebServlet(name = "SubscribeServlet", value = "/subscribe")
 public class SubscribeServlet extends HttpServlet
 {
+	/* ************* */
+	/* Class members */
+	/* ************* */
+
 	HashMap<Object, String> formParameters = new HashMap<>();
+
+	/* ******************* */
+	/* Methods implemented */
+	/* ******************* */
+
+	/**
+	 * Initialise the servlet.
+	 * <p></p>
+	 * This method does initialisation stuff for the controller handling the
+	 * subscription form. It fills the formParameters property of links between
+	 * error codes and fields in the form that references user data and the HTML
+	 * elements containing translated error messages.
+	 */
 
 	@Override public void init() throws ServletException
 	{
@@ -38,15 +55,31 @@ public class SubscribeServlet extends HttpServlet
 		formParameters.put(ControllerError.PASSWORD_DOESNT_MATCH, "confirmPassword");
 	}
 
-	@Override
-	protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	/**
+	 * Display the subscription form.
+	 * <p></p>
+	 * This method display the subscription form. There is no parameter needed to
+	 * do that. Due to the filter servlet, this method can't be called when a user
+	 * is already connected.
+	 */
+
+	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/subscribe.jsp");
 		requestDispatcher.forward(request, response);
 	}
 
-	@Override
-	protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	/**
+	 * Subscribe a user.
+	 * <p></p>
+	 * According to the parameters supplied, this method try to add a user in the
+	 * database. If the operation succeed, the user is automatically login and
+	 * redirected to the welcome page. If an error occurred during the process,
+	 * the doGet method is called to display the form again. Due to the filter
+	 * servlet, this method can't be called when a user is already connected.
+	 */
+
+	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		request.setCharacterEncoding("UTF-8");
 
