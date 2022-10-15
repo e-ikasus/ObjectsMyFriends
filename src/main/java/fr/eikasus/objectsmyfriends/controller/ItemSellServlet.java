@@ -40,7 +40,7 @@ public class ItemSellServlet extends HttpServlet
 
 	ControllerSupport controllerSupport = ControllerSupport.getInstance();
 
-	// Manager to use to handle items
+	// Managers to use to handle items
 	ItemManager itemManager = ItemManager.getInstance();
 	CategoryManager categoryManager = CategoryManager.getInstance();
 	PickupManager pickupManager = PickupManager.getInstance();
@@ -149,6 +149,7 @@ public class ItemSellServlet extends HttpServlet
 			response.sendRedirect(request.getContextPath() + "/welcome");
 		}
 
+		// All is fine, display the item sell form.
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemSell.jsp");
 		requestDispatcher.forward(request, response);
 	}

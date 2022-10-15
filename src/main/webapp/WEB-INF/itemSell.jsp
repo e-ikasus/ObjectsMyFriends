@@ -75,7 +75,7 @@
 					</div>
 					<div class="errorSmall">
 						<c:if test="${requestScope.errorInitialPrice != null}">${requestScope.errorInitialPrice}</c:if>
-						<c:if test="${requestScope.errorCategory == null}">&nbsp;</c:if>
+						<c:if test="${requestScope.errorInitialPrice == null}">&nbsp;</c:if>
 					</div>
 				</div>
 

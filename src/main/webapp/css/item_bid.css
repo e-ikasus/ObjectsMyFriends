@@ -1,0 +1,6 @@
+.labelInputDiv textarea {
+    background-color: var(--background-color);
+    text-align: end;
+    padding: 0;
+    border: 0;
+}

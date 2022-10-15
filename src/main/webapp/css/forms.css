@@ -17,6 +17,22 @@
     color: var(--form-title-color)
 }
 
+fieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-color: var(--form-border-color);
+    border-width: 2px 0 0 0;
+    margin: 0;
+    padding: 8px 0 0 0;
+}
+
+legend {
+    color: var(--form-border-color);
+    text-transform: uppercase;
+    padding: 0 4px 0 0;
+}
+
 .labelInputDiv {
     display: flex;
     flex-direction: row;
@@ -27,6 +43,10 @@
 .labelInputDiv label {
     color: var(--label-text-color);
     font-size: 1.1em;
+}
+
+.topLabel {
+    align-items: start;
 }
 
 .labelInputDiv input, .labelInputDiv select {
@@ -42,6 +62,18 @@
     border-width: 0 0 1px 0;
     padding: 5px;
     resize: none;
+}
+
+.propertyName {
+    margin: 0 0 16px 0;
+    color: var(--label-text-color);
+    font-size: 1.1em;
+}
+
+.propertyValue {
+    margin: 0 0 16px 0;
+    color: var(--input-text-color);
+    font-size: 1.1em;
 }
 
 .error {
@@ -106,4 +138,9 @@
 #save {
     background-color: var(--save-button-background-color);
     border: 2px solid var(--save-button-border-color);
+}
+
+#makeOffer {
+    background-color: var(--make-offer-button-background-color);
+    border: 2px solid var(--make-offer-button-border-color);
 }
