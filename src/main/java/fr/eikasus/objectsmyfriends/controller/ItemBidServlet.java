@@ -8,6 +8,7 @@ import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -55,19 +56,24 @@ public class ItemBidServlet extends HttpServlet
 
 	/**
 	 * Display the bid form.
+	 * <p></p>
+	 * This method is used to display the item bid form to allow the current user
+	 * to make an offer on the item which identifier is supplied in attribute. The
+	 * method also compute the initial price of the possible offer. If there is no
+	 * identifier supplied or if the user is not connected, he is redirected to
+	 * the welcome page.
 	 */
 
 	@Override protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		long itemIdentifier;
-		Item item = null;
 
 		try
 		{
 			if ((itemIdentifier = controllerSupport.parseLongParameter(request, "item")) != 0)
 			{
 				// Read the item from the database.
-				item = itemManager.find(itemIdentifier).get(0);
+				Item item = itemManager.find(itemIdentifier).get(0);
 
 				// Save the item instance to allow doPost method to do his job.
 				request.getSession().setAttribute("item", item);
@@ -77,6 +83,12 @@ public class ItemBidServlet extends HttpServlet
 
 				// Save the bid made on this item to allow doPost method to do his job.
 				request.getSession().setAttribute("bestBid", bestBid);
+
+				// Compute initial offer
+				int initialOffer = ((bestBid != null) ? (bestBid.getPrice() + 1) : (item.getInitialPrice()));
+
+				// save-it in the form.
+				request.setAttribute("yourOffer", initialOffer);
 
 				// Go to the bid page.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemBid.jsp");
@@ -94,38 +106,53 @@ public class ItemBidServlet extends HttpServlet
 
 	/**
 	 * Handle the bid form to register a bid.
+	 * <p></p>
+	 * This method is called when tue user press the make offer button. his offer
+	 * is the only parameter retrieved for the request. If there is an error in
+	 * the bid process, the form is displayed again showing the cause of the
+	 * problem. The doGet method is not used to display the form again.
 	 */
 
-	@Override protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the current user.
-		User user = (User) request.getSession().getAttribute("user");
-
-		// Retrieve the item from the session.
-		Item item = (Item) request.getSession().getAttribute("item");
-
-		// Retrieve the current user offer.
-		int userOffer = controllerSupport.parseIntegerParameter(request, "yourOffer");
-
-		try
+		// Check if the user wants to make an offer.
+		if (request.getParameter("makeOffer") != null)
 		{
-			// Add the user bid
-			bidManager.add(user, item, userOffer);
 
-			// Return to the welcome page.
-			response.sendRedirect(request.getContextPath() + "/welcome");
+			// Retrieve the current user.
+			User user = (User) request.getSession().getAttribute("user");
+
+			// Retrieve the item from the session.
+			Item item = (Item) request.getSession().getAttribute("item");
+
+			// Retrieve the current user offer.
+			int userOffer = controllerSupport.parseIntegerParameter(request, "yourOffer");
+
+			try
+			{
+				// Add the user bid
+				bidManager.add(user, item, userOffer);
+
+				// Return to the welcome page.
+				response.sendRedirect(request.getContextPath() + "/welcome");
+			}
+			catch (ModelException me)
+			{
+				// Transform parameters to attributes for saving the form.
+				controllerSupport.saveForm(request, formParameters);
+
+				// Put the error in the form.
+				controllerSupport.putFormError(me, request, formParameters);
+
+				// Return to the bid page and display errors.
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/itemBid.jsp");
+				requestDispatcher.forward(request, response);
+			}
 		}
-		catch (ModelException me)
+		else
 		{
-			// Transform parameters to attributes for saving the form.
-			controllerSupport.saveForm(request, formParameters);
-
-			// Put the error in the form.
-			controllerSupport.putFormError(me, request, formParameters);
-
-			// Return to the bid page and display errors.
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/itemBid.jsp");
-			requestDispatcher.forward(request, response);
+			// The user doesn't want to make a bid, so return to the welcome page
+			response.sendRedirect(request.getContextPath() + "/welcome");
 		}
 	}
 }
