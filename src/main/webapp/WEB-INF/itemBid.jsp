@@ -103,21 +103,27 @@
 				<div>
 					<div class="labelInputDiv">
 						<p class="propertyName"><fmt:message key="BID_END" bundle="${r}"/></p>
-						<p class="propertyValue" id="biddingEnd">${sessionScope.item.biddingEnd}</p>
+						<p class="propertyValue" id="biddingEnd"><fmt:formatDate type="BOTH" value="${sessionScope.item.biddingEnd}" timeStyle="MEDIUM"/></p>
 					</div>
 				</div>
 
 				<div>
 					<div class="labelInputDiv">
 						<p class="propertyName"><fmt:message key="BEST_BUYER" bundle="${r}"/></p>
-						<p class="propertyValue" id="bestBuyer">${sessionScope.bestBid.user.username}</p>
+						<p class="propertyValue" id="bestBuyer">
+							<c:if test="${sessionScope.bestBid != null}">${sessionScope.bestBid.user.username}</c:if>
+							<c:if test="${sessionScope.bestBid == null}"><fmt:message key="NO_BIDDER" bundle="${r}"/></c:if>
+						</p>
 					</div>
 				</div>
 
 				<div>
 					<div class="labelInputDiv">
 						<p class="propertyName"><fmt:message key="BEST_OFFER" bundle="${r}"/></p>
-						<p class="propertyValue" id="bestOffer">${sessionScope.bestBid.price}</p>
+						<p class="propertyValue" id="bestOffer">
+							<c:if test="${sessionScope.bestBid != null}">${sessionScope.bestBid.price}</c:if>
+							<c:if test="${sessionScope.bestBid == null}"><fmt:message key="NO_OFFER" bundle="${r}"/></c:if>
+						</p>
 					</div>
 				</div>
 
