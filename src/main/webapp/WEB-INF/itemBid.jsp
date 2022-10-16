@@ -110,14 +110,14 @@
 				<div>
 					<div class="labelInputDiv">
 						<p class="propertyName"><fmt:message key="BEST_BUYER" bundle="${r}"/></p>
-						<p class="propertyValue" id="bestBuyer">${requestScope.bestBuyer}</p>
+						<p class="propertyValue" id="bestBuyer">${sessionScope.bestBid.user.username}</p>
 					</div>
 				</div>
 
 				<div>
 					<div class="labelInputDiv">
 						<p class="propertyName"><fmt:message key="BEST_OFFER" bundle="${r}"/></p>
-						<p class="propertyValue" id="bestOffer">${requestScope.bestOffer}</p>
+						<p class="propertyValue" id="bestOffer">${sessionScope.bestBid.price}</p>
 					</div>
 				</div>
 
