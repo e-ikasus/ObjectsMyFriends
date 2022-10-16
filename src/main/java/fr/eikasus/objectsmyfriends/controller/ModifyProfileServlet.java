@@ -55,7 +55,7 @@ public class ModifyProfileServlet extends HttpServlet
 		request.setAttribute("street", user.getStreet());
 		request.setAttribute("zipCode", user.getZipCode());
 		request.setAttribute("city", user.getCity());
-		request.setAttribute("credits", user.getCredit());
+		request.setAttribute("credit", user.getCredit());
 
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");
 		requestDispatcher.forward(request, response);
