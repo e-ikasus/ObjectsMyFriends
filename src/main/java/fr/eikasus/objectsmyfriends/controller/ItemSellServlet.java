@@ -179,7 +179,7 @@ public class ItemSellServlet extends HttpServlet
 		// of the filter servlet. This user is the item owner
 		User user = (User) request.getSession().getAttribute("user");
 
-		// Retrieve the item from the session is it exist for updating.
+		// Retrieve the item from the session if it exist for updating.
 		Item item = (Item) request.getSession().getAttribute("item");
 
 		// Retrieve the pickup place that belongs to the item if exists.
