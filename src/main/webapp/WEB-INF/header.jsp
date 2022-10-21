@@ -21,11 +21,17 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
 
-	<% for (String cssFile: request.getParameter("cssFiles").split(","))
-		out.println("\t<link rel=\"stylesheet\" href=\"" + request.getContextPath() + "/css/" + cssFile + ".css\">");%>
+	<c:forTokens items="${param.cssFiles}" delims="," var="name">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/${name}.css">
+	</c:forTokens>
 
-	<% for (String jsFile: request.getParameter("jsFiles").split(","))
-		out.println("\t<script src=\"" + request.getContextPath() + "/javascript/" + jsFile + ".js\"></script>");%>
+	<c:forTokens items="${param.jsFiles}" delims="," var="name">
+		<script src="${pageContext.request.contextPath}/javascript/${name}.js"></script>
+	</c:forTokens>
+
+	<c:if test="${param.jsInit != null}">
+		<script><c:out value="$(function () { window.${param.jsInit}.initialize() });"/></script>
+	</c:if>
 
 	<title><fmt:message key="TITLE" bundle="${r}"/></title>
 </head>
