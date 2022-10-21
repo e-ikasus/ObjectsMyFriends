@@ -5,6 +5,10 @@ import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +21,8 @@ import java.util.HashMap;
  * method for simplify error handling in forms.
  *
  * @see #getInstance()
+ * @see #loadImage(HttpServletRequest, String) loadImage()
+ * @see #getUrlImage(HttpServletRequest, String) getUrlImage()
  * @see #parseDateParameter(HttpServletRequest, String) parseDateParameter()
  * @see #parseIntegerParameter(HttpServletRequest, String)
  * parseIntegerParameter()
@@ -30,11 +36,19 @@ import java.util.HashMap;
 
 public class ControllerSupport
 {
+	/* ******************** */
+	/* Constant declaration */
+	/* ******************** */
+
+	private static final String IMAGES_PATH = "/item_images/";
+
 	/* ************* */
 	/* Class members */
 	/* ************* */
 
 	private static ControllerSupport instance = null;
+
+	private static String imagePath = null;
 
 	/* *************************** */
 	/* Constructors and instancier */
@@ -47,6 +61,93 @@ public class ControllerSupport
 	private ControllerSupport()
 	{
 
+	}
+
+	/* ******************* */
+	/* Methods implemented */
+	/* ******************* */
+
+	/**
+	 * Retrieve an image.
+	 * <p></p>
+	 * This method retrieve an image sent via the multipart/form-data request and
+	 * store it in the location returned by the {@code getImagePath} method. Only
+	 * jpg and png file formats are allowed.
+	 *
+	 * @param request   Request in which the file was received.
+	 * @param paramName Name of the parameter containing the file
+	 *
+	 * @return Name of the file.
+	 *
+	 * @throws Exception In case of problem.
+	 */
+
+	public String loadImage(@NotNull HttpServletRequest request, @NotNull String paramName) throws Exception
+	{
+		int extPos, bytesRed;
+		byte[] bytes = new byte[1024];
+
+		Part filePart = request.getPart(paramName);
+
+		String fileIdPart, destName, contentType;
+		String fileName = filePart.getSubmittedFileName();
+
+		// If no name is defined.
+		if (fileName == null) throw new Exception();
+
+		// Put the file name in lower case.
+		fileName = fileName.toLowerCase();
+
+		// Check if the file has an extension.
+		if ((extPos = fileName.lastIndexOf('.')) == -1) throw new Exception();
+
+		// The extension should be 3 characters long.
+		if ((extPos + 4) != fileName.length()) throw new Exception();
+
+		// Retrieve the type of the file
+		contentType = filePart.getContentType();
+
+		// Only jpg and png file formats are allowed.
+		if ((contentType.compareTo("image/jpg") != 0) && (contentType.compareTo("image/png") != 0))
+			throw new Exception();
+
+		// The destination file name is formed with the current date.
+		fileIdPart = String.format("%d", (new Date()).getTime());
+
+		// Destination name of the image.
+		destName = fileIdPart + fileName.substring(extPos);
+
+		try (FileOutputStream fileOutputStream = new FileOutputStream(getImagePath(request) + destName); InputStream inputStream = filePart.getInputStream())
+		{
+			while ((bytesRed = inputStream.read(bytes)) != -1)
+				fileOutputStream.write(bytes, 0, bytesRed);
+		}
+
+		// Return the file name crated.
+		return destName;
+	}
+
+	/**
+	 * Compute the url of an image.
+	 * <p></p>
+	 * This method is used to create the url used to access the image from the
+	 * client. Because the image entities only store the image filename and the
+	 * place where those images are stored is not hardcoded, this function should
+	 * be used to allow the client browser to load them.
+	 *
+	 * @param request  Request needed to retrieve context.
+	 * @param fileName Name of the image file.
+	 *
+	 * @return Url to the image.
+	 */
+
+	public String getUrlImage(@NotNull HttpServletRequest request, @NotNull String fileName)
+	{
+		String url = request.getRequestURL().toString();
+		String servletPath = request.getServletPath();
+		String urlBase = url.substring(0, url.lastIndexOf(servletPath));
+
+		return urlBase + IMAGES_PATH + fileName;
 	}
 
 	/**
@@ -66,7 +167,7 @@ public class ControllerSupport
 	}
 
 	/**
-	 * Get an date parameter.
+	 * Get a date parameter.
 	 * <p></p>
 	 * This method take a parameter from an HttpServletRequest request. This
 	 * parameter is expected to be a date inside a String. If the content of that
@@ -226,6 +327,10 @@ public class ControllerSupport
 		}
 	}
 
+	/* ************** */
+	/* Helper methods */
+	/* ************** */
+
 	/**
 	 * Put a UI field as invalid.
 	 * <p></p>
@@ -252,5 +357,39 @@ public class ControllerSupport
 
 		// The field is not valid, so remove-it.
 		request.removeAttribute(property);
+	}
+
+	/**
+	 * Determine the item image folder.
+	 * <p></p>
+	 * This method return the folder where the uploaded images will be stored.
+	 * This location is determined by the "item_images_folder" parameter from the
+	 * "web.xml" file. If it is not defined, then the default location point to a
+	 * folder in the application deployment.
+	 *
+	 * @param request Request used to access context.
+	 *
+	 * @return Path to the item images.
+	 */
+
+	private String getImagePath(HttpServletRequest request)
+	{
+		if (imagePath == null)
+		{
+			// Folder where to put the item images in.
+			imagePath = request.getServletContext().getInitParameter("item_images_folder");
+
+			// Default folder location if none is defined.
+			if (imagePath == null)
+				imagePath = request.getServletContext().getRealPath(IMAGES_PATH);
+
+			File imageFile = new File(imagePath);
+
+			// Create folder if it doesn't exist.
+			if ((!imageFile.exists()) && (!imageFile.mkdir())) imagePath = null;
+		}
+
+		// Location to put the uploaded item images.
+		return imagePath;
 	}
 }
