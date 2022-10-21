@@ -6,7 +6,8 @@
 
 <jsp:include page="header.jsp">
 	<jsp:param name="cssFiles" value="forms,item_sell"/>
-	<jsp:param name="jsFiles" value=""/>
+	<jsp:param name="jsFiles" value="jquery,item_sell"/>
+	<jsp:param name="jsInit" value="ItemSell"/>
 </jsp:include>
 
 <form id="itemSell" class="formApp" method="post" action="${pageContext.request.contextPath}/item_sell">
@@ -18,7 +19,9 @@
 			<fieldset id="itemPicturesFieldset">
 				<legend><fmt:message key="PICTURE" bundle="${r}"/></legend>
 				<div id="picturesDiv">
-
+					<div id="clickToAddPicture"><fmt:message key="CLICK_TO_ADD_PICTURE" bundle="${r}"/>
+						<input type="file" id="inputClickToAddPicture"/>
+					</div>
 				</div>
 			</fieldset>
 		</div>
