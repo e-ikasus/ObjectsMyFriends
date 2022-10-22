@@ -29,9 +29,22 @@
 		<script src="${pageContext.request.contextPath}/javascript/${name}.js"></script>
 	</c:forTokens>
 
-	<c:if test="${param.jsInit != null}">
-		<script><c:out value="$(function () { window.${param.jsInit}.initialize() });"/></script>
-	</c:if>
+	<c:forTokens items="${param.jsInit}" delims="," var="jsParam" varStatus="iter">
+		<c:choose>
+			<c:when test="${iter.first}">
+				<c:out escapeXml="false" value="<script>$(function () { window.${jsParam}.initialize("/>
+				<c:if test="${iter.last}"><c:out escapeXml="false" value=") });</script>"/></c:if>
+			</c:when>
+
+			<c:when test="${iter.last}">
+				<c:out escapeXml="false" value="${jsParam}) });</script>"/>
+			</c:when>
+
+			<c:otherwise>
+				<c:out escapeXml="false" value="${jsParam},"/>
+			</c:otherwise>
+		</c:choose>
+	</c:forTokens>
 
 	<title><fmt:message key="TITLE" bundle="${r}"/></title>
 </head>
