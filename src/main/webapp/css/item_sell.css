@@ -1,70 +1,106 @@
 #inputsDiv {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 #leftPart {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    margin: 32px 32px 16px 32px;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	margin: 32px 32px 16px 32px;
 }
 
 #rightPart {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 400px;
-    margin: 32px 32px 16px 32px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	width: 400px;
+	margin: 32px 32px 16px 32px;
 }
 
 #itemPicturesFieldset {
-    flex-direction: row;
+	flex-direction: row;
 }
 
 #itemPicturesFieldset textarea {
-    resize: none;
+	resize: none;
 }
 
 #picturesDiv {
-    background-color: var(--input-backgound-color);
+	display: flex;
+	background-color: var(--input-backgound-color);
+	-ms-overflow-style: none;
+	scrollbar-width: none;
 }
 
-@media (max-width: 800px ) {
-    #picturesDiv {
-        width: 400px;
-        height: 128px;
-    }
-}
-
-@media (min-width: 800px ) {
-    #picturesDiv {
-        width: 200px;
-    }
-}
-
-#inputClickToAddPicture {
-    display:none;
-}
-
-#clickToAddPicture {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    width: 192px;
-    height: 64px;
-    color: var(--normal-text-color);
-    border: 4px solid;
+#picturesDiv::-webkit-scrollbar {
+	display: none;
 }
 
 .picture {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    width: 192px;
-    height: 192px;
-    color: var(--normal-text-color);
-    padding: 4px;
+	display: flex;
+	flex-shrink: 0;
+	text-align: center;
+	align-items: center;
+	color: var(--normal-text-color);
+	padding: 4px;
 }
+
+#inputClickToAddPicture {
+	display: none;
+}
+
+#clickToAddPicture {
+	display: flex;
+	flex-shrink: 0;
+	text-align: center;
+	align-items: center;
+	color: var(--normal-text-color);
+	border: 4px solid;
+}
+
+/* When the screen is to low, images are displayed horizontally, and mucher smaller.*/
+
+@media (max-width: 800px ) {
+	#picturesDiv {
+		flex-direction: row;
+		width: 400px;
+		height: 128px;
+		overflow-x: auto;
+	}
+
+	.picture {
+		width: 120px;
+		height: 120px;
+	}
+
+	#clickToAddPicture {
+		width: 120px;
+		height: 120px;
+	}
+}
+
+/* When the screen is more than 800px, images are displayed vertically, and mucher bigger.*/
+
+@media (min-width: 800px ) {
+	#picturesDiv {
+		flex-direction: column;
+		width: 200px;
+		overflow-y: auto;
+	}
+
+	.picture {
+		width: 192px;
+		height: 192px;
+	}
+
+	#clickToAddPicture {
+		width: 192px;
+		height: 64px;
+	}
+}
+
+
+
