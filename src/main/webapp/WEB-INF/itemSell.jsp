@@ -1,13 +1,16 @@
+<%@ page import="fr.eikasus.objectsmyfriends.misc.ControllerSupport" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setBundle basename="locale" var="r"/>
 
+<c:set var="urlImages" value="<%=ControllerSupport.getInstance().getUrlImageHandler(request)%>" scope="page"/>
+
 <jsp:include page="header.jsp">
 	<jsp:param name="cssFiles" value="forms,item_sell"/>
 	<jsp:param name="jsFiles" value="jquery,item_sell"/>
-	<jsp:param name="jsInit" value="ItemSell"/>
+	<jsp:param name="jsInit" value="ItemSell,\"${pageScope.urlImages}\""/>
 </jsp:include>
 
 <form id="itemSell" class="formApp" method="post" action="${pageContext.request.contextPath}/item_sell">
