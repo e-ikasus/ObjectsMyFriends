@@ -23,6 +23,7 @@ import java.util.HashMap;
  * @see #getInstance()
  * @see #loadImage(HttpServletRequest, String) loadImage()
  * @see #getUrlImage(HttpServletRequest, String) getUrlImage()
+ * @see #getUrlImageHandler(HttpServletRequest) getUrlImageHandler()
  * @see #parseDateParameter(HttpServletRequest, String) parseDateParameter()
  * @see #parseIntegerParameter(HttpServletRequest, String)
  * parseIntegerParameter()
@@ -41,6 +42,8 @@ public class ControllerSupport
 	/* ******************** */
 
 	private static final String IMAGES_PATH = "/item_images/";
+
+	private static final String IMAGE_HANDLER_NAME = "image_handler";
 
 	/* ************* */
 	/* Class members */
@@ -61,6 +64,22 @@ public class ControllerSupport
 	private ControllerSupport()
 	{
 
+	}
+
+	/**
+	 * Get the instance of the class.
+	 * <p>
+	 * This method instantiate the class and return-it. This is the only way to
+	 * obtain such instance, because the class can't be instanced directly.
+	 *
+	 * @return Unique instance of the class.
+	 */
+
+	public static ControllerSupport getInstance()
+	{
+		if (instance == null) instance = new ControllerSupport();
+
+		return instance;
 	}
 
 	/* ******************* */
@@ -108,7 +127,7 @@ public class ControllerSupport
 		contentType = filePart.getContentType();
 
 		// Only jpg and png file formats are allowed.
-		if ((contentType.compareTo("image/jpg") != 0) && (contentType.compareTo("image/png") != 0))
+		if ((contentType.compareTo("image/jpeg") != 0) && (contentType.compareTo("image/png") != 0))
 			throw new Exception();
 
 		// The destination file name is formed with the current date.
@@ -151,19 +170,24 @@ public class ControllerSupport
 	}
 
 	/**
-	 * Get the instance of the class.
-	 * <p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
+	 * Compute the url of the image handler.
+	 * <p></p>
+	 * This method is used to create the url used to access the image handler from
+	 * the client. This is the address from which the client retrieves images item
+	 * and to which images are uploaded.
 	 *
-	 * @return Unique instance of the class.
+	 * @param request Request needed to retrieve context.
+	 *
+	 * @return Url to the image handler.
 	 */
 
-	public static ControllerSupport getInstance()
+	public String getUrlImageHandler(@NotNull HttpServletRequest request)
 	{
-		if (instance == null) instance = new ControllerSupport();
+		String url = request.getRequestURL().toString();
+		String servletPath = request.getServletPath();
+		String urlBase = url.substring(0, url.lastIndexOf(servletPath));
 
-		return instance;
+		return urlBase + "/" + IMAGE_HANDLER_NAME;
 	}
 
 	/**
