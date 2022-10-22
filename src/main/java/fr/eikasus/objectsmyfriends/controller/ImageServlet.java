@@ -1,5 +1,6 @@
 package fr.eikasus.objectsmyfriends.controller;
 
+import com.google.gson.Gson;
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
 import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
@@ -30,7 +31,8 @@ public class ImageServlet extends HttpServlet
 			// List of images file name uploaded.
 			ArrayList<String> uploadedImages = (ArrayList<String>) request.getSession().getAttribute("itemImages");
 
-			List<Item> items = new ArrayList<>();
+			// Item currently edited if exists.
+			Item currentItem = (Item) request.getSession().getAttribute("item");
 
 			// For convenience, there is always one list, even if it is empty.
 			if (uploadedImages == null) uploadedImages = new ArrayList<>();
@@ -40,17 +42,18 @@ public class ImageServlet extends HttpServlet
 
 			// Find the item to deal with: the one from the database or those that is
 			// currently modified/created.
-			if (identifier != 0) items = ItemManager.getInstance().find(identifier);
-			else items.add((Item) request.getSession().getAttribute("item"));
+			if ((currentItem == null) && (identifier != 0))
+			{
+				List<Item> items = ItemManager.getInstance().find(identifier);
 
-			// If there is no item, then there is a problem.
-			if (items.size() == 0) throw new Exception();
+				if (items.size() != 1) currentItem = items.get(0);
+			}
 
 			// Put the uploaded image file names in the list.
 			uploadedImages.forEach(fileName -> imageFileNames.add(controllerSupport.getUrlImage(request, fileName)));
 
-			// Now, put those of the item.
-			items.get(0).getImages().forEach(image -> imageFileNames.add(controllerSupport.getUrlImage(request, image.getPath())));
+			// Now, put those of the item if defined.
+			if (currentItem != null) currentItem.getImages().forEach(image -> imageFileNames.add(controllerSupport.getUrlImage(request, image.getPath())));
 
 			// The response will be in JSON format.
 			response.setContentType("application/json");
@@ -59,14 +62,14 @@ public class ImageServlet extends HttpServlet
 			response.setCharacterEncoding("UTF-8");
 
 			// The image file name list will be sent.
-			response.getWriter().println(imageFileNames);
+			response.getWriter().println(new Gson().toJson(imageFileNames));
 
-			// Send-id.
+			// Send-it.
 			response.getWriter().flush();
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			System.out.println(e.getMessage());
 
 			// Impossible to deal with the request.
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
