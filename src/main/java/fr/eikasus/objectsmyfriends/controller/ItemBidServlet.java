@@ -67,6 +67,7 @@ public class ItemBidServlet extends HttpServlet
 	@Override protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		long itemIdentifier;
+		boolean welcome = true;
 
 		try
 		{
@@ -87,8 +88,11 @@ public class ItemBidServlet extends HttpServlet
 				// Compute initial offer
 				int initialOffer = ((bestBid != null) ? (bestBid.getPrice() + 1) : (item.getInitialPrice()));
 
-				// save-it in the form.
+				// Save-it in the form.
 				request.setAttribute("yourOffer", initialOffer);
+
+				// Don't go to the welcome page.
+				welcome = false;
 
 				// Go to the bid page.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemBid.jsp");
@@ -101,7 +105,7 @@ public class ItemBidServlet extends HttpServlet
 		}
 
 		// When something goes wrong, return to the welcome page.
-		response.sendRedirect(request.getContextPath() + "/welcome");
+		if (welcome) response.sendRedirect(request.getContextPath() + "/welcome");
 	}
 
 	/**
