@@ -6,10 +6,7 @@ import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
 import fr.eikasus.objectsmyfriends.model.bll.CategoryManager;
 import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
 import fr.eikasus.objectsmyfriends.model.bll.PickupManager;
-import fr.eikasus.objectsmyfriends.model.bo.Category;
-import fr.eikasus.objectsmyfriends.model.bo.Item;
-import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
-import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.bo.*;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +21,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @WebServlet(name = "ItemSellServlet", value = "/item_sell")
 public class ItemSellServlet extends HttpServlet
@@ -96,6 +94,9 @@ public class ItemSellServlet extends HttpServlet
 		long itemIdentifier;
 		Item item = null;
 
+		// A get request means a new action, so ensure there is no image.
+		request.getSession().removeAttribute("itemImages");
+
 		try
 		{
 			// If no parameter is supplied in the url, this means the user wants to
@@ -142,16 +143,16 @@ public class ItemSellServlet extends HttpServlet
 
 			// List of available categories into the form.
 			request.setAttribute("categories", categoryManager.find(null));
+
+			// All is fine, display the item sell form.
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemSell.jsp");
+			requestDispatcher.forward(request, response);
 		}
 		catch (ModelException me)
 		{
 			// When something goes wrong, return to the welcome page.
 			response.sendRedirect(request.getContextPath() + "/welcome");
 		}
-
-		// All is fine, display the item sell form.
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemSell.jsp");
-		requestDispatcher.forward(request, response);
 	}
 
 	/**
@@ -168,7 +169,7 @@ public class ItemSellServlet extends HttpServlet
 	 * are transferred to the JSP via attributes. After the item is completely
 	 * created, its instance, like other part of it, is removed form the user
 	 * session. This method doesn't call doGet method to display the form again
-	 * but all the JSV directly. Note that because the item information are tied
+	 * but call the JSP directly. Note that because the item information are tied
 	 * to more than one object, errors couldn't be displayed at the same time in
 	 * the form.
 	 */
@@ -182,15 +183,21 @@ public class ItemSellServlet extends HttpServlet
 		// Retrieve the item from the session if it exists for updating.
 		Item item = (Item) request.getSession().getAttribute("item");
 
+		// Retrieve the item images from the session if user upload them.
+		List<String> uploadedImages = (List<String>) request.getSession().getAttribute("itemImages");
+
 		// Retrieve the pickup place that belongs to the item if exists.
 		PickupPlace pickupPlace = (item != null) ? (item.getPickupPlace()) : (null);
 
 		// Create list that will receive new properties.
 		HashMap<String, Object> newProperties = new HashMap<>();
 
+		// By default, all works fine.
+		boolean success = true;
+
 		request.setCharacterEncoding("UTF-8");
 
-		// Check if the user wants to create an item.
+		// Check if the user wants to create or update an item.
 		if (request.getParameter("save") != null)
 		{
 			// Retrieve received item information.
@@ -255,14 +262,14 @@ public class ItemSellServlet extends HttpServlet
 					pickupManager.add(item, street, zipCode, city);
 				}
 
-				// The item is created, so remove-it from the session.
-				request.getSession().removeAttribute("item");
-
-				// Return to the welcome page.
-				response.sendRedirect(request.getContextPath() + "/welcome");
+				// Now deal with images that have a special process.
+				controllerSupport.addUploadedImagesToItem(request, item, uploadedImages);
 			}
 			catch (Exception me)
 			{
+				// An error occurred.
+				success = false;
+
 				// Transform parameters to attributes for saving the form.
 				controllerSupport.saveForm(request, formParameters);
 
@@ -277,9 +284,18 @@ public class ItemSellServlet extends HttpServlet
 				requestDispatcher.forward(request, response);
 			}
 		}
-		else
+
+		// If no error occurred during creation/update or if user canceled the form.
+		if (success)
 		{
-			// The user cancels the process, so return to the welcome page.
+			// The item is created or the user canceled the form, so remove-it from the
+			// session.
+			request.getSession().removeAttribute("item");
+
+			// Do the same with images.
+			request.getSession().removeAttribute("itemImages");
+
+			// Return to the welcome page.
 			response.sendRedirect(request.getContextPath() + "/welcome");
 		}
 	}
