@@ -1,5 +1,8 @@
 package fr.eikasus.objectsmyfriends.misc;
 
+import fr.eikasus.objectsmyfriends.model.bll.ImageManager;
+import fr.eikasus.objectsmyfriends.model.bo.Image;
+import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +15,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Class used to simplify handling HTML form.
@@ -21,6 +26,8 @@ import java.util.HashMap;
  * method for simplify error handling in forms.
  *
  * @see #getInstance()
+ * @see #addUploadedImagesToItem(HttpServletRequest, Item, List)
+ * addUploadedImagesToItem
  * @see #loadImage(HttpServletRequest, String) loadImage()
  * @see #getUrlImage(HttpServletRequest, String) getUrlImage()
  * @see #getUrlImageHandler(HttpServletRequest) getUrlImageHandler()
@@ -85,6 +92,95 @@ public class ControllerSupport
 	/* ******************* */
 	/* Methods implemented */
 	/* ******************* */
+
+	/**
+	 * Add images to the item.
+	 * <p></p>
+	 * This method add the supplied images to the item. The images list only
+	 * contain file names and those files should be present in the local storage.
+	 * When each image is successfully added to the item, its corresponding image
+	 * file is prefixed by the u letter to indicate that this file is pointed to.
+	 * Then, in a maintenance process, all image file that aren't prefixed can
+	 * then be deleted. If an error occur during the process, all remaining files
+	 * are deleted. If something goes wrong during the process, no error is
+	 * returned.
+	 *
+	 * @param request        Request used to get context.
+	 * @param item           Item to add image to.
+	 * @param uploadedImages Images to add to the item.
+	 */
+
+	public void addUploadedImagesToItem(@NotNull HttpServletRequest request, @NotNull Item item, List<String> uploadedImages)
+	{
+		ImageManager imageManager = ImageManager.getInstance();
+		ControllerSupport controllerSupport = ControllerSupport.getInstance();
+		String imagePath = controllerSupport.getImagePath(request);
+		Iterator<String> imagesIterator;
+		File oldFile, newFile;
+		Image image;
+		String currentName;
+
+		// If no image file is supplied, do nothing.
+		if (uploadedImages == null) return;
+
+		try
+		{
+			// Iterator used to parse the collection.
+			imagesIterator = uploadedImages.iterator();
+
+			// For each file in the list.
+			while (imagesIterator.hasNext())
+			{
+				// File name to deal with.
+				currentName = imagesIterator.next();
+
+				// Add the image to the item.
+				image = imageManager.add(item, "u" + currentName);
+
+				// Remove the file to the list to avoid deletion later.
+				imagesIterator.remove();
+
+				// Current file name.
+				oldFile = new File(imagePath + currentName);
+
+				// File will be prefixed because it is now used.
+				newFile = new File(imagePath + "u" + currentName);
+
+				// Rename the file.
+				if (!oldFile.renameTo(newFile))
+				{
+					// Remove the image from the item.
+					imageManager.delete(image);
+
+					// stop the process
+					break;
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			// Do nothing.
+		}
+
+		// Iterator used to parse the collection.
+		imagesIterator = uploadedImages.iterator();
+
+		// Delete the remaining files if they exist.
+		while (imagesIterator.hasNext())
+		{
+			// File name to deal with.
+			currentName = imagesIterator.next();
+
+			// Current name.
+			oldFile = new File(imagePath + currentName);
+
+			// Delete the file from the local storage.
+			oldFile.delete();
+
+			// Done with this file.
+			imagesIterator.remove();
+		}
+	}
 
 	/**
 	 * Retrieve an image.
