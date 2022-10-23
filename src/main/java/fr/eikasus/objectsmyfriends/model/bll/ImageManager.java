@@ -31,7 +31,7 @@ public class ImageManager
 	/* Constant declaration */
 	/* ******************** */
 
-	private static final String VALIDATE_PATH = "^[0-9A-Za-z_-]+$";
+	private static final String VALIDATE_PATH = "^[0-9A-Za-z_-]+\\.[A-Za-z]{3}$";
 
 	/* ************* */
 	/* Class members */
@@ -94,10 +94,12 @@ public class ImageManager
 	 * @param item Item that the new image belongs to.
 	 * @param path Path to the image file.
 	 *
+	 * @return The newly created image.
+	 *
 	 * @throws ModelException In case of problem.
 	 */
 
-	public void add(Item item, String path) throws ModelException
+	public Image add(Item item, String path) throws ModelException
 	{
 		Image newImage = new Image(null, path);
 
@@ -120,6 +122,9 @@ public class ImageManager
 			// Throw a generic error too.
 			throw me.add(ModelError.UNABLE_TO_CREATE_IMAGE);
 		}
+
+		// Return the newly created image.
+		return newImage;
 	}
 
 	/**
