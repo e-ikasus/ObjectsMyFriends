@@ -6,6 +6,7 @@ import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -151,6 +152,10 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 		execute(true, ModelError.UNABLE_TO_DELETE_ENTITY, query::executeUpdate);
 	}
 
+	/* ************** */
+	/* Helper methods */
+	/* ************** */
+
 	/**
 	 * Create a query to search for items.
 	 * <p>
@@ -167,7 +172,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * @return Query used to process the request.
 	 */
 
-	private TypedQuery<Item> createJPQLForSeller(String clauseStart, @NotNull User user, @NotNull Search search, Category category, String keywords)
+	private @Nullable TypedQuery<Item> createJPQLForSeller(String clauseStart, @NotNull User user, @NotNull Search search, Category category, String keywords)
 	{
 		StringBuffer request = new StringBuffer();
 		Query query;
@@ -253,13 +258,16 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * @return Query used to process the request.
 	 */
 
-	private TypedQuery<Item> createJPQLForBuyer(String clauseStart, User user, @NotNull Search search, Category category, String keywords)
+	private @Nullable TypedQuery<Item> createJPQLForBuyer(String clauseStart, User user, @NotNull Search search, Category category, String keywords)
 	{
 		StringBuffer request = new StringBuffer();
 		boolean addOr = false;
 
 		// If no criterion is defined for a buyer.
 		if (!search.asBuyer()) return null;
+
+		// User can be null, but in that case all criteria aren't allowed.
+		if ( (user == null) && ((search.isMyWonBids()) || (search.isMyCurrentBids())) ) return null;
 
 		// First part of the request.
 		request.append(clauseStart).append((search.isMyCurrentBids()) ? (JPQL_SELECT3) : (JPQL_SELECT2));
@@ -329,7 +337,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * @return String to add to the database request.
 	 */
 
-	private String addKeywords(@NotNull String keywords)
+	private @NotNull String addKeywords(@NotNull String keywords)
 	{
 		StringBuffer sb = new StringBuffer();
 		String[] splitKeyWords = keywords.split(" ");
