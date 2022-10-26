@@ -66,5 +66,5 @@ window.ItemBid = {};
 			$("#picturesDiv").append($("<img>", {src: image, class: 'picture'}));
 		});
 	}
-
-})(window.ItemBid);
+}
+)(window.ItemBid);

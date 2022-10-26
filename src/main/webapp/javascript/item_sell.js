@@ -146,5 +146,5 @@ window.ItemSell = {};
 			$("#picturesDiv").append($("<img>", {src: image, class: 'picture'}));
 		});
 	}
-
-})(window.ItemSell);
+}
+)(window.ItemSell);
