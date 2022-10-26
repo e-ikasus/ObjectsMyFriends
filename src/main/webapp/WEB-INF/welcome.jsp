@@ -46,9 +46,11 @@
 			<div class="labelInputDiv">
 				<label for="category" class="leftLabel"><fmt:message key="CATEGORY" bundle="${r}"/></label>
 				<select id="category" name="category">
-					<option value="all"<c:if test="${requestScope.category == 'all'}"> selected</c:if>><fmt:message key="ALL_CATEGORIES" bundle="${r}"/></option>
+					<option value="all"<c:if test="${requestScope.category == 'all'}"> selected</c:if>>
+						<fmt:message key="ALL_CATEGORIES" bundle="${r}"/></option>
 					<c:forEach var="category" items="${requestScope.categories}">
-						<option value="${category.label}"<c:if test="${category.label == requestScope.category}"> selected</c:if>>${category.label}</option>
+						<option value="${category.label}"
+										<c:if test="${category.label == requestScope.category}"> selected</c:if>>${category.label}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -60,17 +62,20 @@
 			</legend>
 
 			<div class="labelInputDiv">
-				<input id="openedBids" name="openedBids" type="checkbox" value="1" ${purchasesInputs} <c:if test="${not empty requestScope.openedBids}">checked</c:if>/>
+				<input id="openedBids" name="openedBids" type="checkbox" value="1" ${purchasesInputs}
+				       <c:if test="${not empty requestScope.openedBids}">checked</c:if>/>
 				<label for="openedBids" class="${purchasesLabels}"><fmt:message key="OPENED_BIDS" bundle="${r}"/></label>
 			</div>
 
 			<div class="labelInputDiv">
-				<input id="currentBids" name="currentBids" type="checkbox" value="1" ${purchasesInputs} <c:if test="${not empty requestScope.currentBids}">checked</c:if>/>
+				<input id="currentBids" name="currentBids" type="checkbox" value="1" ${purchasesInputs}
+				       <c:if test="${not empty requestScope.currentBids}">checked</c:if>/>
 				<label for="currentBids" class="${purchasesLabels}"><fmt:message key="MY_CURRENT_BIDS" bundle="${r}"/></label>
 			</div>
 
 			<div class="labelInputDiv">
-				<input id="wonBids" name="wonBids" type="checkbox" value="1" ${purchasesInputs} <c:if test="${not empty requestScope.wonBids}">checked</c:if>/>
+				<input id="wonBids" name="wonBids" type="checkbox" value="1" ${purchasesInputs}
+				       <c:if test="${not empty requestScope.wonBids}">checked</c:if>/>
 				<label for="wonBids" class="${purchasesLabels}"><fmt:message key="MY_WON_BIDS" bundle="${r}"/></label>
 			</div>
 
@@ -82,17 +87,20 @@
 			</legend>
 
 			<div class="labelInputDiv">
-				<input id="myCurrentSales" name="myCurrentSales" type="checkbox" value="1" ${salesInputs} <c:if test="${not empty requestScope.myCurrentSales}">checked</c:if>/>
+				<input id="myCurrentSales" name="myCurrentSales" type="checkbox" value="1" ${salesInputs}
+				       <c:if test="${not empty requestScope.myCurrentSales}">checked</c:if>/>
 				<label for="myCurrentSales" class="${salesLabels}"><fmt:message key="MY_CURRENT_SALES" bundle="${r}"/></label>
 			</div>
 
 			<div class="labelInputDiv">
-				<input id="myPendingSales" name="myPendingSales" type="checkbox" value="1" ${salesInputs} <c:if test="${not empty requestScope.myPendingSales}">checked</c:if>/>
+				<input id="myPendingSales" name="myPendingSales" type="checkbox" value="1" ${salesInputs}
+				       <c:if test="${not empty requestScope.myPendingSales}">checked</c:if>/>
 				<label for="myPendingSales" class="${salesLabels}"><fmt:message key="MY_PENDING_SALES" bundle="${r}"/></label>
 			</div>
 
 			<div class="labelInputDiv">
-				<input id="myEndedSales" name="myEndedSales" type="checkbox" value="1" ${salesInputs} <c:if test="${not empty requestScope.myEndedSales}">checked</c:if>/>
+				<input id="myEndedSales" name="myEndedSales" type="checkbox" value="1" ${salesInputs}
+				       <c:if test="${not empty requestScope.myEndedSales}">checked</c:if>/>
 				<label for="myEndedSales" class="${salesLabels}"><fmt:message key="MY_ENDED_SALES" bundle="${r}"/></label>
 			</div>
 
@@ -107,6 +115,36 @@
 </div>
 
 <div id="itemsViewDiv">
+
+	<c:forEach items="${requestScope.items}" var="item">
+
+		<div class="itemCardShadowDiv">
+			<div class="itemCardDiv">
+				<div class="itemCardImageDiv">
+
+				</div>
+				<div class="itemCardPropertiesDiv">
+
+					<div class="itemCardPropertyDiv">
+						<p class="propertyName"><fmt:message key="INITIAL_PRICE" bundle="${r}"/></p>
+						<p class="propertyValue" id="initialPrice">${item.initialPrice}</p>
+					</div>
+
+					<div class="itemCardPropertyDiv">
+						<p class="propertyName"><fmt:message key="BID_END" bundle="${r}"/></p>
+						<p class="propertyValue" id="biddingEnd"><fmt:formatDate type="BOTH" value="${item.biddingEnd}" timeStyle="MEDIUM"/></p>
+					</div>
+
+					<div class="itemCardPropertyDiv">
+						<p class="propertyName"><fmt:message key="SELLER" bundle="${r}"/></p>
+						<p class="propertyValue" id="seller">${item.seller.username}</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</c:forEach>
 
 </div>
 

@@ -2,7 +2,12 @@ package fr.eikasus.objectsmyfriends.controller;
 
 import com.google.gson.Gson;
 import fr.eikasus.objectsmyfriends.model.bll.CategoryManager;
+import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
+import fr.eikasus.objectsmyfriends.model.bo.Item;
+import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
+import fr.eikasus.objectsmyfriends.model.misc.Search;
+import fr.eikasus.objectsmyfriends.model.misc.UserRole;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -52,7 +58,7 @@ public class WelcomeServlet extends HttpServlet
 			}
 		}
 
-		// If no parameter is received, check if a cooke exist.
+		// If no parameter is received, check if a cookie exist.
 		if (!receiveParam)
 		{
 			// Retrieve cookies list.
@@ -88,6 +94,16 @@ public class WelcomeServlet extends HttpServlet
 				// and available items to buy.
 				savedParams.put("openedBids", "openedBids");
 			}
+		}
+
+		try
+		{
+			//request.setAttribute("items", ItemManager.getInstance().findByCriteria(null, UserRole.BUYER, new Search().setOpenedBids(), null, ""));
+			request.setAttribute("items", ItemManager.getInstance().find(null));
+		}
+		catch (ModelException e)
+		{
+			request.setAttribute("items", new ArrayList<Item>());
 		}
 
 		// Puts received parameter to request to be accessed by the JSP.
