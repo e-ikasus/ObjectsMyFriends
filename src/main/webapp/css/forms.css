@@ -145,3 +145,8 @@ legend {
     background-color: var(--make-offer-button-background-color);
     border: 2px solid var(--make-offer-button-border-color);
 }
+
+#search {
+    background-color: var(--search-button-background-color);
+    border: 2px solid var(--search-button-border-color);
+}

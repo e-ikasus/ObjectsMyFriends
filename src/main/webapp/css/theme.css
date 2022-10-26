@@ -2,6 +2,7 @@
     --normal-text-color: #ffc66d;
     --error-text-color: #f46a64;
     --label-text-color: #ffc66d;
+    --label-disable-text-color: #654e2b;
     --form-border-color: #4e8cf5;
     --input-backgound-color: #595b5d;
     --input-text-color: white;
@@ -22,5 +23,7 @@
     --save-button-border-color: #8a6b9a;
     --make-offer-button-background-color: #9876aa;
     --make-offer-button-border-color: #8a6b9a;
+    --search-button-background-color: #62b543;
+    --search-button-border-color: #559b3a;
     --form-title-color: white;
 }
