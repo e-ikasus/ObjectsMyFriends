@@ -18,17 +18,6 @@ public class DebugTest
 	}
 
 	/**
-	 * Populate database for testing.
-	 */
-
-	@Test public void populate()
-	{
-		testSupport.action("Populating the database");
-
-		testSupport.populateDatabase();
-	}
-
-	/**
 	 * Clear the database.
 	 */
 
@@ -38,5 +27,16 @@ public class DebugTest
 
 		// Empty the database.
 		testSupport.clearDatabase();
+	}
+
+	/**
+	 * Populate database for testing.
+	 */
+
+	@Test public void populate()
+	{
+		testSupport.action("Populating the database");
+
+		testSupport.populateDatabase();
 	}
 }
