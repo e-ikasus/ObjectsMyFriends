@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import fr.eikasus.objectsmyfriends.model.bll.CategoryManager;
 import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
-import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
-import fr.eikasus.objectsmyfriends.model.misc.Search;
-import fr.eikasus.objectsmyfriends.model.misc.UserRole;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

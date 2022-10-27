@@ -1,15 +1,15 @@
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Map" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="fr.eikasus.objectsmyfriends.misc.ControllerSupport" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setBundle basename="locale" var="r"/>
 
+<c:set var="urlImages" value="<%=ControllerSupport.getInstance().getUrlImageHandler(request)%>" scope="page"/>
+
 <jsp:include page="header.jsp">
 	<jsp:param name="cssFiles" value="forms,welcome"/>
 	<jsp:param name="jsFiles" value="jquery,welcome"/>
-	<jsp:param name="jsInit" value="welcome"/>
+	<jsp:param name="jsInit" value="welcome,\"${pageScope.urlImages}\""/>
 </jsp:include>
 
 <c:choose>
@@ -119,7 +119,7 @@
 	<c:forEach items="${requestScope.items}" var="item">
 
 		<div class="itemCardShadowDiv">
-			<div class="itemCardDiv">
+			<div class="itemCardDiv" id="i${item.identifier}">
 				<div class="itemCardImageDiv">
 
 				</div>

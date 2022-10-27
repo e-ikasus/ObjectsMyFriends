@@ -104,6 +104,15 @@ fieldset {
 	width: 128px;
 	height: 128px;
 	padding: 8px;
+	position:relative;
+}
+
+.itemCardImage {
+	width: 128px;
+	height: 128px;
+	position:absolute;
+	left:0;
+	bottom:0;
 }
 
 .itemCardPropertiesDiv {
