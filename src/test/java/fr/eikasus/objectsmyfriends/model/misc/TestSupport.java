@@ -46,13 +46,17 @@ public class TestSupport<T>
 		public String desc;
 		public int cat;
 		public int price;
+		public int imageNbr;
+		public String imageName;
 
-		public SmallItem(String name, String desc, int cat, int price)
+		public SmallItem(String name, String desc, int cat, int price, int imageNbr, String imageName)
 		{
 			this.name = name;
 			this.desc = desc;
 			this.cat = cat;
 			this.price = price;
+			this.imageNbr = imageNbr;
+			this.imageName = imageName;
 		}
 	}
 
@@ -80,18 +84,22 @@ public class TestSupport<T>
 
 	public TestSupport()
 	{
-		defaultItems.add(new SmallItem("Serveur SuperMicro", "Serveur SuperMicro 8047R-7RFT+", 0, 500));
-		defaultItems.add(new SmallItem("Amiga", "Amiga 4000 Desktop", 0, 100));
-		defaultItems.add(new SmallItem("Atari", "Atari 1040 STF", 0, 100));
-		defaultItems.add(new SmallItem("Cyberpunk 2077", "Jeu Cyberpunk 2077 sur Steam", 0, 70));
-		defaultItems.add(new SmallItem("The Witcher 3", "Jeu The Witcher 3 sur Steam", 2, 70));
-		defaultItems.add(new SmallItem("Carte Graphique", "Carte graphique Nvidia GTX 780TI", 2, 200));
-		defaultItems.add(new SmallItem("Processeur Xeon", "Processeur Xeon 7041 paxville SL8MA", 0, 50));
-		defaultItems.add(new SmallItem("Oscilloscope", "Oscilloscope PHILIPS PM3233 2x 10 MHz collection / vintage", 1, 60));
-		defaultItems.add(new SmallItem("Tomb Raider", "Jeu Raise of the Tomb Raider sur Steam", 2, 70));
-		defaultItems.add(new SmallItem("Fallout 4", "Jeu Fallout 4 sur Steam", 2, 70));
-		defaultItems.add(new SmallItem("DOOM", "Jeu DOOM sur Steam", 2, 70));
-		defaultItems.add(new SmallItem("Dark Souls III", "Jeu Dark Souls III sur Steam", 2, 70));
+		defaultItems.add(new SmallItem("Serveur SuperMicro", "Serveur SuperMicro 8047R-7RFT+", 0, 500, 1, "server_sys-8047r-7rft+.jpg"));
+		defaultItems.add(new SmallItem("Amiga", "Amiga 4000 Desktop", 0, 100, 1, "amiga_a4000d.jpg"));
+		defaultItems.add(new SmallItem("Atari", "Atari 1040 STF", 0, 100, 1, "atari_1040stf.jpg"));
+		defaultItems.add(new SmallItem("Cyberpunk 2077", "Jeu Cyberpunk 2077 sur Steam", 0, 70, 1, "cyberpunk_ 2077.jpg"));
+		defaultItems.add(new SmallItem("The Witcher 3", "Jeu The Witcher 3 sur Steam", 2, 70, 1, "the_witcher 3.jpg"));
+		defaultItems.add(new SmallItem("Carte Graphique", "Carte graphique Nvidia GTX 780TI", 2, 200, 1, "nvidia_gtx780ti.jpg"));
+		defaultItems.add(new SmallItem("Processeur Xeon", "Processeur Xeon 7041 paxville SL8MA", 0, 50, 1, "xeon.jpg"));
+		defaultItems.add(new SmallItem("Oscilloscope", "Oscilloscope PHILIPS PM3233 2x 10 MHz collection / vintage", 1, 60, 1, "oscilloscope.jpg"));
+		defaultItems.add(new SmallItem("Tomb Raider", "Jeu Raise of the Tomb Raider sur Steam", 2, 70, 1, "tomb_raider.jpg"));
+		defaultItems.add(new SmallItem("Fallout 4", "Jeu Fallout 4 sur Steam", 2, 70, 1, "fallout4.jpg"));
+		defaultItems.add(new SmallItem("DOOM", "Jeu DOOM sur Steam", 2, 70, 1, "doom.jpg"));
+		defaultItems.add(new SmallItem("Dark Souls III", "Jeu Dark Souls III sur Steam", 2, 70, 1, "darksouls_iii.jpg"));
+		defaultItems.add(new SmallItem("Scie plongeante", "Scie plongeante FESTOOL TS55 FEBQ-PLUS FS", 4, 200, 1, "scie_plongeante_festool.jpg"));
+		defaultItems.add(new SmallItem("Lenovo T480 20L5", "Vends Lenovo T480 20L05 datant de fin 2019. C'est un PC portable de gamme professionnelle, extrêmement robuste. Il dispose de deux batteries internes qui lui donnent une très grande autonomie, Windows affiche plus de 5h. Equipé d'un processeur Intel i5 récent et puissant.", 0, 150, 3, "lenovo.png"));
+		defaultItems.add(new SmallItem("Acer Aspire R3-131t", "Acer Aspire R3-131T 1 1.6 » (500 Go, Intel Celeron Dual-Core, 1.6 GHz, 4 Go)", 0, 400, 3, "acer.jpg"));
+		defaultItems.add(new SmallItem("Corsair RM650", "Corsair RM650 - 650w - 80 plus Gold", 0, 85, 1, "corsair_rm650.png"));
 	}
 
 	/* ******************* */
@@ -165,18 +173,20 @@ public class TestSupport<T>
 	public List<Image> createImageList(@NotNull List<Item> items)
 	{
 		List<Image> images = new ArrayList<>();
-		Random rnd = new Random();
+		String[] baseName;
 
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path one"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path two"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path three"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path for"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path six"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path seven"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path eight"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path nine"));
-		images.add(new Image(items.get(rnd.nextInt(items.size())), "path ten"));
+		// For each item defined.
+		for (int i = 0; i < defaultItems.size(); i++)
+		{
+			// Separate the name and the extension.
+			baseName = defaultItems.get(i).imageName.split("\\.");
 
+			// Attach images to the current item.
+			for (int j = 0; j < defaultItems.get(i).imageNbr; j++)
+				images.add(new Image(items.get(i), String.format("%s_%d.%s",baseName[0], j + 1, baseName[1])));
+		}
+
+		// Return the newly created images list.
 		return images;
 	}
 
