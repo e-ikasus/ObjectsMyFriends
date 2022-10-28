@@ -35,7 +35,8 @@
 
 	<form id="searchOptions" method="get">
 
-		<fieldset id="itemFieldset">
+		<div id="topPart">
+			<fieldset id="itemFieldset">
 			<legend><fmt:message key="ITEM_ATTRIBUTES" bundle="${r}"/></legend>
 
 			<div class="labelInputDiv">
@@ -56,7 +57,7 @@
 			</div>
 		</fieldset>
 
-		<fieldset id="purchasesFieldset">
+			<fieldset id="purchasesFieldset">
 			<legend>
 				<input type="radio" name="searchType" id="purchases" value="purchases" ${purchasesRadioButton}><label for="purchases"><fmt:message key="PURCHASES" bundle="${r}"/></label>
 			</legend>
@@ -80,8 +81,10 @@
 			</div>
 
 		</fieldset>
+		</div>
 
-		<fieldset id="salesFieldset">
+		<div id="bottomPart">
+			<fieldset id="salesFieldset">
 			<legend>
 				<input type="radio" name="searchType" id="sales" value="sales" ${salesRadioButton}><label for="sales"><fmt:message key="MY_SALES" bundle="${r}"/></label>
 			</legend>
@@ -106,8 +109,9 @@
 
 		</fieldset>
 
-		<div id="buttonsDiv">
+			<div id="buttonsDiv">
 			<input id="search" name="search" type="submit" value="<fmt:message key="SEARCH" bundle="${r}"/>">
+		</div>
 		</div>
 
 	</form>

@@ -1,22 +1,73 @@
-#content {
-	display: flex;
-	flex-direction: row;
-	justify-content: stretch;
-	align-items: stretch;
-	flex-wrap: nowrap;
-	overflow-y: hidden;
+@media (max-width: 800px ) {
+	#content {
+		display: flex;
+		flex-direction: column;
+		justify-content: stretch;
+		align-items: stretch;
+		flex-wrap: nowrap;
+		overflow-y: hidden;
+	}
+
+	#searchOptionsDiv {
+		border-bottom-color: var(--form-border-color);
+		border-bottom-style: solid;
+		border-bottom-width: 2px;
+	}
+
+	#searchOptions {
+		display:flex;
+		flex-direction: row;
+	}
+
+	#topPart {
+		margin: 32px 16px 8px 32px;
+	}
+
+	#bottomPart {
+		margin: 32px 32px 0 16px;
+	}
+}
+
+@media (min-width: 800px ) {
+	#content {
+		display: flex;
+		flex-direction: row;
+		justify-content: stretch;
+		align-items: stretch;
+		flex-wrap: nowrap;
+		overflow-y: hidden;
+	}
+
+	#searchOptionsDiv {
+		flex-grow: 0;
+		border-right-color: var(--form-border-color);
+		border-right-style: solid;
+		border-right-width: 2px;
+	}
+
+	#searchOptions {
+		display:flex;
+		flex-direction: column;
+	}
+
+	#topPart {
+		margin: 32px 32px 0 32px;
+	}
+
+	#bottomPart {
+		margin: 0 32px 16px 32px;
+	}
 }
 
 /***********************/
 /* Search options form */
 /***********************/
 
-#searchOptionsDiv {
-	flex-grow: 0;
-	padding: 32px;
-	border-right-color: var(--form-border-color);
-	border-right-style: solid;
-	border-right-width: 2px;
+#topPart, #bottomPart {
+	display: flex;
+	flex-direction:column;
+	flex-grow:1;
+	justify-content: space-between;
 }
 
 .labelInputDiv {
@@ -103,8 +154,9 @@ fieldset {
 .itemCardImageDiv {
 	width: 128px;
 	height: 128px;
-	padding: 8px;
+	margin: 8px;
 	position:relative;
+	background-color: var(--background-image-color);
 }
 
 .itemCardImage {
@@ -138,4 +190,25 @@ fieldset {
 	margin: 0;
 	color: var(--input-text-color);
 	font-size: 1.1em;
+}
+
+/********************/
+/* Images animation */
+/********************/
+
+.itemCardImageFront {
+	animation-duration: 3s;
+	animation-name: fade;
+	animation-iteration-count: 1;
+	animation-direction: normal;
+}
+
+@keyframes fade {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
 }
