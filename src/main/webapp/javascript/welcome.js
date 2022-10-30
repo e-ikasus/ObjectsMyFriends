@@ -66,7 +66,7 @@ window.welcome = {};
 				const current = $(".itemCardShadowDiv")[index];
 
 				// The element identifier is the item identifier.
-				let identifier = $(":first-child", current).attr("id").substring(1);
+				let identifier = $(".itemCardDiv", current).attr("id").substring(1);
 
 				// Retrieve the images for that item.
 				$.get(this.imageHandlerPath + "?identifier=" + identifier)
@@ -108,7 +108,7 @@ window.welcome = {};
 							}.bind(image));
 
 							// Animation is only applied to the last image when there is more than one.
-							if ((index) && (index === list.length - 1)) image.addClass("itemCardImageFront");
+							//if ((index) && (index === list.length - 1)) image.addClass("itemCardImageFront");
 						});
 					});
 			});

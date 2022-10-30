@@ -15,7 +15,7 @@
 	}
 
 	#searchOptions {
-		display:flex;
+		display: flex;
 		flex-direction: row;
 	}
 
@@ -46,7 +46,7 @@
 	}
 
 	#searchOptions {
-		display:flex;
+		display: flex;
 		flex-direction: column;
 	}
 
@@ -65,8 +65,8 @@
 
 #topPart, #bottomPart {
 	display: flex;
-	flex-direction:column;
-	flex-grow:1;
+	flex-direction: column;
+	flex-grow: 1;
 	justify-content: space-between;
 }
 
@@ -139,6 +139,23 @@ fieldset {
 	transform: rotate(3deg);
 }
 
+.itemCardTitleDiv {
+	display: inline-block;
+	margin: 16px 16px 0 16px;
+	background-color: var(--itemcard-backgound-color);
+	border-color: var(--form-border-color);
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	position: relative;
+	top: 1px;
+}
+
+.itemCardTitleDiv p {
+	margin: 0;
+	padding: 4px 8px 4px 8px;
+	color: var(--form-title-color);
+}
+
 .itemCardDiv {
 	display: flex;
 	flex-direction: row;
@@ -146,7 +163,7 @@ fieldset {
 	flex-shrink: 0;
 	width: 432px;
 	padding: 16px;
-	margin: 16px;
+	margin: 0 16px 16px 16px;
 	border: 1px solid var(--form-border-color);
 	background-color: var(--itemcard-backgound-color);
 }
@@ -155,16 +172,16 @@ fieldset {
 	width: 128px;
 	height: 128px;
 	margin: 8px;
-	position:relative;
+	position: relative;
 	background-color: var(--background-image-color);
 }
 
 .itemCardImage {
 	width: 128px;
 	height: 128px;
-	position:absolute;
-	left:0;
-	bottom:0;
+	position: absolute;
+	left: 0;
+	bottom: 0;
 }
 
 .itemCardPropertiesDiv {

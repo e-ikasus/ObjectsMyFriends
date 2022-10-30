@@ -123,6 +123,9 @@
 	<c:forEach items="${requestScope.items}" var="item">
 
 		<div class="itemCardShadowDiv">
+			<div class="itemCardTitleDiv">
+				<p class="itemCardTitle">${item.name}</p>
+			</div>
 			<div class="itemCardDiv" id="i${item.identifier}">
 				<div class="itemCardImageDiv">
 
