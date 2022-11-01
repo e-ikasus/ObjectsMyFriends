@@ -10,6 +10,7 @@ import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -212,6 +213,40 @@ public class UserManager
 
 		// return tue found user.
 		return user;
+	}
+
+	/**
+	 * Search a specific user.
+	 * <p></p>
+	 * Search a specific user in the database whose identifier is the one supplied
+	 * in parameter. If this supplied parameter is null, then all users are
+	 * returned by this method.
+	 *
+	 * @param identifier User identifier or null for all.
+	 *
+	 * @return List of users found.
+	 *
+	 * @throws ModelException In case of pb.
+	 */
+
+	public List<User> find(Long identifier) throws ModelException
+	{
+		List<User> users = new ArrayList<>();
+
+		try
+		{
+			// Find a specific user or all.
+			if (identifier == null) users = dao.find();
+			else users.add(dao.find(identifier));
+		}
+		catch (ModelException me)
+		{
+			// Add generic error.
+			throw me.add(ModelError.USER_NOT_FOUND);
+		}
+
+		// Return the result
+		return users;
 	}
 
 	/**
