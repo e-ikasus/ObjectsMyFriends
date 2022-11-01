@@ -26,8 +26,12 @@
 	--make-offer-button-border-color: #8a6b9a;
 	--search-button-background-color: #62b543;
 	--search-button-border-color: #559b3a;
+	--return-button-background-color: #62b543;
+	--return-button-border-color: #559b3a;
 	--form-title-color: white;
 	--itemcard-backgound-color: #595b5d;
 	--itemcard-shadow-color: #242526;
 	--background-image-color: white;
+	--visited-link-color: #62B543FF;
+	--visited-link-background-color: rgba(159, 248, 126, 0.1);
 }

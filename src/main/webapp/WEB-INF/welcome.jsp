@@ -48,10 +48,12 @@
 				<label for="category" class="leftLabel"><fmt:message key="CATEGORY" bundle="${r}"/></label>
 				<select id="category" name="category">
 					<option value="all"<c:if test="${requestScope.category == 'all'}"> selected</c:if>>
-						<fmt:message key="ALL_CATEGORIES" bundle="${r}"/></option>
+						<fmt:message key="ALL_CATEGORIES" bundle="${r}"/>
+					</option>
 					<c:forEach var="category" items="${requestScope.categories}">
 						<option value="${category.label}"
-										<c:if test="${category.label == requestScope.category}"> selected</c:if>>${category.label}</option>
+							<c:if test="${category.label == requestScope.category}"> selected</c:if>>${category.label}
+						</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -144,7 +146,11 @@
 
 					<div class="itemCardPropertyDiv">
 						<p class="propertyName"><fmt:message key="SELLER" bundle="${r}"/></p>
-						<p class="propertyValue" id="seller">${item.seller.username}</p>
+						<p class="propertyValue" id="seller">
+							<c:if test="${sessionScope.user != null}"> <a class="itemCardSellerLink" href="${pageContext.request.contextPath}/show_profile?identifier=${item.seller.identifier}"></c:if>
+							${item.seller.username}
+							<c:if test="${sessionScope.user != null}"></a></c:if>
+						</p>
 					</div>
 				</div>
 

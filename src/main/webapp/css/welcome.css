@@ -209,6 +209,32 @@ fieldset {
 	font-size: 1.1em;
 }
 
+.itemCardSellerLink {
+	outline: none;
+	text-decoration: none;
+	padding: 2px;
+	border-width: 2px;
+	border-style: dashed;
+}
+
+.itemCardSellerLink:link {
+	color: var(--input-text-color);
+	border-color: var(--input-text-color);
+}
+
+.itemCardSellerLink:visited {
+	color: var(--visited-link-color);
+	border-color: var(--visited-link-color);
+}
+
+.itemCardSellerLink:focus, .itemCardSellerLink:hover {
+	color: var(--visited-link-color);
+	border-color: var(--visited-link-color);
+	background-color: var(--visited-link-background-color);
+}
+
+
+
 /********************/
 /* Images animation */
 /********************/

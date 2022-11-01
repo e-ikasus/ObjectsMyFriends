@@ -9,7 +9,7 @@
 	<jsp:param name="jsFiles" value=""/>
 </jsp:include>
 
-<form id="show" class="formApp" method="get" action="${pageContext.request.contextPath}/modify_profile">
+<form id="show" class="formApp" method="post">
 
 	<div id="formTitle"><fmt:message key="TITLE_SHOW_PROFILE_FORM" bundle="${r}"/></div>
 
@@ -56,7 +56,11 @@
 	</div>
 
 	<div id="buttonsDiv">
-		<input id="modify" name="modify" type="submit" value="<fmt:message key="MODIFY" bundle="${r}"/>">
+		<c:if test="${requestScope.user.identifier == sessionScope.user.identifier}">
+			<input id="modify" name="modify" type="submit" value="<fmt:message key="MODIFY" bundle="${r}"/>">
+		</c:if>
+		<input id="return" name="return" type="submit" value="<fmt:message key="RETURN" bundle="${r}"/>">
+		<input name="identifier" type="hidden" value="${requestScope.user.identifier}"/>
 	</div>
 
 </form>
