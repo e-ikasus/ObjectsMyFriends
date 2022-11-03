@@ -31,6 +31,7 @@ import java.util.List;
  * @see #loadImage(HttpServletRequest, String) loadImage()
  * @see #getUrlImage(HttpServletRequest, String) getUrlImage()
  * @see #getUrlImageHandler(HttpServletRequest) getUrlImageHandler()
+ * @see #getUrlServlet(HttpServletRequest, String) getUrlServlet()
  * @see #parseDateParameter(HttpServletRequest, String) parseDateParameter()
  * @see #parseIntegerParameter(HttpServletRequest, String)
  * parseIntegerParameter()
@@ -284,6 +285,26 @@ public class ControllerSupport
 		String urlBase = url.substring(0, url.lastIndexOf(servletPath));
 
 		return urlBase + "/" + IMAGE_HANDLER_NAME;
+	}
+
+	/**
+	 * Compute the url of a servlet.
+	 * <p></p>
+	 * This method is used to create the url needed to access a servlet from the
+	 * client. The name of this servlet is supplied in parameter.
+	 *
+	 * @param request Request needed to retrieve context.
+	 *
+	 * @return Url to the servlet.
+	 */
+
+	public String getUrlServlet(@NotNull HttpServletRequest request, String servletName)
+	{
+		String url = request.getRequestURL().toString();
+		String servletPath = request.getServletPath();
+		String urlBase = url.substring(0, url.lastIndexOf(servletPath));
+
+		return urlBase + "/" + servletName;
 	}
 
 	/**
