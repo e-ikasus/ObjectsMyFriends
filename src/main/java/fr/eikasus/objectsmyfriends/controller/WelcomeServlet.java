@@ -31,6 +31,10 @@ public class WelcomeServlet extends HttpServlet
 
 		String[] knownParams = {"category", "keywords", "openedBids", "currentBids", "wonBids", "myCurrentSales", "myPendingSales", "myEndedSales", "searchType"};
 
+		// No item is currently selected. This is necessary for the images handler.
+		request.getSession().removeAttribute("item");
+		request.getSession().removeAttribute("itemImages");
+
 		try
 		{
 			// Read the available categories.
