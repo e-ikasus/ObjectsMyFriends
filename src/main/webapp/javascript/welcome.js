@@ -6,10 +6,13 @@ window.welcome = {};
 		 * Initialisation stuff for the search form.
 		 */
 
-		object.initialize = function (path)
+		object.initialize = function (imagesPath, itemsPath)
 		{
 			// URL to the items images handler.
-			this.imageHandlerPath = path;
+			this.imageHandlerPath = imagesPath;
+
+			// URL to the items bid page.
+			this.itemsPath = itemsPath;
 
 			// Handler for radio buttons to disable HTML elements not selectable.
 			$("#purchases,#sales").on("click", () => this.radioButtonsHandler());
@@ -67,6 +70,10 @@ window.welcome = {};
 
 				// The element identifier is the item identifier.
 				let identifier = $(".itemCardDiv", current).attr("id").substring(1);
+
+				// When the user click on an item, it is redirected to the bid form.
+				$(".itemCardDiv", current).on("click", () => document.location.assign(this.itemsPath + "?item=" + identifier));
+				$(".itemCardTitleDiv", current).on("click", () => document.location.assign(this.itemsPath + "?item=" + identifier));
 
 				// Retrieve the images for that item.
 				$.get(this.imageHandlerPath + "?identifier=" + identifier)

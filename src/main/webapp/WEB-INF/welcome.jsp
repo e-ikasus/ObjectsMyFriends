@@ -4,12 +4,13 @@
 
 <fmt:setBundle basename="locale" var="r"/>
 
-<c:set var="urlImages" value="<%=ControllerSupport.getInstance().getUrlImageHandler(request)%>" scope="page"/>
+<c:set var="imagesUrl" value="<%=ControllerSupport.getInstance().getUrlImageHandler(request)%>" scope="page"/>
+<c:set var="itemsUrl" value='<%=ControllerSupport.getInstance().getUrlServlet(request, "item_bid")%>' scope="page"/>
 
 <jsp:include page="header.jsp">
-	<jsp:param name="cssFiles" value="forms,welcome"/>
+	<jsp:param name="cssFiles" value="forms,welcome,itemcard"/>
 	<jsp:param name="jsFiles" value="jquery,welcome"/>
-	<jsp:param name="jsInit" value="welcome,\"${pageScope.urlImages}\""/>
+	<jsp:param name="jsInit" value="welcome,\"${pageScope.imagesUrl}\",\"${pageScope.itemsUrl}\""/>
 </jsp:include>
 
 <c:choose>
@@ -124,38 +125,9 @@
 
 	<c:forEach items="${requestScope.items}" var="item">
 
-		<div class="itemCardShadowDiv">
-			<div class="itemCardTitleDiv">
-				<p class="itemCardTitle">${item.name}</p>
-			</div>
-			<div class="itemCardDiv" id="i${item.identifier}">
-				<div class="itemCardImageDiv">
+		<c:set var="itemCard" value="${item}" scope="request"/>
 
-				</div>
-				<div class="itemCardPropertiesDiv">
-
-					<div class="itemCardPropertyDiv">
-						<p class="propertyName"><fmt:message key="INITIAL_PRICE" bundle="${r}"/></p>
-						<p class="propertyValue" id="initialPrice">${item.initialPrice}</p>
-					</div>
-
-					<div class="itemCardPropertyDiv">
-						<p class="propertyName"><fmt:message key="BID_END" bundle="${r}"/></p>
-						<p class="propertyValue" id="biddingEnd"><fmt:formatDate type="BOTH" value="${item.biddingEnd}" timeStyle="MEDIUM"/></p>
-					</div>
-
-					<div class="itemCardPropertyDiv">
-						<p class="propertyName"><fmt:message key="SELLER" bundle="${r}"/></p>
-						<p class="propertyValue" id="seller">
-							<c:if test="${sessionScope.user != null}"> <a class="itemCardSellerLink" href="${pageContext.request.contextPath}/show_profile?identifier=${item.seller.identifier}"></c:if>
-							${item.seller.username}
-							<c:if test="${sessionScope.user != null}"></a></c:if>
-						</p>
-					</div>
-				</div>
-
-			</div>
-		</div>
+		<jsp:include page="itemcard.jsp"/>
 
 	</c:forEach>
 
