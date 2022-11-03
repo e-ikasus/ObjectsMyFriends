@@ -41,8 +41,6 @@ public class LogInFilter implements Filter
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
 		else if ((url.contains("item_sell")) && (!connected))
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		else if ((url.contains("item_bid")) && (!connected))
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
 		else if ((url.contains("show_profile")) && (!connected))
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
 		else

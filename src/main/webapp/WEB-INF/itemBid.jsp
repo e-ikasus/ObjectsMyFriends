@@ -13,6 +13,9 @@
 	<jsp:param name="jsInit" value="ItemBid,\"${pageScope.urlImages}\""/>
 </jsp:include>
 
+<%-- A user can only make an offer if it is connected, not the seller of the item or not the best bidder. --%>
+<c:set var="canMakeOffer" value="${(sessionScope.user != null) && (sessionScope.user != sessionScope.item.seller) && (sessionScope.user != sessionScope.bestBid.user)}"/>
+
 <form id="itemBid" class="formApp" method="post" action="${pageContext.request.contextPath}/item_bid">
 
 	<div id="formTitle"><fmt:message key="TITLE_ITEM_BID_FORM" bundle="${r}"/></div>
@@ -131,16 +134,18 @@
 					</div>
 				</div>
 
-				<div>
-					<div class="labelInputDiv">
-						<label for="yourOffer"><fmt:message key="YOUR_OFFER" bundle="${r}"/></label>
-						<input id="yourOffer" name="yourOffer" type="number" value="${requestScope.yourOffer}"/>
+				<c:if test="${canMakeOffer}">
+					<div>
+						<div class="labelInputDiv">
+							<label for="yourOffer"><fmt:message key="YOUR_OFFER" bundle="${r}"/></label>
+							<input id="yourOffer" name="yourOffer" type="number" value="${requestScope.yourOffer}"/>
+						</div>
+						<div class="errorSmall">
+							<c:if test="${requestScope.errorYourOffer != null}">${requestScope.errorYourOffer}</c:if>
+							<c:if test="${requestScope.errorYourOffer == null}">&nbsp;</c:if>
+						</div>
 					</div>
-					<div class="errorSmall">
-						<c:if test="${requestScope.errorYourOffer != null}">${requestScope.errorYourOffer}</c:if>
-						<c:if test="${requestScope.errorYourOffer == null}">&nbsp;</c:if>
-					</div>
-				</div>
+				</c:if>
 
 			</fieldset>
 
@@ -153,8 +158,10 @@
 	</div>
 
 	<div id="buttonsDiv">
-		<input id="makeOffer" name="makeOffer" type="submit" value="<fmt:message key="MAKE_OFFER" bundle="${r}"/>">
-		<input id="cancel" name="cancel" type="submit" value="<fmt:message key="CANCEL" bundle="${r}"/>">
+		<c:if test="${canMakeOffer}">
+			<input id="makeOffer" name="makeOffer" type="submit" value="<fmt:message key="MAKE_OFFER" bundle="${r}"/>">
+		</c:if>
+		<input id="return" name="return" type="submit" value="<fmt:message key="RETURN" bundle="${r}"/>">
 	</div>
 
 </form>
