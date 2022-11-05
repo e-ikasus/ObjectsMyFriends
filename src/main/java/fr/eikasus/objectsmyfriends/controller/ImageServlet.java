@@ -28,7 +28,7 @@ public class ImageServlet extends HttpServlet
 			// Where the image file names will be stored before sending.
 			ArrayList<String> imageFileNames = new ArrayList<>();
 
-			// List of images file name uploaded.
+			// List of images file name uploaded if exists.
 			ArrayList<String> uploadedImages = (ArrayList<String>) request.getSession().getAttribute("itemImages");
 
 			// Item currently edited if exists.
@@ -46,7 +46,7 @@ public class ImageServlet extends HttpServlet
 			{
 				List<Item> items = ItemManager.getInstance().find(identifier);
 
-				if (items.size() != 1) currentItem = items.get(0);
+				if (items.size() != 0) currentItem = items.get(0);
 			}
 
 			// Put the uploaded image file names in the list.
