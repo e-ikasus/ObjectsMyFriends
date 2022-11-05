@@ -30,7 +30,10 @@
 	</c:forTokens>
 
 	<c:forTokens items="${param.jsFiles}" delims="," var="name">
-		<script src="${pageContext.request.contextPath}/javascript/${name}.js"></script>
+		<c:choose>
+			<c:when test="${name == 'jquery'}"><script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script></c:when>
+			<c:otherwise><script src="${pageContext.request.contextPath}/javascript/${name}.js"></script></c:otherwise>
+		</c:choose>
 	</c:forTokens>
 
 	<c:forTokens items="${param.jsInit}" delims="," var="jsParam" varStatus="iter">
