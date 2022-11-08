@@ -1,24 +1,25 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bo.*;
+import fr.eikasus.objectsmyfriends.model.bo.Bid;
+import fr.eikasus.objectsmyfriends.model.bo.Category;
+import fr.eikasus.objectsmyfriends.model.bo.Item;
+import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.*;
-import fr.eikasus.objectsmyfriends.model.dal.misc.ResultVoid;
+import fr.eikasus.objectsmyfriends.model.dal.interfaces.BidDAO;
+import fr.eikasus.objectsmyfriends.model.dal.interfaces.CategoryDAO;
+import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
+import fr.eikasus.objectsmyfriends.model.dal.interfaces.UserDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ItemState;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class is used to test functionalities of the item data access object.
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ItemDAOImplTest
 {
+	private static DAOFactory daoFactory;
 	private static CategoryDAO categoryDAO;
 	private static UserDAO userDAO;
 	private static BidDAO bidDAO;
@@ -48,23 +50,41 @@ class ItemDAOImplTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a dao factory object;
+		daoFactory = new DAOFactory();
+
 		// Retrieve DAO objects.
-		categoryDAO = DAOFactory.getCategoryDAO();
-		userDAO = DAOFactory.getUserDAO();
-		bidDAO = DAOFactory.getBidDAO();
-		itemDAO = DAOFactory.getItemDAO();
+		categoryDAO = daoFactory.getCategoryDAO();
+		userDAO = daoFactory.getUserDAO();
+		bidDAO = daoFactory.getBidDAO();
+		itemDAO = daoFactory.getItemDAO();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(daoFactory);
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the dao factory object.
+		daoFactory.close();
 	}
 
 	/**
 	 * Populate database for each test.
 	 */
 
-	@BeforeEach void setUp()
+	@BeforeEach public void setUp()
 	{
 		testSupport.action("Populating the database");
 
 		// Populate the database.
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(daoFactory);
 
 		testSupport.action("Retrieving all images");
 		assertDoesNotThrow(() -> items = itemDAO.find());
@@ -88,7 +108,7 @@ class ItemDAOImplTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(daoFactory);
 	}
 
 	/* ************** */
@@ -134,7 +154,7 @@ class ItemDAOImplTest
 	 * @param user User do deal with.
 	 */
 
-	private void itemsBoughtBySpecificUser(User user)
+	private void itemsBoughtBySpecificUser(@NotNull User user)
 	{
 		testSupport.executeAndCompare(String.format("Searching items bought by user %s", user.getUsername()), attendedItems, () ->
 		{
@@ -191,7 +211,7 @@ class ItemDAOImplTest
 	 * @param user User do deal with.
 	 */
 
-	private void itemsRelatedToUser(User user)
+	private void itemsRelatedToUser(@NotNull User user)
 	{
 		testSupport.executeAndCompare(String.format("Searching items sold by user %s", user.getUsername()), attendedItems, () ->
 		{
@@ -218,7 +238,7 @@ class ItemDAOImplTest
 	 * @param category Category do deal with.
 	 */
 
-	private void itemsRelatedToCategory(Category category)
+	private void itemsRelatedToCategory(@NotNull Category category)
 	{
 		testSupport.executeAndCompare(String.format("Searching items of category %s", category.getLabel()), attendedItems, () ->
 		{

@@ -3,6 +3,7 @@ package fr.eikasus.objectsmyfriends.model.dal.implementations;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
@@ -64,9 +65,9 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	/* Constructors */
 	/* ************ */
 
-	public ItemDAOImpl()
+	public ItemDAOImpl(DAOFactory daoFactory)
 	{
-		super(Item.class);
+		super(Item.class, daoFactory);
 	}
 
 	/* ******************* */

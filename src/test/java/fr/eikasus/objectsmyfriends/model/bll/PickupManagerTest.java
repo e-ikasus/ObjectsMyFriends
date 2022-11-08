@@ -1,17 +1,12 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
-import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +24,7 @@ public class PickupManagerTest
 	HashMap<String, Object> properties = new HashMap<>();
 
 	private static TestSupport<PickupPlace> testSupport;
+	private static ManagerFactory managerFactory;
 	private static PickupManager pickupManager;
 
 	/**
@@ -40,8 +36,26 @@ public class PickupManagerTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a manager factory object.
+		managerFactory = new ManagerFactory();
+
 		// Unique category manager instance.
-		pickupManager = PickupManager.getInstance();
+		pickupManager = managerFactory.getPickupManager();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the manager factory object.
+		managerFactory.close();
 	}
 
 	/**
@@ -52,7 +66,7 @@ public class PickupManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(managerFactory.getDaoFactory());
 	}
 
 	/**
@@ -64,7 +78,7 @@ public class PickupManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 
 	/* ************** */
@@ -107,11 +121,11 @@ public class PickupManagerTest
 		testSupport.action(String.format("Searching for a particular item owned by %s", name));
 
 		// Search a particular user.
-		assertDoesNotThrow(() -> {user = UserManager.getInstance().find(name, null, password);});
+		assertDoesNotThrow(() -> {user = managerFactory.getUserManager().find(name, null, password);});
 		assertNotNull(user);
 
 		// Search a particular item.
-		assertDoesNotThrow(() -> {items = ItemManager.getInstance().findByCriteria(user, UserRole.SELLER, criteria, null, null);});
+		assertDoesNotThrow(() -> {items = managerFactory.getItemManager().findByCriteria(user, UserRole.SELLER, criteria, null, null);});
 		assertNotNull(items);
 		assertNotEquals(0, items.size());
 		item = items.get(0);

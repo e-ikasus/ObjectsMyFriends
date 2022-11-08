@@ -1,10 +1,11 @@
 package fr.eikasus.objectsmyfriends.controller;
 
 import com.google.gson.Gson;
-import fr.eikasus.objectsmyfriends.model.bll.CategoryManager;
-import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
+import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,9 +22,11 @@ import java.util.HashMap;
 @WebServlet(name = "WelcomeServlet", urlPatterns = {"/welcome", "/index.jsp", "/index.html"})
 public class WelcomeServlet extends HttpServlet
 {
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		HashMap<String, String> savedParams = new HashMap<>();
 		String param;
 		boolean receiveParam = false;
@@ -31,14 +34,14 @@ public class WelcomeServlet extends HttpServlet
 
 		String[] knownParams = {"category", "keywords", "openedBids", "currentBids", "wonBids", "myCurrentSales", "myPendingSales", "myEndedSales", "searchType"};
 
-		// No item is currently selected. This is necessary for the images handler.
+		// No item is currently selected. This is necessary for the image handler.
 		request.getSession().removeAttribute("item");
 		request.getSession().removeAttribute("itemImages");
 
 		try
 		{
 			// Read the available categories.
-			request.setAttribute("categories", CategoryManager.getInstance().find(null));
+			request.setAttribute("categories", managerFactory.getCategoryManager().find(null));
 		}
 		catch (ModelException e)
 		{
@@ -100,7 +103,7 @@ public class WelcomeServlet extends HttpServlet
 		try
 		{
 			//request.setAttribute("items", ItemManager.getInstance().findByCriteria(null, UserRole.BUYER, new Search().setOpenedBids(), null, ""));
-			request.setAttribute("items", ItemManager.getInstance().find(null));
+			request.setAttribute("items", managerFactory.getItemManager().find(null));
 		}
 		catch (ModelException e)
 		{
@@ -118,8 +121,7 @@ public class WelcomeServlet extends HttpServlet
 		requestDispatcher.forward(request, response);
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);
 	}

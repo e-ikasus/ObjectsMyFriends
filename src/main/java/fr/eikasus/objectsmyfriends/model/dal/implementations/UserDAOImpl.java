@@ -1,6 +1,7 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.UserDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -31,9 +32,9 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
 	/* Constructors */
 	/* ************ */
 
-	public UserDAOImpl()
+	public UserDAOImpl(DAOFactory daoFactory)
 	{
-		super(User.class);
+		super(User.class, daoFactory);
 	}
 
 	/* ******************* */

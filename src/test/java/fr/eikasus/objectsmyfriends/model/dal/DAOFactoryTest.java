@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DAOFactoryTest
 {
+	private static DAOFactory daoFactory;
 	private static CategoryDAO categoryDAO;
 	private static UserDAO userDAO;
 	private static ImageDAO imageDAO;
@@ -42,13 +43,31 @@ class DAOFactoryTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a dao factory object;
+		daoFactory = new DAOFactory();
+
 		// Retrieve DAO objects.
-		categoryDAO = DAOFactory.getCategoryDAO();
-		userDAO = DAOFactory.getUserDAO();
-		imageDAO = DAOFactory.getImageDAO();
-		bidDAO = DAOFactory.getBidDAO();
-		pickupDAO = DAOFactory.getPickupDAO();
-		itemDAO = DAOFactory.getItemDAO();
+		categoryDAO = daoFactory.getCategoryDAO();
+		userDAO = daoFactory.getUserDAO();
+		imageDAO = daoFactory.getImageDAO();
+		bidDAO = daoFactory.getBidDAO();
+		pickupDAO = daoFactory.getPickupDAO();
+		itemDAO = daoFactory.getItemDAO();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(daoFactory);
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the dao factory object.
+		daoFactory.close();
 	}
 
 	/**
@@ -60,7 +79,7 @@ class DAOFactoryTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(daoFactory);
 	}
 
 	/* ************** */

@@ -2,7 +2,6 @@ package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.UserDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -24,7 +23,6 @@ import java.util.regex.Pattern;
  * access of one of data access object method by the controllers is strictly
  * forbidden.
  *
- * @see #getInstance() getInstance()
  * @see #add(String, String, String, String, String, String, String, String,
  * String, int, boolean) add()
  * @see #find(String, String, String) find()
@@ -32,7 +30,7 @@ import java.util.regex.Pattern;
  * @see #delete(User, boolean) delete()
  */
 
-public class UserManager
+public class UserManager extends GenericManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -49,9 +47,6 @@ public class UserManager
 	/* ************* */
 	/* Class members */
 	/* ************* */
-
-	// Unique instance of the class.
-	private static UserManager instance;
 
 	// Data access object instance.
 	private final UserDAO dao;
@@ -70,13 +65,15 @@ public class UserManager
 	/* *************************** */
 
 	/**
-	 * Private constructor of the class.
+	 * Constructor of the class.
 	 */
 
-	private UserManager()
+	public UserManager(ManagerFactory managerFactory)
 	{
+		super(managerFactory);
+
 		// Data access object for user entity operations.
-		dao = DAOFactory.getUserDAO();
+		dao = managerFactory.getDaoFactory().getUserDAO();
 
 		// Property validators.
 		emailCheck = Pattern.compile(VALIDATE_EMAIL);
@@ -87,24 +84,6 @@ public class UserManager
 		streetCheck = Pattern.compile(VALIDATE_STREET);
 		zipcodeCheck = Pattern.compile(VALIDATE_ZIPCODE);
 		cityCheck = Pattern.compile(VALIDATE_NAME);
-	}
-
-	/**
-	 * Get the instance of the class.
-	 * <p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
-	 *
-	 * @return Unique instance of the class.
-	 */
-
-	public static UserManager getInstance()
-	{
-		// If the class is not already instanced.
-		if (instance == null) instance = new UserManager();
-
-		// Return the only instance of the class.
-		return instance;
 	}
 
 	/* ******************* */
@@ -380,7 +359,7 @@ public class UserManager
 			else
 			{
 				// Instance of the item manager to delete them.
-				itemManager = ItemManager.getInstance();
+				itemManager = managerFactory.getItemManager();
 
 				// Search for items related to the user.
 				criteria = new Search();
@@ -394,7 +373,7 @@ public class UserManager
 				itemManager.delete(items);
 
 				// Delete bids that the user did.
-				BidManager.getInstance().delete(user);
+				managerFactory.getBidManager().delete(user);
 
 				// Delete the user from the database.
 				dao.delete(user);

@@ -1,7 +1,6 @@
 package fr.eikasus.objectsmyfriends.model.misc;
 
-import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
-import fr.eikasus.objectsmyfriends.model.bll.UserManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.*;
 import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.CategoryDAO;
@@ -29,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see #createItemList(List, List) createItemList()
  * @see #enterFunction() enterFunction()
  * @see #action(String) action()
- * @see #populateDatabase()
- * @see #clearDatabase()
+ * @see #populateDatabase(DAOFactory) populateDatabase()
+ * @see #clearDatabase(DAOFactory) clearDatabase()
  * @see #executeAndCompare(String, List, ResultList) executeAndCompare()
  * @see #daysAfter(Date, int) daysAfter()
  * @see #daysBefore(Date, int) daysBefore()
- * @see #searchItem(UserRole, String, String, Search) searchIem()
+ * @see #searchItem(ManagerFactory, UserRole, String, String, Search) searchIem()
  * @see #displayTable(List, List)
  */
 
@@ -89,7 +88,7 @@ public class TestSupport<T>
 		defaultItems.add(new SmallItem("Atari", "Atari 1040 STF", 0, 100, 1, "atari_1040stf.jpg"));
 		defaultItems.add(new SmallItem("Cyberpunk 2077", "Jeu Cyberpunk 2077 sur Steam", 0, 70, 1, "cyberpunk_ 2077.jpg"));
 		defaultItems.add(new SmallItem("The Witcher 3", "Jeu The Witcher 3 sur Steam", 2, 70, 1, "the_witcher 3.jpg"));
-		defaultItems.add(new SmallItem("Carte Graphique", "Carte graphique Nvidia GTX 780TI", 2, 200, 1, "nvidia_gtx780ti.jpg"));
+		defaultItems.add(new SmallItem("Carte Graphique", "Carte graphique Nvidia GTX 780TI", 0, 200, 1, "nvidia_gtx780ti.jpg"));
 		defaultItems.add(new SmallItem("Processeur Xeon", "Processeur Xeon 7041 paxville SL8MA", 0, 50, 1, "xeon.jpg"));
 		defaultItems.add(new SmallItem("Oscilloscope", "Oscilloscope PHILIPS PM3233 2x 10 MHz collection / vintage", 1, 60, 1, "oscilloscope.jpg"));
 		defaultItems.add(new SmallItem("Tomb Raider", "Jeu Raise of the Tomb Raider sur Steam", 2, 70, 1, "tomb_raider.jpg"));
@@ -100,6 +99,16 @@ public class TestSupport<T>
 		defaultItems.add(new SmallItem("Lenovo T480 20L5", "Vends Lenovo T480 20L05 datant de fin 2019. C'est un PC portable de gamme professionnelle, extrêmement robuste. Il dispose de deux batteries internes qui lui donnent une très grande autonomie, Windows affiche plus de 5h. Equipé d'un processeur Intel i5 récent et puissant.", 0, 150, 3, "lenovo.png"));
 		defaultItems.add(new SmallItem("Acer Aspire R3-131t", "Acer Aspire R3-131T 1 1.6 » (500 Go, Intel Celeron Dual-Core, 1.6 GHz, 4 Go)", 0, 400, 3, "acer.jpg"));
 		defaultItems.add(new SmallItem("Corsair RM650", "Corsair RM650 - 650w - 80 plus Gold", 0, 85, 1, "corsair_rm650.png"));
+		defaultItems.add(new SmallItem("Carte Graphique AMD", "Carte Graphique AMD Radeon R9 285. fonctionnelle", 0, 20, 5, "radeon_r9_285.jpg"));
+		defaultItems.add(new SmallItem("Carte Graphique Nvidia", "ends Carte GraphiqueNVIDIA GeForce RTX 3060 Ti Founders Edition 8Go GDDR6", 0, 550, 1, "nvidia_rtx_3060ti.jpg"));
+		defaultItems.add(new SmallItem("Disque dur SSD", "Disque dur SSD interne SAMSUNG 870 EVO 500Go", 0, 50, 3, "ssd_samsung.jpg"));
+		defaultItems.add(new SmallItem("RAM Crucial DDR3", "RAM Crucial 8GB DDR3L 1600 1.35v CT102464BF160B Laptop neuve", 0, 30, 4, "ram_crucial.jpg"));
+		defaultItems.add(new SmallItem("Call of duty modern warfare 2", "Vends Call of duty modern warfare 2 ps5. Le jeu est comme neuf", 2, 54, 1, "call_of_duty.jpg"));
+		defaultItems.add(new SmallItem("Final Fantasy Vii 7 Ps1", "Final Fantasy Vii 7 Ps1.Complet, bon etat, version francaise", 2, 40, 4, "ff7_ps1.jpg"));
+		defaultItems.add(new SmallItem("The Elder Scrolls V: Skyrim", "The Elder Scrolls V: Skyrim VR (Sony PlayStation 4, 2017)", 2, 10, 2, "skyrim.jpg"));
+		defaultItems.add(new SmallItem("Station de soudage", "Station de soudage,JBC CD-2BQF numérique 130 W 90 - 450 °C", 1, 500, 1, "station_soudage_jbc.jpg"));
+		defaultItems.add(new SmallItem("METRIX AX 322", "Alimentation de laboratoire réglable 2 x 30V 2 x 2.5A", 1, 150, 3, "ax322.jpg"));
+		defaultItems.add(new SmallItem("Analyseur logique", "Analyseur logique Tektronix 1240 avec pack de communication d'imprimante Tektronix 1200C11", 1, 90, 5, "tektronix_1240.jpg"));
 	}
 
 	/* ******************* */
@@ -453,28 +462,30 @@ public class TestSupport<T>
 	 * items, images, bids and pickup places. All data are in good associated.
 	 * See {@code clearDatabase()} to clear the database.
 	 *
-	 * @see #clearDatabase()
+	 * @param daoFactory DaoFactory used to access the database.
+	 *
+	 * @see #clearDatabase(DAOFactory) clearDatabase()
 	 */
 
-	public void populateDatabase()
+	public void populateDatabase(DAOFactory daoFactory)
 	{
 		List<Category> categories = createCategoryList();
-		categories.forEach(category -> assertDoesNotThrow(() -> DAOFactory.getCategoryDAO().save(category)));
+		categories.forEach(category -> assertDoesNotThrow(() -> daoFactory.getCategoryDAO().save(category)));
 
 		List<User> users = createUserList();
-		users.forEach(user -> assertDoesNotThrow(() -> DAOFactory.getUserDAO().save(user)));
+		users.forEach(user -> assertDoesNotThrow(() -> daoFactory.getUserDAO().save(user)));
 
 		List<Item> items = createItemList(users, categories);
-		items.forEach(item -> assertDoesNotThrow(() -> DAOFactory.getItemDAO().save(item)));
+		items.forEach(item -> assertDoesNotThrow(() -> daoFactory.getItemDAO().save(item)));
 
 		List<Image> images = createImageList(items);
-		images.forEach(image -> assertDoesNotThrow(() -> DAOFactory.getImageDAO().save(image)));
+		images.forEach(image -> assertDoesNotThrow(() -> daoFactory.getImageDAO().save(image)));
 
 		List<PickupPlace> pickupPlaces = createPickupPlaceList(items);
-		pickupPlaces.forEach(pickupPlace -> assertDoesNotThrow(() -> DAOFactory.getPickupDAO().save(pickupPlace)));
+		pickupPlaces.forEach(pickupPlace -> assertDoesNotThrow(() -> daoFactory.getPickupDAO().save(pickupPlace)));
 
 		List<Bid> bids = createBidList(items, users);
-		bids.forEach(bid -> assertDoesNotThrow(() -> DAOFactory.getBidDAO().save(bid)));
+		bids.forEach(bid -> assertDoesNotThrow(() -> daoFactory.getBidDAO().save(bid)));
 	}
 
 	/**
@@ -485,23 +496,25 @@ public class TestSupport<T>
 	 * before items, and items before users and categories. See
 	 * {@code populateDatabase()} to fill the database.
 	 *
-	 * @see #populateDatabase()
+	 * @param daoFactory DaoFactory used to access the database.
+	 *
+	 * @see #populateDatabase(DAOFactory) populateDatabase()
 	 */
 
-	public void clearDatabase()
+	public void clearDatabase(DAOFactory daoFactory)
 	{
 		try
 		{
 			// Delete items which imply images, bids, pickup places.
-			ItemDAO itemDAO = DAOFactory.getItemDAO();
+			ItemDAO itemDAO = daoFactory.getItemDAO();
 			for (Item item : itemDAO.find()) itemDAO.delete(item);
 
 			// Delete categories.
-			CategoryDAO categoryDAO = DAOFactory.getCategoryDAO();
+			CategoryDAO categoryDAO = daoFactory.getCategoryDAO();
 			for (Category category : categoryDAO.find()) categoryDAO.deleteById(category.getIdentifier());
 
 			// Delete users.
-			UserDAO userDAO = DAOFactory.getUserDAO();
+			UserDAO userDAO = daoFactory.getUserDAO();
 			for (User user : userDAO.find()) userDAO.deleteById(user.getIdentifier());
 		}
 		catch (Exception exception)
@@ -610,18 +623,18 @@ public class TestSupport<T>
 	 * @return Found user and items.
 	 */
 
-	public HashMap<String, Object> searchItem(UserRole role, String name, String password, Search criteria)
+	public HashMap<String, Object> searchItem(ManagerFactory managerFactory, UserRole role, String name, String password, Search criteria)
 	{
 		HashMap<String, Object> result = new HashMap<>();
 
 		action(String.format("Searching for particular items owned by %s", name));
 
 		// Search a particular user.
-		assertDoesNotThrow(() -> {foundUser = UserManager.getInstance().find(name, null, password);});
+		assertDoesNotThrow(() -> {foundUser = managerFactory.getUserManager().find(name, null, password);});
 		assertNotNull(foundUser);
 
 		// Search particular items.
-		assertDoesNotThrow(() -> {foundItems = ItemManager.getInstance().findByCriteria(foundUser, role, criteria, null, null);});
+		assertDoesNotThrow(() -> {foundItems = managerFactory.getItemManager().findByCriteria(foundUser, role, criteria, null, null);});
 		assertNotNull(foundItems);
 
 		// Put the result in the collection.

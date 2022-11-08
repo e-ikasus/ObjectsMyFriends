@@ -3,7 +3,7 @@ package fr.eikasus.objectsmyfriends.controller;
 import fr.eikasus.objectsmyfriends.misc.ControllerError;
 import fr.eikasus.objectsmyfriends.misc.ControllerException;
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
-import fr.eikasus.objectsmyfriends.model.bll.UserManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -39,8 +39,7 @@ public class ModifyProfileServlet extends HttpServlet
 		formParameters.put(null, "credit");
 	}
 
-	@Override
-	protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// Retrieve the connected user. At this stage, there is always one because
 		// of the filter servlet.
@@ -61,14 +60,16 @@ public class ModifyProfileServlet extends HttpServlet
 		requestDispatcher.forward(request, response);
 	}
 
-	@Override
-	protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
+		request.setCharacterEncoding("UTF-8");
+
 		// Retrieve the connected user. At this stage, there is always one because
 		// of the filter servlet.
 		User user = (User) request.getSession().getAttribute("user");
-
-		request.setCharacterEncoding("UTF-8");
 
 		// Check if the user confirm the update.
 		if (request.getParameter("update") != null)
@@ -89,6 +90,10 @@ public class ModifyProfileServlet extends HttpServlet
 				if (newPassword.compareTo(confirmPassword) != 0)
 					throw new ControllerException(null, ControllerError.PASSWORD_DOESNT_MATCH);
 
+				// It is necessary to synchronise the user again, because the session
+				// was closed and then is not in the persistence context anymore.
+				user = managerFactory.getUserManager().find(user.getIdentifier()).get(0);
+
 				// Create list that will receive new properties.
 				HashMap<String, Object> newProperties = new HashMap<>();
 
@@ -103,23 +108,24 @@ public class ModifyProfileServlet extends HttpServlet
 				if (newPassword.length() != 0) newProperties.put("plainPassword", newPassword);
 
 				// Try to update the user.
-				UserManager.getInstance().update(user, newProperties);
+				managerFactory.getUserManager().update(user, newProperties);
+
+				// Update the current connected user.
+				request.getSession().setAttribute("user", user);
 
 				// Return to the welcome page with a connected user.
 				response.sendRedirect(request.getContextPath() + "/welcome");
 			}
 			catch (ModelException | ControllerException exc)
 			{
-				ControllerSupport controllerSupport = ControllerSupport.getInstance();
-
 				// Transform parameters to attributes for saving the form.
-				controllerSupport.saveForm(request, formParameters);
+				ControllerSupport.saveForm(request, formParameters);
 
 				// Put the error in the form.
 				if (exc instanceof ModelException)
-					controllerSupport.putFormError((ModelException) exc, request, formParameters);
+					ControllerSupport.putFormError((ModelException) exc, request, formParameters);
 				else
-					controllerSupport.putFormError((ControllerException) exc, request, formParameters);
+					ControllerSupport.putFormError((ControllerException) exc, request, formParameters);
 
 				// Return to the profile update page and display errors.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");
@@ -130,8 +136,12 @@ public class ModifyProfileServlet extends HttpServlet
 		{
 			try
 			{
+				// It is necessary to synchronise the user again, because the session
+				// was closed and then is not in the persistence context anymore.
+				user = managerFactory.getUserManager().find(user.getIdentifier()).get(0);
+
 				// Try to delete the user by archiving it.
-				UserManager.getInstance().delete(user, true);
+				managerFactory.getUserManager().delete(user, true);
 
 				// Return to the logout page as the user is disconnected.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/logOut.jsp");
@@ -139,13 +149,11 @@ public class ModifyProfileServlet extends HttpServlet
 			}
 			catch (ModelException exc)
 			{
-				ControllerSupport controllerSupport = ControllerSupport.getInstance();
-
 				// Transform parameters to attributes for saving the form.
-				controllerSupport.saveForm(request, formParameters);
+				ControllerSupport.saveForm(request, formParameters);
 
 				// Put the error in the form.
-				controllerSupport.putFormError((ModelException) exc, request, formParameters);
+				ControllerSupport.putFormError((ModelException) exc, request, formParameters);
 
 				// Return to the profile update page and display errors.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");

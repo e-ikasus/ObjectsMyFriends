@@ -3,6 +3,7 @@ package fr.eikasus.objectsmyfriends.model.bll;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,7 @@ class UserManagerTest
 	private static User user;
 
 	private static TestSupport<User> testSupport;
+	private static ManagerFactory managerFactory;
 	private static UserManager userManager;
 
 	/**
@@ -31,8 +33,26 @@ class UserManagerTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a manager factory object.
+		managerFactory = new ManagerFactory();
+
 		// Unique user manager instance.
-		userManager = UserManager.getInstance();
+		userManager = managerFactory.getUserManager();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the manager factory object.
+		managerFactory.close();
 	}
 
 	/* ************** */
@@ -201,7 +221,7 @@ class UserManagerTest
 		testSupport.action("Populating the database");
 		/* ---------------------------------------- */
 
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(managerFactory.getDaoFactory());
 
 		testSupport.action("Trying to find a user");
 		/* -------------------------------------- */
@@ -221,6 +241,6 @@ class UserManagerTest
 		testSupport.action("Emptying the database");
 		/* -------------------------------------- */
 
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 }

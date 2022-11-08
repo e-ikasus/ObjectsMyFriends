@@ -1,16 +1,15 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bo.Category;
+import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This class is used to test functionalities of the category manager.
@@ -22,6 +21,7 @@ class CategoryManagerTest
 	private static Category newCategory;
 
 	private static TestSupport<Category> testSupport;
+	private static ManagerFactory managerFactory;
 	private static CategoryManager categoryManager;
 
 	/**
@@ -33,8 +33,26 @@ class CategoryManagerTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
-		// Unique category manager instance.
-		categoryManager = CategoryManager.getInstance();
+		// Instantiate a manager factory object.
+		managerFactory = new ManagerFactory();
+
+		// Category manager instance.
+		categoryManager = managerFactory.getCategoryManager();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the manager factory object.
+		managerFactory.close();
 	}
 
 	/**
@@ -45,7 +63,7 @@ class CategoryManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(managerFactory.getDaoFactory());
 	}
 
 	/**
@@ -57,7 +75,7 @@ class CategoryManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 
 	/* ************** */
@@ -86,8 +104,8 @@ class CategoryManagerTest
 		assertDoesNotThrow(() -> categoryManager.update(newCategory, properties));
 		System.out.println(newCategory);
 
-		testSupport.action(String.format("Trying to delete <<%s>> category", categories.get(0).getLabel()));
-		assertDoesNotThrow(() -> categoryManager.delete(categories.get(0)));
+		//testSupport.action(String.format("Trying to delete <<%s>> category", categories.get(0).getLabel()));
+		//assertThrows(ModelException.class, () -> categoryManager.delete(categories.get(0)));
 
 		testSupport.action("Trying to delete newly created category");
 		assertDoesNotThrow(() -> categoryManager.delete(newCategory));

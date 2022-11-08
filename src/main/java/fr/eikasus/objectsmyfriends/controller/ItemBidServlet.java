@@ -1,8 +1,7 @@
 package fr.eikasus.objectsmyfriends.controller;
 
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
-import fr.eikasus.objectsmyfriends.model.bll.BidManager;
-import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
@@ -26,12 +25,6 @@ public class ItemBidServlet extends HttpServlet
 
 	// Property list for the form.
 	HashMap<Object, String> formParameters = new HashMap<>();
-
-	ControllerSupport controllerSupport = ControllerSupport.getInstance();
-
-	// Managers to use to handle items
-	ItemManager itemManager = ItemManager.getInstance();
-	BidManager bidManager = BidManager.getInstance();
 
 	/* ******************* */
 	/* Methods implemented */
@@ -64,17 +57,19 @@ public class ItemBidServlet extends HttpServlet
 	 * the welcome page.
 	 */
 
-	@Override protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		long itemIdentifier;
-		boolean welcome = true;
 
 		try
 		{
-			if ((itemIdentifier = controllerSupport.parseLongParameter(request, "item")) != 0)
+			if ((itemIdentifier = ControllerSupport.parseLongParameter(request, "item")) != 0)
 			{
 				// Read the item from the database.
-				Item item = itemManager.find(itemIdentifier).get(0);
+				Item item = managerFactory.getItemManager().find(itemIdentifier).get(0);
 
 				// Save the item instance to allow doPost method to do his job.
 				request.getSession().setAttribute("item", item);
@@ -85,27 +80,27 @@ public class ItemBidServlet extends HttpServlet
 				// Save the bid made on this item to allow doPost method to do his job.
 				request.getSession().setAttribute("bestBid", bestBid);
 
-				// Compute initial offer
+				// Compute initial offer.
 				int initialOffer = ((bestBid != null) ? (bestBid.getPrice() + 1) : (item.getInitialPrice()));
 
 				// Save-it in the form.
 				request.setAttribute("yourOffer", initialOffer);
 
-				// Don't go to the welcome page.
-				welcome = false;
-
 				// Go to the bid page.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemBid.jsp");
 				requestDispatcher.forward(request, response);
 			}
+			else
+			{
+				// Nothing to do, so return to the welcome page.
+				response.sendRedirect(request.getContextPath() + "/welcome");
+			}
 		}
 		catch (ModelException me)
 		{
-			// nothing to do.
+			// When something goes wrong, return to the welcome page.
+			response.sendRedirect(request.getContextPath() + "/welcome");
 		}
-
-		// When something goes wrong, return to the welcome page.
-		if (welcome) response.sendRedirect(request.getContextPath() + "/welcome");
 	}
 
 	/**
@@ -119,23 +114,25 @@ public class ItemBidServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		// Check if the user wants to make an offer.
 		if (request.getParameter("makeOffer") != null)
 		{
-
 			// Retrieve the current user.
-			User user = (User) request.getSession().getAttribute("user");
+			User user = ControllerSupport.getUserFromSession(request);
 
 			// Retrieve the item from the session.
-			Item item = (Item) request.getSession().getAttribute("item");
+			Item item = ControllerSupport.getItemFromSession(request);
 
 			// Retrieve the current user offer.
-			int userOffer = controllerSupport.parseIntegerParameter(request, "yourOffer");
+			int userOffer = ControllerSupport.parseIntegerParameter(request, "yourOffer");
 
 			try
 			{
 				// Add the user bid
-				bidManager.add(user, item, userOffer);
+				managerFactory.getBidManager().add(user, item, userOffer);
 
 				// Return to the welcome page.
 				response.sendRedirect(request.getContextPath() + "/welcome");
@@ -143,10 +140,10 @@ public class ItemBidServlet extends HttpServlet
 			catch (ModelException me)
 			{
 				// Transform parameters to attributes for saving the form.
-				controllerSupport.saveForm(request, formParameters);
+				ControllerSupport.saveForm(request, formParameters);
 
 				// Put the error in the form.
-				controllerSupport.putFormError(me, request, formParameters);
+				ControllerSupport.putFormError(me, request, formParameters);
 
 				// Return to the bid page and display errors.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/itemBid.jsp");

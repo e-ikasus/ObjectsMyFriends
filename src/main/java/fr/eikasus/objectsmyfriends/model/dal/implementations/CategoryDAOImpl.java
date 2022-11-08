@@ -1,6 +1,7 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bo.Category;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.CategoryDAO;
 
 /**
@@ -9,8 +10,8 @@ import fr.eikasus.objectsmyfriends.model.dal.interfaces.CategoryDAO;
 
 public class CategoryDAOImpl extends GenericDAOImpl<Category, Long> implements CategoryDAO
 {
-	public CategoryDAOImpl()
+	public CategoryDAOImpl(DAOFactory daoFactory)
 	{
-		super(Category.class);
+		super(Category.class, daoFactory);
 	}
 }

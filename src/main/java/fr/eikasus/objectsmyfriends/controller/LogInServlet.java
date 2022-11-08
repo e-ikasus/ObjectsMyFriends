@@ -1,6 +1,7 @@
 package fr.eikasus.objectsmyfriends.controller;
 
-import fr.eikasus.objectsmyfriends.model.bll.UserManager;
+import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
@@ -44,8 +45,8 @@ public class LogInServlet extends HttpServlet
 	 * Log in a user.
 	 * <p></p>
 	 * This method try to connect a user whose login information are supplied in
-	 * parameter. If this user is found in the database, its instance is saved
-	 * in the session, otherwise the form is displayed again by calling the doGet
+	 * parameter. If this user is found in the database, its instance is saved in
+	 * the session, otherwise the form is displayed again by calling the doGet
 	 * method. Once connected if the "Remember me" button is checked, his username
 	 * is saved in a cookie. The state of this button always depends on the
 	 * presence of the cookie, and vice versa. Due to the filter servlet, this
@@ -54,6 +55,9 @@ public class LogInServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		request.setCharacterEncoding("UTF-8");
 
 		// Check if the user confirm the connexion or not.
@@ -72,11 +76,10 @@ public class LogInServlet extends HttpServlet
 			try
 			{
 				// Try to find the user in the database.
-				User user = UserManager.getInstance().find(username, email, password);
+				User user = managerFactory.getUserManager().find(username, email, password);
 
 				// Success, so save it to the user session.
-				HttpSession session = request.getSession();
-				session.setAttribute("user", user);
+				request.getSession().setAttribute("user", user);
 
 				// Create a cookie with user entered identifier.
 				Cookie cookie = new Cookie("username", input);

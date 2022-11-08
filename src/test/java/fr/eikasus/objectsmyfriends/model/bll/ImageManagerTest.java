@@ -5,10 +5,7 @@ import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 public class ImageManagerTest
 {
 	private static TestSupport<Image> testSupport;
+	private static ManagerFactory managerFactory;
 	private static ImageManager imageManager;
 
 	/**
@@ -29,8 +27,26 @@ public class ImageManagerTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a manager factory object.
+		managerFactory = new ManagerFactory();
+
 		// Unique image manager instance.
-		imageManager =ImageManager.getInstance();
+		imageManager = managerFactory.getImageManager();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the manager factory object.
+		managerFactory.close();
 	}
 
 	/**
@@ -41,7 +57,7 @@ public class ImageManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(managerFactory.getDaoFactory());
 	}
 
 	/**
@@ -53,7 +69,7 @@ public class ImageManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 
 	/* ************** */
@@ -65,20 +81,20 @@ public class ImageManagerTest
 		testSupport.enterFunction();
 
 		// Search for seller and its active items.
-		HashMap<String, Object> sellerData = testSupport.searchItem(UserRole.SELLER, "Fabien", "P@ssw0rd", new Search().setMyCurrentSales());
+		HashMap<String, Object> sellerData = testSupport.searchItem(managerFactory, UserRole.SELLER, "Fabien", "P@ssw0rd", new Search().setMyCurrentSales());
 
 		Item item = ((List<Item>) sellerData.get("items")).get(0);
 
 		testSupport.action(String.format("Adding images to item <<%s>>", item.getName()));
-		assertDoesNotThrow(() -> imageManager.add(item, "path1"));
-		assertDoesNotThrow(() -> imageManager.add(item, "path2"));
+		assertDoesNotThrow(() -> imageManager.add(item, "image1.jpg"));
+		assertDoesNotThrow(() -> imageManager.add(item, "image2.jpg"));
 
 		testSupport.action(String.format("Displaying all images of item <<%s>>", item.getName()));
 		item.getImages().forEach(System.out::println);
 
 		testSupport.action(String.format("Deleting recent created images of item <<%s>>", item.getName()));
-		item.getImages().forEach((image) -> assertDoesNotThrow(() -> {if (image.getPath().compareTo("path1") == 0) imageManager.delete(image);}));
-		item.getImages().forEach((image) -> assertDoesNotThrow(() -> {if (image.getPath().compareTo("path2") == 0) imageManager.delete(image);}));
+		item.getImages().forEach((image) -> assertDoesNotThrow(() -> {if (image.getPath().compareTo("image1.jpg") == 0) imageManager.delete(image);}));
+		item.getImages().forEach((image) -> assertDoesNotThrow(() -> {if (image.getPath().compareTo("image1.jpg") == 0) imageManager.delete(image);}));
 
 		testSupport.action(String.format("Displaying all images of item <<%s>>", item.getName()));
 		item.getImages().forEach(System.out::println);

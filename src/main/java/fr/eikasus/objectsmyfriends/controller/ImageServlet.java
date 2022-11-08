@@ -2,11 +2,10 @@ package fr.eikasus.objectsmyfriends.controller;
 
 import com.google.gson.Gson;
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
-import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import org.jetbrains.annotations.NotNull;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,9 +18,10 @@ import java.util.List;
 @WebServlet(name = "ImageServlet", value = "/image_handler") @MultipartConfig
 public class ImageServlet extends HttpServlet
 {
-	@Override protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		ControllerSupport controllerSupport = ControllerSupport.getInstance();
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
 
 		try
 		{
@@ -32,28 +32,28 @@ public class ImageServlet extends HttpServlet
 			ArrayList<String> uploadedImages = (ArrayList<String>) request.getSession().getAttribute("itemImages");
 
 			// Item currently edited if exists.
-			Item currentItem = (Item) request.getSession().getAttribute("item");
+			Item currentItem = ControllerSupport.getItemFromSession(request);
 
 			// For convenience, there is always one list, even if it is empty.
 			if (uploadedImages == null) uploadedImages = new ArrayList<>();
 
 			// Retrieve a possible item identifier.
-			long identifier = controllerSupport.parseLongParameter(request, "identifier");
+			long identifier = ControllerSupport.parseLongParameter(request, "identifier");
 
 			// Find the item to deal with: the one from the database or those that is
 			// currently modified/created.
 			if ((currentItem == null) && (identifier != 0))
 			{
-				List<Item> items = ItemManager.getInstance().find(identifier);
+				List<Item> items = managerFactory.getItemManager().find(identifier);
 
 				if (items.size() != 0) currentItem = items.get(0);
 			}
 
 			// Put the uploaded image file names in the list.
-			uploadedImages.forEach(fileName -> imageFileNames.add(controllerSupport.getUrlImage(request, fileName)));
+			uploadedImages.forEach(fileName -> imageFileNames.add(ControllerSupport.getUrlImage(request, fileName)));
 
 			// Now, put those of the item if defined.
-			if (currentItem != null) currentItem.getImages().forEach(image -> imageFileNames.add(controllerSupport.getUrlImage(request, image.getPath())));
+			if (currentItem != null) currentItem.getImages().forEach(image -> imageFileNames.add(ControllerSupport.getUrlImage(request, image.getPath())));
 
 			// The response will be in JSON format.
 			response.setContentType("application/json");
@@ -76,11 +76,9 @@ public class ImageServlet extends HttpServlet
 		}
 	}
 
-	@Override protected void doPost(HttpServletRequest request, @NotNull HttpServletResponse response) throws ServletException, IOException
+	@Override protected void doPost(HttpServletRequest request, @NotNull HttpServletResponse response) throws IOException
 	{
 		response.setContentType("text/html;charset=UTF-8");
-
-		ControllerSupport controllerSupport = ControllerSupport.getInstance();
 
 		try
 		{
@@ -99,7 +97,7 @@ public class ImageServlet extends HttpServlet
 
 			// Add the image to the item images list. The list will be scanned for
 			// adding image to the current modified/new item.
-			itemImages.add(controllerSupport.loadImage(request, "file"));
+			itemImages.add(ControllerSupport.loadImage(request, "file"));
 
 			// All was fine.
 			response.sendError(HttpServletResponse.SC_OK);

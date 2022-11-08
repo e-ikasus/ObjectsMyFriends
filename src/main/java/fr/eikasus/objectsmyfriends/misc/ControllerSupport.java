@@ -1,11 +1,14 @@
 package fr.eikasus.objectsmyfriends.misc;
 
 import fr.eikasus.objectsmyfriends.model.bll.ImageManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
+import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
@@ -25,9 +28,8 @@ import java.util.List;
  * then simplify the controllers code. For exemple, this class give access to
  * method for simplify error handling in forms.
  *
- * @see #getInstance()
- * @see #addUploadedImagesToItem(HttpServletRequest, Item, List)
- * addUploadedImagesToItem
+ * @see #addUploadedImagesToItem(ManagerFactory, HttpServletRequest, Item, List)
+ * addUploadedImagesToItem()
  * @see #loadImage(HttpServletRequest, String) loadImage()
  * @see #getUrlImage(HttpServletRequest, String) getUrlImage()
  * @see #getUrlImageHandler(HttpServletRequest) getUrlImageHandler()
@@ -41,6 +43,8 @@ import java.util.List;
  * putFormError()
  * @see #putFormError(ControllerException, HttpServletRequest, HashMap)
  * putFormError()
+ * @see #getUserFromSession(HttpServletRequest) getUserFromSession()
+ * @see #getItemFromSession(HttpServletRequest) getItemFromSession()
  */
 
 public class ControllerSupport
@@ -57,8 +61,6 @@ public class ControllerSupport
 	/* Class members */
 	/* ************* */
 
-	private static ControllerSupport instance = null;
-
 	private static String imagePath = null;
 
 	/* *************************** */
@@ -72,22 +74,6 @@ public class ControllerSupport
 	private ControllerSupport()
 	{
 
-	}
-
-	/**
-	 * Get the instance of the class.
-	 * <p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
-	 *
-	 * @return Unique instance of the class.
-	 */
-
-	public static ControllerSupport getInstance()
-	{
-		if (instance == null) instance = new ControllerSupport();
-
-		return instance;
 	}
 
 	/* ******************* */
@@ -111,11 +97,10 @@ public class ControllerSupport
 	 * @param uploadedImages Images to add to the item.
 	 */
 
-	public void addUploadedImagesToItem(@NotNull HttpServletRequest request, @NotNull Item item, List<String> uploadedImages)
+	public static void addUploadedImagesToItem(@NotNull ManagerFactory managerFactory, @NotNull HttpServletRequest request, @NotNull Item item, List<String> uploadedImages)
 	{
-		ImageManager imageManager = ImageManager.getInstance();
-		ControllerSupport controllerSupport = ControllerSupport.getInstance();
-		String imagePath = controllerSupport.getImagePath(request);
+		ImageManager imageManager = managerFactory.getImageManager();
+		String imagePath = getImagePath(request);
 		Iterator<String> imagesIterator;
 		File oldFile, newFile;
 		Image image;
@@ -198,7 +183,7 @@ public class ControllerSupport
 	 * @throws Exception In case of problem.
 	 */
 
-	public String loadImage(@NotNull HttpServletRequest request, @NotNull String paramName) throws Exception
+	public static @NotNull String loadImage(@NotNull HttpServletRequest request, @NotNull String paramName) throws Exception
 	{
 		int extPos, bytesRed;
 		byte[] bytes = new byte[1024];
@@ -257,7 +242,7 @@ public class ControllerSupport
 	 * @return Url to the image.
 	 */
 
-	public String getUrlImage(@NotNull HttpServletRequest request, @NotNull String fileName)
+	public static @NotNull String getUrlImage(@NotNull HttpServletRequest request, @NotNull String fileName)
 	{
 		String url = request.getRequestURL().toString();
 		String servletPath = request.getServletPath();
@@ -278,7 +263,7 @@ public class ControllerSupport
 	 * @return Url to the image handler.
 	 */
 
-	public String getUrlImageHandler(@NotNull HttpServletRequest request)
+	public static @NotNull String getUrlImageHandler(@NotNull HttpServletRequest request)
 	{
 		String url = request.getRequestURL().toString();
 		String servletPath = request.getServletPath();
@@ -298,7 +283,7 @@ public class ControllerSupport
 	 * @return Url to the servlet.
 	 */
 
-	public String getUrlServlet(@NotNull HttpServletRequest request, String servletName)
+	public static @NotNull String getUrlServlet(@NotNull HttpServletRequest request, String servletName)
 	{
 		String url = request.getRequestURL().toString();
 		String servletPath = request.getServletPath();
@@ -321,7 +306,7 @@ public class ControllerSupport
 	 * @return Value of the parameter or null.
 	 */
 
-	public Date parseDateParameter(@NotNull HttpServletRequest request, @NotNull String name)
+	public static @Nullable Date parseDateParameter(@NotNull HttpServletRequest request, @NotNull String name)
 	{
 		// Formatter for the date.
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -350,7 +335,7 @@ public class ControllerSupport
 	 * @return Value of the parameter or zero.
 	 */
 
-	public int parseIntegerParameter(@NotNull HttpServletRequest request, @NotNull String name)
+	public static int parseIntegerParameter(@NotNull HttpServletRequest request, @NotNull String name)
 	{
 		try
 		{
@@ -376,7 +361,7 @@ public class ControllerSupport
 	 * @return Value of the parameter or zero.
 	 */
 
-	public long parseLongParameter(@NotNull HttpServletRequest request, @NotNull String name)
+	public static long parseLongParameter(@NotNull HttpServletRequest request, @NotNull String name)
 	{
 		try
 		{
@@ -400,7 +385,7 @@ public class ControllerSupport
 	 * @param parameters Parameters list.
 	 */
 
-	public void saveForm(@NotNull HttpServletRequest request, @NotNull HashMap<Object, String> parameters)
+	public static void saveForm(@NotNull HttpServletRequest request, @NotNull HashMap<Object, String> parameters)
 	{
 		// Copy parameters to attributes.
 		parameters.forEach((key, value) -> request.setAttribute(value, request.getParameter(value)));
@@ -419,7 +404,7 @@ public class ControllerSupport
 	 * @param parameters          List of HTML associated element error.
 	 */
 
-	public void putFormError(@NotNull ControllerException controllerException, @NotNull HttpServletRequest request, HashMap<Object, String> parameters)
+	public static void putFormError(@NotNull ControllerException controllerException, @NotNull HttpServletRequest request, HashMap<Object, String> parameters)
 	{
 		String property;
 
@@ -450,7 +435,7 @@ public class ControllerSupport
 	 * @param parameters     List of HTML associated element error.
 	 */
 
-	public void putFormError(@NotNull ModelException modelException, @NotNull HttpServletRequest request, HashMap<Object, String> parameters)
+	public static void putFormError(@NotNull ModelException modelException, @NotNull HttpServletRequest request, HashMap<Object, String> parameters)
 	{
 		String property;
 
@@ -466,6 +451,112 @@ public class ControllerSupport
 			// Update the form and clear the invalid field.
 			wrongAttribute(request, property, modelException.getLastErrorMessage());
 		}
+	}
+
+	/**
+	 * Read the user stored in the session.
+	 * <p></p>
+	 * This method read the user that is stored in a session attribute. Because
+	 * the hibernate session was closed after the user was saved in a previous
+	 * http request, it is necessary to read it again from the database, because
+	 * it is not in the persistence context anymore. No exception is generated and
+	 * null is returned if none if found or in case of problem.
+	 *
+	 * @param request Request to deal with.
+	 *
+	 * @return User found and present in the persistence context or null if none.
+	 */
+
+	public static User getUserFromSession(@NotNull HttpServletRequest request)
+	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = getManagerFactory(request);
+
+		// Retrieve the user from the request.
+		User user = (User) request.getSession().getAttribute("user");
+
+		try
+		{
+			// If a user is found, read-it again from the database and update his
+			// session attribute or do nothing if it doesn't exist in the database
+			// yet.
+			if ( (user != null) && (user.getIdentifier() != 0) )
+			{
+				// Read the user by its identifier.
+				user = managerFactory.getUserManager().find(user.getIdentifier()).get(0);
+
+				// Update his corresponding session attribute.
+				request.setAttribute("user", user);
+			}
+		}
+		catch (ModelException me)
+		{
+			// Do nothing
+		}
+
+		// Return the found user.
+		return user;
+	}
+
+	/**
+	 * Read the item stored in the session.
+	 * <p></p>
+	 * This method read the item that is stored in a session attribute. Because
+	 * the hibernate session was closed after the item was saved in a previous
+	 * http request, it is necessary to read it again from the database, because
+	 * it is not in the persistence context anymore. No exception is generated and
+	 * null is returned if none if found or in case of problem.
+	 *
+	 * @param request Request to deal with.
+	 *
+	 * @return Item found and present in the persistence context or null if none.
+	 */
+
+	public static Item getItemFromSession(@NotNull HttpServletRequest request)
+	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = getManagerFactory(request);
+
+		// Retrieve the item from the request.
+		Item item = (Item) request.getSession().getAttribute("item");
+
+		try
+		{
+			// If an item is found, read-it again from the database and update his
+			// session attribute or do nothing if it doesn't exist in the database
+			// yet.
+			if ( (item != null) && (item.getIdentifier() != 0) )
+			{
+				// Read the item by its identifier.
+				item = managerFactory.getItemManager().find(item.getIdentifier()).get(0);
+
+				// Update his corresponding session attribute.
+				request.setAttribute("item", item);
+			}
+		}
+		catch (ModelException me)
+		{
+			// Do nothing
+		}
+
+		// Return the found item.
+		return item;
+	}
+
+	/**
+	 *
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+
+	public static @NotNull ManagerFactory getManagerFactory(@NotNull HttpServletRequest request)
+	{
+		ManagerFactory managerFactory = (ManagerFactory) request.getAttribute("managerFactory");
+
+		if (managerFactory == null) throw new RuntimeException("ManagerFactory attended in the request !");
+
+		return managerFactory;
 	}
 
 	/* ************** */
@@ -485,7 +576,7 @@ public class ControllerSupport
 	 * @param message  Message to put in the error field.
 	 */
 
-	private void wrongAttribute(HttpServletRequest request, String property, String message)
+	private static void wrongAttribute(HttpServletRequest request, String property, String message)
 	{
 		// Do nothing if no known property is supplied.
 		if (property == null) return;
@@ -513,7 +604,7 @@ public class ControllerSupport
 	 * @return Path to the item images.
 	 */
 
-	private String getImagePath(HttpServletRequest request)
+	private static synchronized String getImagePath(HttpServletRequest request)
 	{
 		if (imagePath == null)
 		{

@@ -3,9 +3,7 @@ package fr.eikasus.objectsmyfriends.controller;
 import fr.eikasus.objectsmyfriends.misc.ControllerError;
 import fr.eikasus.objectsmyfriends.misc.ControllerException;
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
-import fr.eikasus.objectsmyfriends.model.bll.CategoryManager;
-import fr.eikasus.objectsmyfriends.model.bll.ItemManager;
-import fr.eikasus.objectsmyfriends.model.bll.PickupManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.*;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -35,13 +33,6 @@ public class ItemSellServlet extends HttpServlet
 
 	// Formatter for the date.
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-	ControllerSupport controllerSupport = ControllerSupport.getInstance();
-
-	// Managers to use to handle items
-	ItemManager itemManager = ItemManager.getInstance();
-	CategoryManager categoryManager = CategoryManager.getInstance();
-	PickupManager pickupManager = PickupManager.getInstance();
 
 	/* ******************* */
 	/* Methods implemented */
@@ -91,6 +82,9 @@ public class ItemSellServlet extends HttpServlet
 
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		long itemIdentifier;
 		Item item = null;
 
@@ -103,10 +97,10 @@ public class ItemSellServlet extends HttpServlet
 			// create an item, otherwise it is necessary to read this item from the
 			// database to fill the form with its information. The item should then be
 			// put in the session to warn the doPost method of an update.
-			if ((itemIdentifier = controllerSupport.parseLongParameter(request, "item")) != 0)
+			if ((itemIdentifier = ControllerSupport.parseLongParameter(request, "item")) != 0)
 			{
 				// Read the item from the database.
-				item = itemManager.find(itemIdentifier).get(0);
+				item = managerFactory.getItemManager().find(itemIdentifier).get(0);
 
 				// As this is an update, put the item in the session to be further
 				// retrieved by the doPost method.
@@ -142,7 +136,7 @@ public class ItemSellServlet extends HttpServlet
 			}
 
 			// List of available categories into the form.
-			request.setAttribute("categories", categoryManager.find(null));
+			request.setAttribute("categories", managerFactory.getCategoryManager().find(null));
 
 			// All is fine, display the item sell form.
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/itemSell.jsp");
@@ -176,30 +170,33 @@ public class ItemSellServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
+		request.setCharacterEncoding("UTF-8");
+
 		// Retrieve the connected user. At this stage, there is always one because
 		// of the filter servlet. This user is the item owner
-		User user = (User) request.getSession().getAttribute("user");
+		User user = ControllerSupport.getUserFromSession(request);
 
 		// Retrieve the item from the session if it exists for updating.
-		Item item = (Item) request.getSession().getAttribute("item");
-
-		// Retrieve the item images from the session if user upload them.
-		List<String> uploadedImages = (List<String>) request.getSession().getAttribute("itemImages");
-
-		// Retrieve the pickup place that belongs to the item if exists.
-		PickupPlace pickupPlace = (item != null) ? (item.getPickupPlace()) : (null);
-
-		// Create list that will receive new properties.
-		HashMap<String, Object> newProperties = new HashMap<>();
+		Item item = ControllerSupport.getItemFromSession(request);
 
 		// By default, all works fine.
 		boolean success = true;
 
-		request.setCharacterEncoding("UTF-8");
-
 		// Check if the user wants to create or update an item.
-		if (request.getParameter("save") != null)
+		if ( (user != null) && (request.getParameter("save") != null) )
 		{
+			// Retrieve the item images from the session if user upload them.
+			List<String> uploadedImages = (List<String>) request.getSession().getAttribute("itemImages");
+
+			// Retrieve the pickup place that belongs to the item if exists.
+			PickupPlace pickupPlace = (item != null) ? (item.getPickupPlace()) : (null);
+
+			// Create list that will receive new properties.
+			HashMap<String, Object> newProperties = new HashMap<>();
+
 			// Retrieve received item information.
 			String name = request.getParameter("name");
 			String description = request.getParameter("description");
@@ -211,17 +208,17 @@ public class ItemSellServlet extends HttpServlet
 			String city = request.getParameter("city");
 
 			// Retrieve received sale information.
-			int initialPrice = controllerSupport.parseIntegerParameter(request, "initialPrice");
-			Date biddingStart = controllerSupport.parseDateParameter(request, "biddingStart");
-			Date biddingEnd = controllerSupport.parseDateParameter(request, "biddingEnd");
+			int initialPrice = ControllerSupport.parseIntegerParameter(request, "initialPrice");
+			Date biddingStart = ControllerSupport.parseDateParameter(request, "biddingStart");
+			Date biddingEnd = ControllerSupport.parseDateParameter(request, "biddingEnd");
 
 			try
 			{
 				// Retrieve the category chosen by the user for that item.
-				Category category = categoryManager.find(categoryLabel).get(0);
+				Category category = managerFactory.getCategoryManager().find(categoryLabel).get(0);
 
 				// Read categories again in case of further pb.
-				request.setAttribute("categories", categoryManager.find(null));
+				request.setAttribute("categories", managerFactory.getCategoryManager().find(null));
 
 				// If an item is present in the session, this means an update is to be
 				// done, otherwise the item should be created.
@@ -236,12 +233,12 @@ public class ItemSellServlet extends HttpServlet
 					if (item.getBiddingEnd().compareTo(biddingEnd) != 0) newProperties.put("biddingEnd", biddingEnd);
 
 					// Try to update the item.
-					itemManager.update(item, newProperties);
+					managerFactory.getItemManager().update(item, newProperties);
 				}
 				else
 				{
 					// Create the item.
-					item = itemManager.add(name, description, biddingStart, biddingEnd, initialPrice, user, category);
+					item = managerFactory.getItemManager().add(name, description, biddingStart, biddingEnd, initialPrice, user, category);
 				}
 
 				if (pickupPlace != null)
@@ -254,16 +251,16 @@ public class ItemSellServlet extends HttpServlet
 					if (pickupPlace.getCity().compareTo(city) != 0) newProperties.put("city", city);
 
 					// Try to update the pickup place.
-					pickupManager.update(pickupPlace, newProperties);
+					managerFactory.getPickupManager().update(pickupPlace, newProperties);
 				}
 				else
 				{
 					// Create the pickup place and attach-it to the item.
-					pickupManager.add(item, street, zipCode, city);
+					managerFactory.getPickupManager().add(item, street, zipCode, city);
 				}
 
 				// Now deal with images that have a special process.
-				controllerSupport.addUploadedImagesToItem(request, item, uploadedImages);
+				ControllerSupport.addUploadedImagesToItem(managerFactory, request, item, uploadedImages);
 			}
 			catch (Exception me)
 			{
@@ -271,15 +268,18 @@ public class ItemSellServlet extends HttpServlet
 				success = false;
 
 				// Transform parameters to attributes for saving the form.
-				controllerSupport.saveForm(request, formParameters);
+				ControllerSupport.saveForm(request, formParameters);
 
 				// Put the error in the form.
 				if (me instanceof ModelException)
-					controllerSupport.putFormError((ModelException) me, request, formParameters);
+					ControllerSupport.putFormError((ModelException) me, request, formParameters);
 				else
-					controllerSupport.putFormError(new ControllerException(me, ControllerError.UNATTENDED_ERROR), request, formParameters);
+					ControllerSupport.putFormError(new ControllerException(me, ControllerError.UNATTENDED_ERROR), request, formParameters);
 
-				// Return to the profile update page and display errors.
+				// Save the item. It was created or updated, but not the pickup place.
+				if (item != null) request.getSession().setAttribute("item", item);
+
+				// Return to the item page and display errors.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/itemSell.jsp");
 				requestDispatcher.forward(request, response);
 			}

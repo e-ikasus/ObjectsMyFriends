@@ -3,14 +3,10 @@ package fr.eikasus.objectsmyfriends.model.bll;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +25,7 @@ public class BidManagerTest
 	HashMap<String, Object> sellerData = new HashMap<>();
 
 	private static TestSupport<Bid> testSupport;
+	private static ManagerFactory managerFactory;
 	private static BidManager bidManager;
 
 	/**
@@ -40,8 +37,26 @@ public class BidManagerTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a manager factory object.
+		managerFactory = new ManagerFactory();
+
 		// Unique category manager instance.
-		bidManager = BidManager.getInstance();
+		bidManager = managerFactory.getBidManager();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the manager factory object.
+		managerFactory.close();
 	}
 
 	/**
@@ -52,7 +67,7 @@ public class BidManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(managerFactory.getDaoFactory());
 	}
 
 	/**
@@ -64,7 +79,7 @@ public class BidManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 
 	/* ************** */
@@ -76,13 +91,13 @@ public class BidManagerTest
 		testSupport.enterFunction();
 
 		// Search for seller and its active items.
-		sellerData = testSupport.searchItem(UserRole.SELLER, "Fabien", "P@ssw0rd", new Search().setMyCurrentSales());
+		sellerData = testSupport.searchItem(managerFactory, UserRole.SELLER, "Fabien", "P@ssw0rd", new Search().setMyCurrentSales());
 
 		testSupport.action("Searching for the first buyer");
-		assertDoesNotThrow(() -> buyer1 = UserManager.getInstance().find("Willy", null, "P@ssw0rd"));
+		assertDoesNotThrow(() -> buyer1 = managerFactory.getUserManager().find("Willy", null, "P@ssw0rd"));
 
 		testSupport.action("Searching for the second buyer");
-		assertDoesNotThrow(() -> buyer2 = UserManager.getInstance().find("AnneC", null, "P@ssw0rd"));
+		assertDoesNotThrow(() -> buyer2 = managerFactory.getUserManager().find("AnneC", null, "P@ssw0rd"));
 
 		List<Item> items = (List<Item>) sellerData.get("items");
 
@@ -128,7 +143,7 @@ public class BidManagerTest
 		try
 		{
 			// Search the actual max bid.
-			Bid maxBid = DAOFactory.getBidDAO().findBestBid(item);
+			Bid maxBid = managerFactory.getDaoFactory().getBidDAO().findBestBid(item);
 
 			// Information message of what is doing.
 			sb.append(String.format("Trying to register a bid of <<%d>> made by <<%s>> on item <<%s>> currently at <<%d>> price. This operation should%s succeed",

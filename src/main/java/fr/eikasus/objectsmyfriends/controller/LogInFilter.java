@@ -1,5 +1,7 @@
 package fr.eikasus.objectsmyfriends.controller;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -17,33 +19,48 @@ public class LogInFilter implements Filter
 	{
 	}
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException
+	@Override public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException
 	{
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-		// Determine if the current user is connected or not.
-		boolean connected = (httpServletRequest.getSession().getAttribute("user") != null);
-
 		// Url in lower case.
 		String url = httpServletRequest.getServletPath().toLowerCase();
 
-		if ( (url.lastIndexOf(".css") != -1) || (url.lastIndexOf(".js") != -1) || (url.lastIndexOf(".html") != -1) || (url.lastIndexOf(".jsp") != -1) )
+		// Determine if the current user is connected or not.
+		boolean connected = (httpServletRequest.getSession().getAttribute("user") != null);
+
+		// Determine the target of the request.
+		boolean resource = (url.lastIndexOf(".jsp") != -1);
+		boolean modifyProfile = url.contains("modify_profile");
+		boolean subscribe = url.contains("subscribe");
+		boolean logout = url.contains("logout");
+		boolean login = url.contains("login");
+		boolean itemSell = url.contains("item_sell");
+		boolean showProfile = url.contains("show_profile");
+
+		// Is the target reachable.
+		boolean redirect = (connected && (subscribe || login)) || ((!connected) && (logout || itemSell || showProfile || modifyProfile));
+
+		// Resources don't need a manager factory. This is the same for the logout
+		// page.
+		if ((resource) || ((logout) && (!redirect)))
+		{
 			chain.doFilter(request, response);
-		else if ((url.contains("modify_profile")) && (!connected))
+		}
+		else if (redirect)
+		{
 			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		else if ((url.contains("subscribe")) && (connected))
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		else if ((url.contains("logout")) && (!connected))
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		else if ((url.contains("login")) && (connected))
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		else if ((url.contains("item_sell")) && (!connected))
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		else if ((url.contains("show_profile")) && (!connected))
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
+		}
 		else
+		{
+			ManagerFactory managerFactory = new ManagerFactory();
+			httpServletRequest.setAttribute("managerFactory", managerFactory);
+
 			chain.doFilter(request, response);
+
+			httpServletRequest.removeAttribute("managerFactory");
+			managerFactory.close();
+		}
 	}
 }

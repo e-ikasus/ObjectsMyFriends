@@ -3,7 +3,6 @@ package fr.eikasus.objectsmyfriends.model.bll;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.BidDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -23,19 +22,15 @@ import java.util.List;
  * are contained in the item itself. Retrieving an item allow then access to its
  * bids.
  *
- * @see #getInstance() getInstance()
  * @see #add(User, Item, int) add()
  * @see #delete(User) delete()
  */
 
-public class BidManager
+public class BidManager extends GenericManager
 {
 	/* ************* */
 	/* Class members */
 	/* ************* */
-
-	// Unique instance of the class.
-	private static BidManager instance;
 
 	// Data access object instance.
 	private final BidDAO dao;
@@ -45,31 +40,15 @@ public class BidManager
 	/* *************************** */
 
 	/**
-	 * Private constructor of the class.
+	 * Constructor of the class.
 	 */
 
-	private BidManager()
+	public BidManager(ManagerFactory managerFactory)
 	{
+		super(managerFactory);
+
 		// Data access object for user entity operations.
-		dao = DAOFactory.getBidDAO();
-	}
-
-	/**
-	 * Get the instance of the class.
-	 * <p></p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
-	 *
-	 * @return Unique instance of the class.
-	 */
-
-	public static BidManager getInstance()
-	{
-		// If the class is not already instanced.
-		if (instance == null) instance = new BidManager();
-
-		// Return the only instance of the class.
-		return instance;
+		dao = managerFactory.getDaoFactory().getBidDAO();
 	}
 
 	/* ******************* */
@@ -114,12 +93,12 @@ public class BidManager
 			if (oldBid != null)
 			{
 				properties.put("credit", oldBid.getUser().getCredit() + oldBid.getPrice());
-				UserManager.getInstance().update(oldBid.getUser(), properties);
+				managerFactory.getUserManager().update(oldBid.getUser(), properties);
 			}
 
 			// Reduce the price bid to the new winner credit.
 			properties.put("credit", newBid.getUser().getCredit() - newBid.getPrice());
-			UserManager.getInstance().update(newBid.getUser(), properties);
+			managerFactory.getUserManager().update(newBid.getUser(), properties);
 
 			// Update the item to finish the operation by adding the new bid to it.
 			newBid.getItem().addBid(newBid);

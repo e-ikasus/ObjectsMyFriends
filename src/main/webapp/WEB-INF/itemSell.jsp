@@ -5,7 +5,7 @@
 
 <fmt:setBundle basename="locale" var="r"/>
 
-<c:set var="urlImages" value="<%=ControllerSupport.getInstance().getUrlImageHandler(request)%>" scope="page"/>
+<c:set var="urlImages" value="<%=ControllerSupport.getUrlImageHandler(request)%>" scope="page"/>
 
 <jsp:include page="header.jsp">
 	<jsp:param name="cssFiles" value="forms,item_sell"/>

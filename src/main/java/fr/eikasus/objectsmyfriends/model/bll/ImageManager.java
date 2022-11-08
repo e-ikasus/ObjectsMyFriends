@@ -2,7 +2,6 @@ package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ImageDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -20,12 +19,11 @@ import java.util.regex.Pattern;
  * because they are contained in the item itself. Retrieving an item allow then
  * access to its images.
  *
- * @see #getInstance() getInstance()
  * @see #add(Item, String) add()
  * @see #delete(Image) delete()
  */
 
-public class ImageManager
+public class ImageManager extends GenericManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -37,9 +35,6 @@ public class ImageManager
 	/* Class members */
 	/* ************* */
 
-	// Unique instance of the class.
-	private static ImageManager instance;
-
 	// Data access object instance.
 	private final ImageDAO dao;
 
@@ -50,34 +45,18 @@ public class ImageManager
 	/* *************************** */
 
 	/**
-	 * Private constructor of the class.
+	 * Constructor of the class.
 	 */
 
-	private ImageManager()
+	public ImageManager(ManagerFactory managerFactory)
 	{
+		super(managerFactory);
+
 		// Data access object for user entity operations.
-		dao = DAOFactory.getImageDAO();
+		dao = managerFactory.getDaoFactory().getImageDAO();
 
 		// Property validators.
 		pathCheck = Pattern.compile(VALIDATE_PATH);
-	}
-
-	/**
-	 * Get the instance of the class.
-	 * <p></p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
-	 *
-	 * @return Unique instance of the class.
-	 */
-
-	public static ImageManager getInstance()
-	{
-		// If the class is not already instanced.
-		if (instance == null) instance = new ImageManager();
-
-		// Return the only instance of the class.
-		return instance;
 	}
 
 	/* ******************* */

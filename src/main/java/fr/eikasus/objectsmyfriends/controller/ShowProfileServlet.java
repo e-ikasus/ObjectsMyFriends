@@ -1,7 +1,7 @@
 package fr.eikasus.objectsmyfriends.controller;
 
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
-import fr.eikasus.objectsmyfriends.model.bll.UserManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
@@ -26,16 +26,19 @@ public class ShowProfileServlet extends HttpServlet
 
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		long identifier;
 		User user = null;
 
 		// If an identifier is supplied, find the corresponding user.
-		if ((identifier = ControllerSupport.getInstance().parseLongParameter(request, "identifier")) != 0)
+		if ((identifier = ControllerSupport.parseLongParameter(request, "identifier")) != 0)
 		{
 			try
 			{
 				// Retrieve the user.
-				user = UserManager.getInstance().find(identifier).get(0);
+				user = managerFactory.getUserManager().find(identifier).get(0);
 			}
 			catch (ModelException me)
 			{
@@ -75,7 +78,7 @@ public class ShowProfileServlet extends HttpServlet
 
 	@Override protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		long identifier = ControllerSupport.getInstance().parseLongParameter(request, "identifier");
+		long identifier = ControllerSupport.parseLongParameter(request, "identifier");
 		User currentUser = (User) request.getSession().getAttribute("user");
 
 		if ((currentUser != null) && ((identifier == 0) || (identifier == currentUser.getIdentifier())) && (request.getParameter("modify") != null))

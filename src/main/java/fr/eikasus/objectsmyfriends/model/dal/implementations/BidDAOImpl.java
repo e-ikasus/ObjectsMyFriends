@@ -2,6 +2,7 @@ package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.BidDAO;
 import fr.eikasus.objectsmyfriends.model.misc.BidId;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
@@ -31,9 +32,9 @@ public class BidDAOImpl extends GenericDAOImpl<Bid, BidId> implements BidDAO
 	/* Constructors */
 	/* ************ */
 
-	public BidDAOImpl()
+	public BidDAOImpl(DAOFactory daoFactory)
 	{
-		super(Bid.class);
+		super(Bid.class, daoFactory);
 	}
 
 	/* ******************* */

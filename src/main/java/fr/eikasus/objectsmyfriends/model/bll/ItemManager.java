@@ -4,7 +4,6 @@ import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,6 @@ import java.util.regex.Pattern;
  * access of one of data access object method by the controllers is strictly
  * forbidden.
  *
- * @see #getInstance() getInstance()
  * @see #add(String, String, Date, Date, int, User, Category) add()
  * @see #find(Long) find()
  * @see #findByCriteria(User, UserRole, Search, Category, String)
@@ -33,7 +31,7 @@ import java.util.regex.Pattern;
  * deleteByCriteria()
  */
 
-public class ItemManager
+public class ItemManager extends GenericManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -53,9 +51,6 @@ public class ItemManager
 	/* Class members */
 	/* ************* */
 
-	// Unique instance of the class.
-	private static ItemManager instance;
-
 	// Data access object instance.
 	private final ItemDAO dao;
 
@@ -67,35 +62,19 @@ public class ItemManager
 	/* *************************** */
 
 	/**
-	 * Private constructor of the class.
+	 * Constructor of the class.
 	 */
 
-	private ItemManager()
+	public ItemManager(ManagerFactory managerFactory)
 	{
+		super(managerFactory);
+
 		// Data access object for user entity operations.
-		dao = DAOFactory.getItemDAO();
+		dao = managerFactory.getDaoFactory().getItemDAO();
 
 		// Property validators.
 		nameCheck = Pattern.compile(VALIDATE_NAME);
 		descriptionCheck = Pattern.compile(VALIDATE_DESCRIPTION);
-	}
-
-	/**
-	 * Get the instance of the class.
-	 * <p></p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
-	 *
-	 * @return Unique instance of the class.
-	 */
-
-	public static ItemManager getInstance()
-	{
-		// If the class is not already instanced.
-		if (instance == null) instance = new ItemManager();
-
-		// Return the only instance of the class.
-		return instance;
 	}
 
 	/* ******************* */

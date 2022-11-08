@@ -4,8 +4,8 @@
 
 <fmt:setBundle basename="locale" var="r"/>
 
-<c:set var="imagesUrl" value="<%=ControllerSupport.getInstance().getUrlImageHandler(request)%>" scope="page"/>
-<c:set var="itemsUrl" value='<%=ControllerSupport.getInstance().getUrlServlet(request, "item_bid")%>' scope="page"/>
+<c:set var="imagesUrl" value="<%=ControllerSupport.getUrlImageHandler(request)%>" scope="page"/>
+<c:set var="itemsUrl" value='<%=ControllerSupport.getUrlServlet(request, "item_bid")%>' scope="page"/>
 
 <jsp:include page="header.jsp">
 	<jsp:param name="cssFiles" value="forms,welcome,itemcard"/>

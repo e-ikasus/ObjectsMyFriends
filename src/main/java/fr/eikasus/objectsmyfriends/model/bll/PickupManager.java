@@ -2,7 +2,6 @@ package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.PickupDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ItemState;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
@@ -20,7 +19,6 @@ import java.util.regex.Pattern;
  * deleting and so. The access of one of data access object method by the
  * controllers is strictly forbidden.
  *
- * @see #getInstance() getInstance()
  * @see #add(Item, String, String, String) add()
  * @see #find(Item)
  * @see #update(PickupPlace, HashMap)
@@ -41,9 +39,6 @@ public class PickupManager extends GenericManager
 	/* Class members */
 	/* ************* */
 
-	// Unique instance of the class.
-	private static PickupManager instance;
-
 	// Data access object instance.
 	private final PickupDAO dao;
 
@@ -56,36 +51,20 @@ public class PickupManager extends GenericManager
 	/* *************************** */
 
 	/**
-	 * Private constructor of the class.
+	 * Constructor of the class.
 	 */
 
-	private PickupManager()
+	public PickupManager(ManagerFactory managerFactory)
 	{
+		super(managerFactory);
+
 		// Data access object for user entity operations.
-		dao = DAOFactory.getPickupDAO();
+		dao = managerFactory.getDaoFactory().getPickupDAO();
 
 		// Property validators.
 		streetCheck = Pattern.compile(VALIDATE_STREET);
 		zipcodeCheck = Pattern.compile(VALIDATE_ZIPCODE);
 		cityCheck = Pattern.compile(VALIDATE_CITY);
-	}
-
-	/**
-	 * Get the instance of the class.
-	 * <p>
-	 * This method instantiate the class and return-it. This is the only way to
-	 * obtain such instance, because the class can't be instanced directly.
-	 *
-	 * @return Unique instance of the class.
-	 */
-
-	public static PickupManager getInstance()
-	{
-		// If the class is not already instanced.
-		if (instance == null) instance = new PickupManager();
-
-		// Return the only instance of the class.
-		return instance;
 	}
 
 	/* ******************* */

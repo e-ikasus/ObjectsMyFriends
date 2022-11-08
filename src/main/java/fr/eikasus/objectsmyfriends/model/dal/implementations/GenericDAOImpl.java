@@ -1,5 +1,6 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.misc.ResultList;
 import fr.eikasus.objectsmyfriends.model.dal.misc.ResultObject;
 import fr.eikasus.objectsmyfriends.model.dal.misc.ResultVoid;
@@ -43,9 +44,9 @@ public abstract class GenericDAOImpl<T, U>
 	/* Class members */
 	/* ************* */
 
-	protected static EntityManagerFactory entityManagerFactory = null;
+	protected DAOFactory daoFactory = null;
 
-	public static EntityManager entityManager = null;
+	protected EntityManager entityManager = null;
 
 	protected Class<T> entityClass;
 
@@ -57,16 +58,10 @@ public abstract class GenericDAOImpl<T, U>
 
 	/**
 	 * Constructor of the class.
-	 * <p>
-	 * This constructor performs the task of obtaining the entity manager
-	 * necessary to deal with entities in the database.
 	 */
 
 	private GenericDAOImpl()
 	{
-		if (entityManagerFactory == null) entityManagerFactory = Persistence.createEntityManagerFactory("ObjectsMyFriends");
-
-		if (entityManager == null) entityManager = entityManagerFactory.createEntityManager();
 	}
 
 	/**
@@ -77,9 +72,11 @@ public abstract class GenericDAOImpl<T, U>
 	 * @param entity Class of the entity this instance deals with.
 	 */
 
-	protected GenericDAOImpl(Class<T> entity)
+	protected GenericDAOImpl(Class<T> entity, DAOFactory daoFactory)
 	{
-		this();
+		this.daoFactory = daoFactory;
+
+		entityManager = this.daoFactory.getEntityManager();
 
 		// Entity class.
 		entityClass = entity;

@@ -1,6 +1,7 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bo.Image;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ImageDAO;
 
 /**
@@ -9,8 +10,8 @@ import fr.eikasus.objectsmyfriends.model.dal.interfaces.ImageDAO;
 
 public class ImageDAOImpl extends GenericDAOImpl<Image, Long> implements ImageDAO
 {
-	public ImageDAOImpl()
+	public ImageDAOImpl(DAOFactory daoFactory)
 	{
-		super(Image.class);
+		super(Image.class, daoFactory);
 	}
 }

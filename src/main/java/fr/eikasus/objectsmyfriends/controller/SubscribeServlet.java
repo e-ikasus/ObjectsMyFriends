@@ -3,7 +3,7 @@ package fr.eikasus.objectsmyfriends.controller;
 import fr.eikasus.objectsmyfriends.misc.ControllerError;
 import fr.eikasus.objectsmyfriends.misc.ControllerException;
 import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
-import fr.eikasus.objectsmyfriends.model.bll.UserManager;
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
@@ -81,6 +81,9 @@ public class SubscribeServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// Retrieve the manager factory.
+		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
+
 		request.setCharacterEncoding("UTF-8");
 
 		// Check if the user confirm the connexion or not.
@@ -104,7 +107,7 @@ public class SubscribeServlet extends HttpServlet
 					throw new ControllerException(null, ControllerError.PASSWORD_DOESNT_MATCH);
 
 				// Try to create a user.
-				User user = UserManager.getInstance().add(username, firstName, lastName, email, phoneNumber, street, zipCode, city, password, 0, false);
+				User user = managerFactory.getUserManager().add(username, firstName, lastName, email, phoneNumber, street, zipCode, city, password, 0, false);
 
 				// Success, so save it to the user session.
 				HttpSession session = request.getSession();
@@ -115,16 +118,14 @@ public class SubscribeServlet extends HttpServlet
 			}
 			catch (ModelException | ControllerException exc)
 			{
-				ControllerSupport controllerSupport = ControllerSupport.getInstance();
-
 				// Transform parameters to attributes for saving the form.
-				controllerSupport.saveForm(request, formParameters);
+				ControllerSupport.saveForm(request, formParameters);
 
 				// Put the error in the form.
 				if (exc instanceof ModelException)
-					controllerSupport.putFormError((ModelException) exc, request, formParameters);
+					ControllerSupport.putFormError((ModelException) exc, request, formParameters);
 				else
-					controllerSupport.putFormError((ControllerException) exc, request, formParameters);
+					ControllerSupport.putFormError((ControllerException) exc, request, formParameters);
 
 				// Return to the profile creation page and display errors.
 				doGet(request, response);

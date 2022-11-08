@@ -5,10 +5,7 @@ import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +25,7 @@ class ItemManagerTest
 	private static List<Item> items;
 
 	private static TestSupport<Item> testSupport;
+	private static ManagerFactory managerFactory;
 	private static ItemManager itemManager;
 
 	private	String itemName;
@@ -47,8 +45,26 @@ class ItemManagerTest
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
+		// Instantiate a manager factory object.
+		managerFactory = new ManagerFactory();
+
 		// Unique item manager instance.
-		itemManager = ItemManager.getInstance();
+		itemManager = managerFactory.getItemManager();
+
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
+	}
+
+	/**
+	 * Free used resources.
+	 */
+
+	@AfterAll public static void afterAll()
+	{
+		// Close the manager factory object.
+		managerFactory.close();
 	}
 
 	/**
@@ -59,7 +75,7 @@ class ItemManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase();
+		testSupport.populateDatabase(managerFactory.getDaoFactory());
 	}
 
 	/**
@@ -71,7 +87,7 @@ class ItemManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase();
+		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 
 	/* ************** */
@@ -89,11 +105,11 @@ class ItemManagerTest
 		Date current = new Date();
 
 		// Search a particular user.
-		assertDoesNotThrow(() -> {user = UserManager.getInstance().find("Fabien", null, "P@ssw0rd");});
+		assertDoesNotThrow(() -> {user = managerFactory.getUserManager().find("Fabien", null, "P@ssw0rd");});
 		assertNotNull(user);
 
 		// Search a particular category.
-		assertDoesNotThrow(() -> {categories = CategoryManager.getInstance().find("Informatique");});
+		assertDoesNotThrow(() -> {categories = managerFactory.getCategoryManager().find("Informatique");});
 		assertNotNull(categories);
 
 		addItem("name", "/", "wrong name");
@@ -216,7 +232,7 @@ class ItemManagerTest
 	private void searchIem(String name, String password, Search criteria)
 	{
 		// Search for seller and its items.
-		HashMap<String, Object> sellerData = testSupport.searchItem(UserRole.SELLER, name, password, criteria);
+		HashMap<String, Object> sellerData = testSupport.searchItem(managerFactory, UserRole.SELLER, name, password, criteria);
 
 		user = (User) sellerData.get("user");
 		items = (List<Item>) sellerData.get("items");
