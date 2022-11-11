@@ -1,5 +1,7 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ImageDAO;
@@ -23,7 +25,7 @@ import java.util.regex.Pattern;
  * @see #delete(Image) delete()
  */
 
-public class ImageManager extends GenericManager
+public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -48,7 +50,7 @@ public class ImageManager extends GenericManager
 	 * Constructor of the class.
 	 */
 
-	public ImageManager(ManagerFactory managerFactory)
+	public ImageManagerImpl(ManagerFactory managerFactory)
 	{
 		super(managerFactory);
 

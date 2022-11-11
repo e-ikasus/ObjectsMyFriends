@@ -1,5 +1,6 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.UserManager;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;

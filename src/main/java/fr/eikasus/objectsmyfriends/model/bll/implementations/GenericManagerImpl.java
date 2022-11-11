@@ -1,5 +1,6 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 
@@ -15,7 +16,7 @@ import java.util.HashMap;
  * @see #setEntityProperty(Object, HashMap, String, boolean) setEntityProperty()
  */
 
-public abstract class GenericManager
+public abstract class GenericManagerImpl
 {
 	/* ************* */
 	/* Class members */
@@ -27,7 +28,12 @@ public abstract class GenericManager
 	/* Constructors and instancier */
 	/* *************************** */
 
-	protected GenericManager(ManagerFactory managerFactory)
+	protected GenericManagerImpl()
+	{
+
+	}
+
+	protected GenericManagerImpl(ManagerFactory managerFactory)
 	{
 		this.managerFactory = managerFactory;
 	}

@@ -1,5 +1,6 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.BidManager;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;

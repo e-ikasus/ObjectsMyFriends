@@ -1,5 +1,7 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.CategoryManager;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.CategoryDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
@@ -25,7 +27,7 @@ import java.util.regex.Pattern;
  * @see #delete(long)
  */
 
-public class CategoryManager extends GenericManager
+public class CategoryManagerImpl extends GenericManagerImpl implements CategoryManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -50,7 +52,7 @@ public class CategoryManager extends GenericManager
 	 * Constructor of the class.
 	 */
 
-	public CategoryManager(ManagerFactory managerFactory)
+	public CategoryManagerImpl(ManagerFactory managerFactory)
 	{
 		super(managerFactory);
 

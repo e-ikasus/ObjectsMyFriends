@@ -1,5 +1,7 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
+import fr.eikasus.objectsmyfriends.model.bll.implementations.*;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.*;
 import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 
 public class ManagerFactory
@@ -50,42 +52,42 @@ public class ManagerFactory
 
 	public UserManager getUserManager()
 	{
-		if (userManager == null) userManager = new UserManager(this);
+		if (userManager == null) userManager = new UserManagerImpl(this);
 
 		return userManager;
 	}
 
 	public CategoryManager getCategoryManager()
 	{
-		if (categoryManager == null) categoryManager = new CategoryManager(this);
+		if (categoryManager == null) categoryManager = new CategoryManagerImpl(this);
 
 		return categoryManager;
 	}
 
 	public ItemManager getItemManager()
 	{
-		if (itemManager == null) itemManager = new ItemManager(this);
+		if (itemManager == null) itemManager = new ItemManagerImpl(this);
 
 		return itemManager;
 	}
 
 	public PickupManager getPickupManager()
 	{
-		if (pickupManager == null) pickupManager = new PickupManager(this);
+		if (pickupManager == null) pickupManager = new PickupManagerImpl(this);
 
 		return pickupManager;
 	}
 
 	public ImageManager getImageManager()
 	{
-		if (imageManager == null) imageManager = new ImageManager(this);
+		if (imageManager == null) imageManager = new ImageManagerImpl(this);
 
 		return imageManager;
 	}
 
 	public BidManager getBidManager()
 	{
-		if (bidManager == null) bidManager = new BidManager(this);
+		if (bidManager == null) bidManager = new BidManagerImpl(this);
 
 		return bidManager;
 	}

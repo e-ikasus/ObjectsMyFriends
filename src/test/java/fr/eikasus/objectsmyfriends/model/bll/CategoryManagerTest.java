@@ -1,7 +1,7 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.CategoryManager;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
-import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import org.junit.jupiter.api.*;
 
@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This class is used to test functionalities of the category manager.

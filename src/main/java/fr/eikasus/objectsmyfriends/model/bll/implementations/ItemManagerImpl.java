@@ -1,5 +1,7 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.ItemManager;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
@@ -31,7 +33,7 @@ import java.util.regex.Pattern;
  * deleteByCriteria()
  */
 
-public class ItemManager extends GenericManager
+public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -65,7 +67,7 @@ public class ItemManager extends GenericManager
 	 * Constructor of the class.
 	 */
 
-	public ItemManager(ManagerFactory managerFactory)
+	public ItemManagerImpl(ManagerFactory managerFactory)
 	{
 		super(managerFactory);
 

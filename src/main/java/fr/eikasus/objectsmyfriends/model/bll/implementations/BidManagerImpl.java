@@ -1,5 +1,7 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.BidManager;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
@@ -26,7 +28,7 @@ import java.util.List;
  * @see #delete(User) delete()
  */
 
-public class BidManager extends GenericManager
+public class BidManagerImpl extends GenericManagerImpl implements BidManager
 {
 	/* ************* */
 	/* Class members */
@@ -43,7 +45,7 @@ public class BidManager extends GenericManager
 	 * Constructor of the class.
 	 */
 
-	public BidManager(ManagerFactory managerFactory)
+	public BidManagerImpl(ManagerFactory managerFactory)
 	{
 		super(managerFactory);
 

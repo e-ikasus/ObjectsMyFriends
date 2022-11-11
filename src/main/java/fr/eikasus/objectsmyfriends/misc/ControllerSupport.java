@@ -1,7 +1,7 @@
 package fr.eikasus.objectsmyfriends.misc;
 
-import fr.eikasus.objectsmyfriends.model.bll.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;

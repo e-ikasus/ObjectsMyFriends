@@ -1,5 +1,7 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.PickupManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.PickupDAO;
@@ -25,7 +27,7 @@ import java.util.regex.Pattern;
  * @see #delete(PickupPlace)
  */
 
-public class PickupManager extends GenericManager
+public class PickupManagerImpl extends GenericManagerImpl implements PickupManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -54,7 +56,7 @@ public class PickupManager extends GenericManager
 	 * Constructor of the class.
 	 */
 
-	public PickupManager(ManagerFactory managerFactory)
+	public PickupManagerImpl(ManagerFactory managerFactory)
 	{
 		super(managerFactory);
 

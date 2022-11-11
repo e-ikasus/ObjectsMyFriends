@@ -1,5 +1,6 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.PickupManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
 import fr.eikasus.objectsmyfriends.model.bo.User;
@@ -19,7 +20,6 @@ public class PickupManagerTest
 	private static User user;
 	private static List<Item> items;
 
-	private static List<PickupPlace> pickupPlaces;
 	private static PickupPlace newPickupPlace;
 	HashMap<String, Object> properties = new HashMap<>();
 

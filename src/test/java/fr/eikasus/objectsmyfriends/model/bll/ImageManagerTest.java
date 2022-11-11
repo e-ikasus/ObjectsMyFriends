@@ -1,5 +1,6 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.misc.Search;

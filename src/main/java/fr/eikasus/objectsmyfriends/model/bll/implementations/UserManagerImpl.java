@@ -1,5 +1,9 @@
-package fr.eikasus.objectsmyfriends.model.bll;
+package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.implementations.GenericManagerImpl;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.ItemManager;
+import fr.eikasus.objectsmyfriends.model.bll.interfaces.UserManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.UserDAO;
@@ -30,7 +34,7 @@ import java.util.regex.Pattern;
  * @see #delete(User, boolean) delete()
  */
 
-public class UserManager extends GenericManager
+public class UserManagerImpl extends GenericManagerImpl implements UserManager
 {
 	/* ******************** */
 	/* Constant declaration */
@@ -68,7 +72,7 @@ public class UserManager extends GenericManager
 	 * Constructor of the class.
 	 */
 
-	public UserManager(ManagerFactory managerFactory)
+	public UserManagerImpl(ManagerFactory managerFactory)
 	{
 		super(managerFactory);
 
