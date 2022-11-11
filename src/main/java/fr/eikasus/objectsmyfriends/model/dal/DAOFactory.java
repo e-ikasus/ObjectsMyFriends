@@ -19,7 +19,7 @@ public class DAOFactory
 
 	private static EntityManagerFactory entityManagerFactory = null;
 
-	private EntityManager entityManager = null;
+	private EntityManager entityManager;
 
 	private UserDAO userDAO = null;
 
