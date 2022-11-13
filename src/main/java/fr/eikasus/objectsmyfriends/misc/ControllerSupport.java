@@ -43,8 +43,8 @@ import java.util.List;
  * putFormError()
  * @see #putFormError(ControllerException, HttpServletRequest, HashMap)
  * putFormError()
- * @see #getUserFromSession(HttpServletRequest) getUserFromSession()
- * @see #getItemFromSession(HttpServletRequest) getItemFromSession()
+ * @see #getUserFromSession(ManagerFactory, HttpServletRequest) getUserFromSession()
+ * @see #getItemFromSession(ManagerFactory, HttpServletRequest) getItemFromSession()
  */
 
 public class ControllerSupport
@@ -467,11 +467,8 @@ public class ControllerSupport
 	 * @return User found and present in the persistence context or null if none.
 	 */
 
-	public static User getUserFromSession(@NotNull HttpServletRequest request)
+	public static User getUserFromSession(ManagerFactory managerFactory, @NotNull HttpServletRequest request)
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = getManagerFactory(request);
-
 		// Retrieve the user from the request.
 		User user = (User) request.getSession().getAttribute("user");
 
@@ -512,11 +509,8 @@ public class ControllerSupport
 	 * @return Item found and present in the persistence context or null if none.
 	 */
 
-	public static Item getItemFromSession(@NotNull HttpServletRequest request)
+	public static Item getItemFromSession(ManagerFactory managerFactory, @NotNull HttpServletRequest request)
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = getManagerFactory(request);
-
 		// Retrieve the item from the request.
 		Item item = (Item) request.getSession().getAttribute("item");
 
@@ -541,22 +535,6 @@ public class ControllerSupport
 
 		// Return the found item.
 		return item;
-	}
-
-	/**
-	 *
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-
-	public static @NotNull ManagerFactory getManagerFactory(@NotNull HttpServletRequest request)
-	{
-		ManagerFactory managerFactory = (ManagerFactory) request.getAttribute("managerFactory");
-
-		if (managerFactory == null) throw new RuntimeException("ManagerFactory attended in the request !");
-
-		return managerFactory;
 	}
 
 	/* ************** */

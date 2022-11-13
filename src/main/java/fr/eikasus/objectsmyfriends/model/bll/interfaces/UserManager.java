@@ -1,6 +1,8 @@
 package fr.eikasus.objectsmyfriends.model.bll.interfaces;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +11,10 @@ import java.util.List;
 
 public interface UserManager
 {
+	void setManagerFactory(ManagerFactory managerFactory);
+
+	DAOFactory getDaoFactory();
+
 	User add(String username, String firstName, String lastName, String email, String phoneNumber, String street, String zipCode, String city, String plainPassword, int credit, boolean admin) throws ModelException;
 
 	User find(String username, String email, String plainPassword) throws ModelException;

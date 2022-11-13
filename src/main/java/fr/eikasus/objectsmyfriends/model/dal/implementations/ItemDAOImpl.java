@@ -3,12 +3,13 @@ package fr.eikasus.objectsmyfriends.model.dal.implementations;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
+import fr.eikasus.objectsmyfriends.model.dal.annotations.ItemDAODB;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
  * @see #deleteByCriteria(User, UserRole, Search, Category, String) delete()
  */
 
+@ApplicationScoped @ItemDAODB
 public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 {
 	/* ******************************* */
@@ -65,9 +67,9 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	/* Constructors */
 	/* ************ */
 
-	public ItemDAOImpl(DAOFactory daoFactory)
+	public ItemDAOImpl()
 	{
-		super(Item.class, daoFactory);
+		super(Item.class);
 	}
 
 	/* ******************* */

@@ -2,12 +2,13 @@ package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
+import fr.eikasus.objectsmyfriends.model.dal.annotations.BidDAODB;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.BidDAO;
 import fr.eikasus.objectsmyfriends.model.misc.BidId;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @see #findBestBid(Item)
  */
 
+@ApplicationScoped @BidDAODB
 public class BidDAOImpl extends GenericDAOImpl<Bid, BidId> implements BidDAO
 {
 	/* ******************************* */
@@ -32,9 +34,9 @@ public class BidDAOImpl extends GenericDAOImpl<Bid, BidId> implements BidDAO
 	/* Constructors */
 	/* ************ */
 
-	public BidDAOImpl(DAOFactory daoFactory)
+	public BidDAOImpl()
 	{
-		super(Bid.class, daoFactory);
+		super(Bid.class);
 	}
 
 	/* ******************* */

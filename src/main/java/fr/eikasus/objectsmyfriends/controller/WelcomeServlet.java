@@ -1,12 +1,12 @@
 package fr.eikasus.objectsmyfriends.controller;
 
 import com.google.gson.Gson;
-import fr.eikasus.objectsmyfriends.misc.ControllerSupport;
 import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,11 +22,10 @@ import java.util.HashMap;
 @WebServlet(name = "WelcomeServlet", urlPatterns = {"/welcome", "/index.jsp", "/index.html"})
 public class WelcomeServlet extends HttpServlet
 {
+	@Inject ManagerFactory managerFactory;
+
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		HashMap<String, String> savedParams = new HashMap<>();
 		String param;
 		boolean receiveParam = false;

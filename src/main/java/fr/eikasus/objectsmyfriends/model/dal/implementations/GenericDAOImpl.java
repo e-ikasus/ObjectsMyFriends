@@ -1,12 +1,11 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
-import fr.eikasus.objectsmyfriends.model.dal.misc.ResultList;
-import fr.eikasus.objectsmyfriends.model.dal.misc.ResultObject;
-import fr.eikasus.objectsmyfriends.model.dal.misc.ResultVoid;
+import fr.eikasus.objectsmyfriends.model.dal.misc.*;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.List;
 
@@ -44,9 +43,7 @@ public abstract class GenericDAOImpl<T, U>
 	/* Class members */
 	/* ************* */
 
-	protected DAOFactory daoFactory = null;
-
-	protected EntityManager entityManager = null;
+	@Inject @EntityManagerRequestScoped protected EntityManager entityManager;
 
 	protected Class<T> entityClass;
 
@@ -57,12 +54,10 @@ public abstract class GenericDAOImpl<T, U>
 	/* *********** */
 
 	/**
-	 * Constructor of the class.
+	 * Managed bean must have a constructor with no parameters.
 	 */
 
-	private GenericDAOImpl()
-	{
-	}
+	protected GenericDAOImpl() { }
 
 	/**
 	 * Real constructor of the class used to instantiate it. The supplied
@@ -72,12 +67,8 @@ public abstract class GenericDAOImpl<T, U>
 	 * @param entity Class of the entity this instance deals with.
 	 */
 
-	protected GenericDAOImpl(Class<T> entity, DAOFactory daoFactory)
+	protected GenericDAOImpl(Class<T> entity)
 	{
-		this.daoFactory = daoFactory;
-
-		entityManager = this.daoFactory.getEntityManager();
-
 		// Entity class.
 		entityClass = entity;
 

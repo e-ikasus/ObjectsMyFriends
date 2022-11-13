@@ -1,15 +1,17 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.BidManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.BidManager;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.BidDAO;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,31 +30,9 @@ import java.util.List;
  * @see #delete(User) delete()
  */
 
+@ApplicationScoped @BidManagerDB
 public class BidManagerImpl extends GenericManagerImpl implements BidManager
 {
-	/* ************* */
-	/* Class members */
-	/* ************* */
-
-	// Data access object instance.
-	private final BidDAO dao;
-
-	/* *************************** */
-	/* Constructors and instancier */
-	/* *************************** */
-
-	/**
-	 * Constructor of the class.
-	 */
-
-	public BidManagerImpl(ManagerFactory managerFactory)
-	{
-		super(managerFactory);
-
-		// Data access object for user entity operations.
-		dao = managerFactory.getDaoFactory().getBidDAO();
-	}
-
 	/* ******************* */
 	/* Methods implemented */
 	/* ******************* */
@@ -87,7 +67,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 			Bid oldBid = validate(newBid);
 
 			// Save it into the database.
-			dao.save(newBid);
+			daoFactory.getBidDAO().save(newBid);
 
 			HashMap<String, Object> properties = new HashMap<>();
 
@@ -131,7 +111,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 		try
 		{
 			// Search bids related to the user.
-			bids = dao.findByProperty("user", user);
+			bids = daoFactory.getBidDAO().findByProperty("user", user);
 		}
 		catch (ModelException me)
 		{
@@ -144,7 +124,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 			for (Bid bid : bids)
 			{
 				// Delete if from the database.
-				dao.delete(bid);
+				daoFactory.getBidDAO().delete(bid);
 
 				// And remove the bid from the item bid list.
 				bid.getItem().removeBid(bid);
@@ -204,7 +184,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 				throw exception.add(ModelError.INVALID_BID_PRICE);
 
 			// Retrieve the maximum bid made on this item and check it if exists.
-			if ((maxBid = dao.findBestBid(bid.getItem())) != null)
+			if ((maxBid = daoFactory.getBidDAO().findBestBid(bid.getItem())) != null)
 			{
 				// A user can't bid on him.
 				if (maxBid.getUser() == bid.getUser())

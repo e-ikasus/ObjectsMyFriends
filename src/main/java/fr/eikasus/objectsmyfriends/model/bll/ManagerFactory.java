@@ -1,49 +1,44 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
-import fr.eikasus.objectsmyfriends.model.bll.implementations.*;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.*;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.*;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
 public class ManagerFactory
 {
 	/* ************* */
 	/* Class members */
 	/* ************* */
 
-	private final DAOFactory daoFactory;
+	@Inject @UserManagerDB private UserManager userManager;
 
-	private UserManager userManager = null;
+	@Inject @CategoryManagerDB private CategoryManager categoryManager;
 
-	private CategoryManager categoryManager = null;
+	@Inject @ItemManagerDB private ItemManager itemManager;
 
-	private ItemManager itemManager = null;
+	@Inject @PickupManagerDB private PickupManager pickupManager;
 
-	private PickupManager pickupManager = null;
+	@Inject @ImageManagerDB private ImageManager imageManager;
 
-	private ImageManager imageManager = null;
+	@Inject @BidManagerDB private BidManager bidManager;
 
-	private BidManager bidManager = null;
+	/* ************ */
+	/* Constructors */
+	/* ************ */
 
-	/* *************** */
-	/* Getters/setters */
-	/* *************** */
-
-	public DAOFactory getDaoFactory()
+	@PostConstruct
+	public void initialize()
 	{
-		return daoFactory;
-	}
-
-	/* *********** */
-	/* Constructor */
-	/* *********** */
-
-	/**
-	 * Constructor of the class that also create the DAOFactory object.
-	 */
-
-	public ManagerFactory()
-	{
-		daoFactory = new DAOFactory();
+		userManager.setManagerFactory(this);
+		categoryManager.setManagerFactory(this);
+		itemManager.setManagerFactory(this);
+		pickupManager.setManagerFactory(this);
+		imageManager.setManagerFactory(this);
+		bidManager.setManagerFactory(this);
 	}
 
 	/* *************************** */
@@ -52,56 +47,31 @@ public class ManagerFactory
 
 	public UserManager getUserManager()
 	{
-		if (userManager == null) userManager = new UserManagerImpl(this);
-
 		return userManager;
 	}
 
 	public CategoryManager getCategoryManager()
 	{
-		if (categoryManager == null) categoryManager = new CategoryManagerImpl(this);
-
 		return categoryManager;
 	}
 
 	public ItemManager getItemManager()
 	{
-		if (itemManager == null) itemManager = new ItemManagerImpl(this);
-
 		return itemManager;
 	}
 
 	public PickupManager getPickupManager()
 	{
-		if (pickupManager == null) pickupManager = new PickupManagerImpl(this);
-
 		return pickupManager;
 	}
 
 	public ImageManager getImageManager()
 	{
-		if (imageManager == null) imageManager = new ImageManagerImpl(this);
-
 		return imageManager;
 	}
 
 	public BidManager getBidManager()
 	{
-		if (bidManager == null) bidManager = new BidManagerImpl(this);
-
 		return bidManager;
-	}
-
-	/* ******************* */
-	/* Methods implemented */
-	/* ******************* */
-
-	/**
-	 * Close all resources that need to be closed.
-	 */
-
-	public void close()
-	{
-		daoFactory.close();
 	}
 }

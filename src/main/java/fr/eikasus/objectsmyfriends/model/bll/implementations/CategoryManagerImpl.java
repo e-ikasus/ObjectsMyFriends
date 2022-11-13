@@ -1,13 +1,15 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.CategoryManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.CategoryManager;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.CategoryDAO;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -27,6 +29,7 @@ import java.util.regex.Pattern;
  * @see #delete(long)
  */
 
+@ApplicationScoped @CategoryManagerDB
 public class CategoryManagerImpl extends GenericManagerImpl implements CategoryManager
 {
 	/* ******************** */
@@ -39,9 +42,6 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 	/* Class members */
 	/* ************* */
 
-	// Data access object instance.
-	private final CategoryDAO dao;
-
 	private final Pattern labelCheck;
 
 	/* *************************** */
@@ -52,12 +52,9 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 	 * Constructor of the class.
 	 */
 
-	public CategoryManagerImpl(ManagerFactory managerFactory)
+	public CategoryManagerImpl()
 	{
-		super(managerFactory);
-
-		// Data access object for user entity operations.
-		dao =managerFactory.getDaoFactory().getCategoryDAO();
+		super();
 
 		// Property validators.
 		labelCheck = Pattern.compile(VALIDATE_LABEL);
@@ -91,7 +88,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 			validate(category);
 
 			// Save it into the database.
-			dao.save(category);
+			daoFactory.getCategoryDAO().save(category);
 		}
 		catch (ModelException me)
 		{
@@ -122,7 +119,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 		try
 		{
 			// Search and return wanted categories.
-			return (label == null) ? (dao.find()) : (dao.findByProperty("label", label));
+			return (label == null) ? (daoFactory.getCategoryDAO().find()) : (daoFactory.getCategoryDAO().findByProperty("label", label));
 		}
 		catch (ModelException me)
 		{
@@ -166,7 +163,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 			validate(updatedCategory);
 
 			// Update the category into the database.
-			dao.update(updatedCategory);
+			daoFactory.getCategoryDAO().update(updatedCategory);
 		}
 		catch (ModelException me)
 		{
@@ -189,7 +186,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 	{
 		try
 		{
-			dao.delete(category);
+			daoFactory.getCategoryDAO().delete(category);
 		}
 		catch (ModelException me)
 		{
@@ -212,7 +209,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 	{
 		try
 		{
-			dao.deleteById(id);
+			daoFactory.getCategoryDAO().deleteById(id);
 		}
 		catch (ModelException me)
 		{

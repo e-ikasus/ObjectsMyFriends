@@ -1,12 +1,13 @@
 package fr.eikasus.objectsmyfriends.model.dal.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
+import fr.eikasus.objectsmyfriends.model.dal.annotations.UserDAODB;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.UserDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.TypedQuery;
 
 /**
@@ -16,6 +17,7 @@ import javax.persistence.TypedQuery;
  * @see #findByEmail(String) findByEmail()
  */
 
+@ApplicationScoped @UserDAODB
 public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
 {
 	/* ******************************* */
@@ -32,9 +34,9 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
 	/* Constructors */
 	/* ************ */
 
-	public UserDAOImpl(DAOFactory daoFactory)
+	public UserDAOImpl()
 	{
-		super(User.class, daoFactory);
+		super(User.class);
 	}
 
 	/* ******************* */

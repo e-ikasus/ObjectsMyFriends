@@ -9,6 +9,7 @@ import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -23,6 +24,9 @@ public class SubscribeServlet extends HttpServlet
 	/* ************* */
 
 	HashMap<Object, String> formParameters = new HashMap<>();
+
+	@Inject
+	ManagerFactory managerFactory;
 
 	/* ******************* */
 	/* Methods implemented */
@@ -81,9 +85,6 @@ public class SubscribeServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		request.setCharacterEncoding("UTF-8");
 
 		// Check if the user confirm the connexion or not.

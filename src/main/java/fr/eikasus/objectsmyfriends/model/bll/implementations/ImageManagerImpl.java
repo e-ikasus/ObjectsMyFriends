@@ -1,14 +1,16 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.ImageManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.ImageDAO;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.regex.Pattern;
 
 /**
@@ -25,6 +27,7 @@ import java.util.regex.Pattern;
  * @see #delete(Image) delete()
  */
 
+@ApplicationScoped @ImageManagerDB
 public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 {
 	/* ******************** */
@@ -37,9 +40,6 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 	/* Class members */
 	/* ************* */
 
-	// Data access object instance.
-	private final ImageDAO dao;
-
 	private final Pattern pathCheck;
 
 	/* *************************** */
@@ -50,12 +50,9 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 	 * Constructor of the class.
 	 */
 
-	public ImageManagerImpl(ManagerFactory managerFactory)
+	public ImageManagerImpl()
 	{
-		super(managerFactory);
-
-		// Data access object for user entity operations.
-		dao = managerFactory.getDaoFactory().getImageDAO();
+		super();
 
 		// Property validators.
 		pathCheck = Pattern.compile(VALIDATE_PATH);
@@ -93,7 +90,7 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 			validate(newImage);
 
 			// Save the image into the database.
-			dao.save(newImage);
+			daoFactory.getImageDAO().save(newImage);
 
 			// Add the image to the corresponding item.
 			item.addImage(newImage);
@@ -126,7 +123,7 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 			image.getItem().removeImage(image);
 
 			// Delete the image from the database.
-			dao.delete(image);
+			daoFactory.getImageDAO().delete(image);
 		}
 		catch (ModelException me)
 		{

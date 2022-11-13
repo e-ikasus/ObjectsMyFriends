@@ -1,8 +1,10 @@
 package fr.eikasus.objectsmyfriends.model.bll.interfaces;
 
+import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
@@ -14,6 +16,10 @@ import java.util.List;
 
 public interface ItemManager
 {
+	void setManagerFactory(ManagerFactory managerFactory);
+
+	DAOFactory getDaoFactory();
+
 	Item add(String name, String description, Date biddingStart, Date biddingEnd, int initialPrice, User seller, Category category) throws ModelException;
 
 	List<Item> find(Long identifier) throws ModelException;

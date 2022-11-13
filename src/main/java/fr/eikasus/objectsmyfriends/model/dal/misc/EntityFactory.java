@@ -10,12 +10,12 @@ import javax.persistence.Persistence;
 
 public class EntityFactory
 {
-	private static EntityManagerFactory entityManagerFactory = null;
+	/*private static EntityManagerFactory entityManagerFactory = null;
 
 	static
 	{
 		entityManagerFactory = Persistence.createEntityManagerFactory("ObjectsMyFriends");
-	}
+	}*/
 
 	/**
 	 * Get the object needed to access the database.
@@ -25,7 +25,7 @@ public class EntityFactory
 	 *
 	 * @return The EntityManager object.
 	 */
-
+/*
 	public static EntityManager getEntityManager() throws Exception
 	{
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -34,5 +34,5 @@ public class EntityFactory
 			throw new Exception("Impossible to get access to the database.");
 
 		return entityManager;
-	}
+	}*/
 }

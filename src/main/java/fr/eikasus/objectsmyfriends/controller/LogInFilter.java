@@ -24,7 +24,7 @@ public class LogInFilter implements Filter
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-		// Url in lower case.
+		// URL in lower case.
 		String url = httpServletRequest.getServletPath().toLowerCase();
 
 		// Determine if the current user is connected or not.
@@ -42,25 +42,7 @@ public class LogInFilter implements Filter
 		// Is the target reachable.
 		boolean redirect = (connected && (subscribe || login)) || ((!connected) && (logout || itemSell || showProfile || modifyProfile));
 
-		// Resources don't need a manager factory. This is the same for the logout
-		// page.
-		if ((resource) || ((logout) && (!redirect)))
-		{
-			chain.doFilter(request, response);
-		}
-		else if (redirect)
-		{
-			httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
-		}
-		else
-		{
-			ManagerFactory managerFactory = new ManagerFactory();
-			httpServletRequest.setAttribute("managerFactory", managerFactory);
-
-			chain.doFilter(request, response);
-
-			httpServletRequest.removeAttribute("managerFactory");
-			managerFactory.close();
-		}
+		if (redirect) httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/welcome");
+		else chain.doFilter(request, response);
 	}
 }

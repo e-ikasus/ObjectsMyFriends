@@ -1,9 +1,11 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
 import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 
+import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
@@ -22,20 +24,24 @@ public abstract class GenericManagerImpl
 	/* Class members */
 	/* ************* */
 
+	// Manager factory used to access other managers if necessary.
 	protected ManagerFactory managerFactory;
 
-	/* *************************** */
-	/* Constructors and instancier */
-	/* *************************** */
+	// DAO factory used to access DAOs objects
+	@Inject protected DAOFactory daoFactory;
 
-	protected GenericManagerImpl()
-	{
+	/* *************** */
+	/* Getters/setters */
+	/* *************** */
 
-	}
-
-	protected GenericManagerImpl(ManagerFactory managerFactory)
+	public void setManagerFactory(ManagerFactory managerFactory)
 	{
 		this.managerFactory = managerFactory;
+	}
+
+	public DAOFactory getDaoFactory()
+	{
+		return daoFactory;
 	}
 
 	/* ******************* */

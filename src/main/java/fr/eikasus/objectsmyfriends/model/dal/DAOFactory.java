@@ -1,62 +1,33 @@
 package fr.eikasus.objectsmyfriends.model.dal;
 
-import fr.eikasus.objectsmyfriends.model.dal.implementations.*;
+import fr.eikasus.objectsmyfriends.model.dal.annotations.*;
 import fr.eikasus.objectsmyfriends.model.dal.interfaces.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * Class handling Data Access objects.
  */
 
+@ApplicationScoped
 public class DAOFactory
 {
 	/* ************* */
 	/* Class members */
 	/* ************* */
 
-	private static EntityManagerFactory entityManagerFactory = null;
+	@Inject @UserDAODB private UserDAO userDAO;
 
-	private EntityManager entityManager;
+	@Inject @CategoryDAODB private CategoryDAO categoryDAO;
 
-	private UserDAO userDAO = null;
+	@Inject @ItemDAODB private ItemDAO itemDAO;
 
-	private CategoryDAO categoryDAO = null;
+	@Inject @PickupDAODB private PickupDAO pickupDAO;
 
-	private ItemDAO itemDAO = null;
+	@Inject @ImageDAODB private ImageDAO imageDAO;
 
-	private PickupDAO pickupDAO = null;
-
-	private ImageDAO imageDAO = null;
-
-	private BidDAO bidDAO = null;
-
-	/* *************** */
-	/* Getters/setters */
-	/* *************** */
-
-	public EntityManager getEntityManager()
-	{
-		return entityManager;
-	}
-
-	/* *********** */
-	/* Constructor */
-	/* *********** */
-
-	/**
-	 * Constructor of the classe that instantiate the persistence context.
-	 */
-
-	public DAOFactory()
-	{
-		if (entityManagerFactory == null)
-			entityManagerFactory = Persistence.createEntityManagerFactory("ObjectsMyFriends");
-
-		entityManager = entityManagerFactory.createEntityManager();
-	}
+	@Inject @BidDAODB private BidDAO bidDAO;
 
 	/* ****************************** */
 	/* Getters for data access object */
@@ -64,60 +35,31 @@ public class DAOFactory
 
 	public UserDAO getUserDAO()
 	{
-		if (userDAO == null) userDAO = new UserDAOImpl(this);
-
 		return userDAO;
 	}
 
 	public CategoryDAO getCategoryDAO()
 	{
-		if (categoryDAO == null) categoryDAO = new CategoryDAOImpl(this);
-
 		return categoryDAO;
 	}
 
 	public ItemDAO getItemDAO()
 	{
-		if (itemDAO == null) itemDAO = new ItemDAOImpl(this);
-
 		return itemDAO;
 	}
 
 	public PickupDAO getPickupDAO()
 	{
-		if (pickupDAO == null) pickupDAO = new PickupDAOImpl(this);
-
 		return pickupDAO;
 	}
 
 	public ImageDAO getImageDAO()
 	{
-		if (imageDAO == null) imageDAO = new ImageDAOImpl(this);
-
 		return imageDAO;
 	}
 
 	public BidDAO getBidDAO()
 	{
-		if (bidDAO == null) bidDAO = new BidDAOImpl(this);
-
 		return bidDAO;
-	}
-
-	/* ******************* */
-	/* Methods implemented */
-	/* ******************* */
-
-	/**
-	 * Close all resources that need to be closed.
-	 */
-
-	public synchronized void close()
-	{
-		// Close the entity manager if opened.
-		if ( (entityManager != null) && (entityManager.isOpen()) ) entityManager.close();
-
-		// No entity manager opened.
-		entityManager = null;
 	}
 }

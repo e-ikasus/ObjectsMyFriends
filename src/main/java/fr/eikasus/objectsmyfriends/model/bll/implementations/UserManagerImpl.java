@@ -1,18 +1,17 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
-import fr.eikasus.objectsmyfriends.model.bll.implementations.GenericManagerImpl;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.UserManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.ItemManager;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.UserManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.UserDAO;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +33,7 @@ import java.util.regex.Pattern;
  * @see #delete(User, boolean) delete()
  */
 
+@ApplicationScoped @UserManagerDB
 public class UserManagerImpl extends GenericManagerImpl implements UserManager
 {
 	/* ******************** */
@@ -52,9 +52,6 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 	/* Class members */
 	/* ************* */
 
-	// Data access object instance.
-	private final UserDAO dao;
-
 	private final Pattern emailCheck;
 	private final Pattern pseudoCheck;
 	private final Pattern phoneCheck;
@@ -72,12 +69,9 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 	 * Constructor of the class.
 	 */
 
-	public UserManagerImpl(ManagerFactory managerFactory)
+	public UserManagerImpl()
 	{
-		super(managerFactory);
-
-		// Data access object for user entity operations.
-		dao = managerFactory.getDaoFactory().getUserDAO();
+		super();
 
 		// Property validators.
 		emailCheck = Pattern.compile(VALIDATE_EMAIL);
@@ -136,7 +130,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 			user.hashPassword();
 
 			// Save the user into the database.
-			dao.save(user);
+			daoFactory.getUserDAO().save(user);
 		}
 		catch (ModelException me)
 		{
@@ -174,8 +168,8 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 		try
 		{
 			// Search the user by name or email by ignoring password.
-			if (username != null) user = dao.findByUsername(username);
-			else if (email != null) user = dao.findByEmail(email);
+			if (username != null) user = daoFactory.getUserDAO().findByUsername(username);
+			else if (email != null) user = daoFactory.getUserDAO().findByEmail(email);
 			else throw new ModelException();
 
 			// Create a temporary user object to hash password supplied.
@@ -219,8 +213,8 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 		try
 		{
 			// Find a specific user or all.
-			if (identifier == null) users = dao.find();
-			else users.add(dao.find(identifier));
+			if (identifier == null) users = daoFactory.getUserDAO().find();
+			else users.add(daoFactory.getUserDAO().find(identifier));
 		}
 		catch (ModelException me)
 		{
@@ -320,7 +314,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 			updatedUser.hashPassword();
 
 			// Update the user into the database.
-			dao.update(updatedUser);
+			daoFactory.getUserDAO().update(updatedUser);
 		}
 		catch (ModelException me)
 		{
@@ -358,7 +352,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 				// Mark the user as archived.
 				user.setArchived(true);
 				// Update it in the database.
-				dao.update(user);
+				daoFactory.getUserDAO().update(user);
 			}
 			else
 			{
@@ -380,7 +374,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 				managerFactory.getBidManager().delete(user);
 
 				// Delete the user from the database.
-				dao.delete(user);
+				daoFactory.getUserDAO().delete(user);
 			}
 		}
 		catch (ModelException me)

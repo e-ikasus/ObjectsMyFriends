@@ -6,6 +6,7 @@ import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +22,9 @@ public class LogInServlet extends HttpServlet
 
 	// Time of the cookie life in seconds.
 	private static final int USERNAME_COOKIE_AGE = 60 * 60 * 24 * 7;
+
+	@Inject
+	ManagerFactory managerFactory;
 
 	/* ******************* */
 	/* Methods implemented */
@@ -55,9 +59,6 @@ public class LogInServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		request.setCharacterEncoding("UTF-8");
 
 		// Check if the user confirm the connexion or not.

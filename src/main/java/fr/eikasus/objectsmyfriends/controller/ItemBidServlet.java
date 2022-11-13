@@ -9,6 +9,7 @@ import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -25,6 +26,9 @@ public class ItemBidServlet extends HttpServlet
 
 	// Property list for the form.
 	HashMap<Object, String> formParameters = new HashMap<>();
+
+	@Inject
+	ManagerFactory managerFactory;
 
 	/* ******************* */
 	/* Methods implemented */
@@ -59,9 +63,6 @@ public class ItemBidServlet extends HttpServlet
 
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		long itemIdentifier;
 
 		try
@@ -114,17 +115,14 @@ public class ItemBidServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		// Check if the user wants to make an offer.
 		if (request.getParameter("makeOffer") != null)
 		{
 			// Retrieve the current user.
-			User user = ControllerSupport.getUserFromSession(request);
+			User user = ControllerSupport.getUserFromSession(managerFactory, request);
 
 			// Retrieve the item from the session.
-			Item item = ControllerSupport.getItemFromSession(request);
+			Item item = ControllerSupport.getItemFromSession(managerFactory, request);
 
 			// Retrieve the current user offer.
 			int userOffer = ControllerSupport.parseIntegerParameter(request, "yourOffer");

@@ -9,6 +9,7 @@ import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -19,6 +20,9 @@ import java.util.HashMap;
 public class ModifyProfileServlet extends HttpServlet
 {
 	HashMap<Object, String> formParameters = new HashMap<>();
+
+	@Inject
+	ManagerFactory managerFactory;
 
 	@Override public void init() throws ServletException
 	{
@@ -62,9 +66,6 @@ public class ModifyProfileServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		request.setCharacterEncoding("UTF-8");
 
 		// Retrieve the connected user. At this stage, there is always one because

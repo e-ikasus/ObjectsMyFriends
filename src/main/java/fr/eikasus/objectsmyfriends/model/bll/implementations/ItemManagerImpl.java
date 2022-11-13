@@ -1,15 +1,17 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.ItemManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.ItemManager;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.ItemDAO;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import java.util.regex.Pattern;
  * deleteByCriteria()
  */
 
+@ApplicationScoped @ItemManagerDB
 public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 {
 	/* ******************** */
@@ -53,9 +56,6 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 	/* Class members */
 	/* ************* */
 
-	// Data access object instance.
-	private final ItemDAO dao;
-
 	private final Pattern nameCheck;
 	private final Pattern descriptionCheck;
 
@@ -67,12 +67,9 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 	 * Constructor of the class.
 	 */
 
-	public ItemManagerImpl(ManagerFactory managerFactory)
+	public ItemManagerImpl()
 	{
-		super(managerFactory);
-
-		// Data access object for user entity operations.
-		dao = managerFactory.getDaoFactory().getItemDAO();
+		super();
 
 		// Property validators.
 		nameCheck = Pattern.compile(VALIDATE_NAME);
@@ -113,7 +110,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 			validate(item);
 
 			// Add the item to the database.
-			dao.save(item);
+			daoFactory.getItemDAO().save(item);
 		}
 		catch (ModelException me)
 		{
@@ -146,8 +143,8 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 		try
 		{
 			// Find a specific item or all.
-			if (identifier == null) items = dao.find();
-			else items.add(dao.find(identifier));
+			if (identifier == null) items = daoFactory.getItemDAO().find();
+			else items.add(daoFactory.getItemDAO().find(identifier));
 		}
 		catch (ModelException me)
 		{
@@ -181,7 +178,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 		try
 		{
 			// Find items that belong to supplied criteria.
-			return dao.findByCriteria(user, role, search, category, keywords);
+			return daoFactory.getItemDAO().findByCriteria(user, role, search, category, keywords);
 		}
 		catch (ModelException me)
 		{
@@ -299,7 +296,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 			validate(updatedItem);
 
 			// Update the user into the database.
-			dao.update(updatedItem);
+			daoFactory.getItemDAO().update(updatedItem);
 		}
 		catch (ModelException me)
 		{
@@ -325,7 +322,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 		try
 		{
 			// Delete each items.
-			for (Item item : items) dao.delete(item);
+			for (Item item : items) daoFactory.getItemDAO().delete(item);
 		}
 		catch (ModelException me)
 		{
@@ -355,7 +352,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 		try
 		{
 			// Delete items that belong to supplied criteria.
-			dao.deleteByCriteria(user, role, search, category, keywords);
+			daoFactory.getItemDAO().deleteByCriteria(user, role, search, category, keywords);
 		}
 		catch (ModelException me)
 		{

@@ -6,6 +6,7 @@ import fr.eikasus.objectsmyfriends.model.bo.User;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -14,6 +15,9 @@ import java.io.IOException;
 @WebServlet(name = "ShowProfileServlet", value = "/show_profile")
 public class ShowProfileServlet extends HttpServlet
 {
+	@Inject
+	ManagerFactory managerFactory;
+
 	/**
 	 * Show user profile.
 	 * <p></p>
@@ -26,9 +30,6 @@ public class ShowProfileServlet extends HttpServlet
 
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		long identifier;
 		User user = null;
 

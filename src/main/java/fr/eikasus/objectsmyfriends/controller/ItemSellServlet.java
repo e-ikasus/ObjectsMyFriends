@@ -9,6 +9,7 @@ import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +34,9 @@ public class ItemSellServlet extends HttpServlet
 
 	// Formatter for the date.
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+	@Inject
+	ManagerFactory managerFactory;
 
 	/* ******************* */
 	/* Methods implemented */
@@ -82,9 +86,6 @@ public class ItemSellServlet extends HttpServlet
 
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		long itemIdentifier;
 		Item item = null;
 
@@ -170,17 +171,14 @@ public class ItemSellServlet extends HttpServlet
 
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		request.setCharacterEncoding("UTF-8");
 
 		// Retrieve the connected user. At this stage, there is always one because
 		// of the filter servlet. This user is the item owner
-		User user = ControllerSupport.getUserFromSession(request);
+		User user = ControllerSupport.getUserFromSession(managerFactory, request);
 
 		// Retrieve the item from the session if it exists for updating.
-		Item item = ControllerSupport.getItemFromSession(request);
+		Item item = ControllerSupport.getItemFromSession(managerFactory, request);
 
 		// By default, all works fine.
 		boolean success = true;

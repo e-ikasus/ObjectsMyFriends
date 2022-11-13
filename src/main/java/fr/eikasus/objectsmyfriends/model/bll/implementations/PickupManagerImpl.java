@@ -1,15 +1,17 @@
 package fr.eikasus.objectsmyfriends.model.bll.implementations;
 
-import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
+import fr.eikasus.objectsmyfriends.model.bll.annotations.PickupManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.PickupManager;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
-import fr.eikasus.objectsmyfriends.model.dal.interfaces.PickupDAO;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ItemState;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,7 @@ import java.util.regex.Pattern;
  * @see #delete(PickupPlace)
  */
 
+@ApplicationScoped @PickupManagerDB
 public class PickupManagerImpl extends GenericManagerImpl implements PickupManager
 {
 	/* ******************** */
@@ -41,9 +44,6 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 	/* Class members */
 	/* ************* */
 
-	// Data access object instance.
-	private final PickupDAO dao;
-
 	private final Pattern streetCheck;
 	private final Pattern zipcodeCheck;
 	private final Pattern cityCheck;
@@ -56,12 +56,9 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 	 * Constructor of the class.
 	 */
 
-	public PickupManagerImpl(ManagerFactory managerFactory)
+	public PickupManagerImpl()
 	{
-		super(managerFactory);
-
-		// Data access object for user entity operations.
-		dao = managerFactory.getDaoFactory().getPickupDAO();
+		super();
 
 		// Property validators.
 		streetCheck = Pattern.compile(VALIDATE_STREET);
@@ -110,7 +107,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 			validate(pickupPlace);
 
 			// Save it into the database.
-			dao.save(pickupPlace);
+			daoFactory.getPickupDAO().save(pickupPlace);
 
 			// Once the pickup place is successfully created, item can be updated.
 			item.setPickupPlace(pickupPlace);
@@ -148,7 +145,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 		try
 		{
 			// Find the requested pickup place.
-			return dao.find(item.getIdentifier());
+			return daoFactory.getPickupDAO().find(item.getIdentifier());
 		}
 		catch (ModelException me)
 		{
@@ -187,7 +184,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 			validate(updatedPickupPlace);
 
 			// Update the pickup place into the database.
-			dao.update(updatedPickupPlace);
+			daoFactory.getPickupDAO().update(updatedPickupPlace);
 		}
 		catch (ModelException me)
 		{
@@ -225,7 +222,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 			pickupPlace.getItem().setPickupPlace(null);
 
 			// And delete it from the database.
-			dao.delete(pickupPlace);
+			daoFactory.getPickupDAO().delete(pickupPlace);
 		}
 		catch (ModelException me)
 		{

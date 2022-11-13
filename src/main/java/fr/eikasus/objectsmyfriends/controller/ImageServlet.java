@@ -6,6 +6,7 @@ import fr.eikasus.objectsmyfriends.model.bll.ManagerFactory;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,11 +19,11 @@ import java.util.List;
 @WebServlet(name = "ImageServlet", value = "/image_handler") @MultipartConfig
 public class ImageServlet extends HttpServlet
 {
+	@Inject
+	ManagerFactory managerFactory;
+
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
-		// Retrieve the manager factory.
-		ManagerFactory managerFactory = ControllerSupport.getManagerFactory(request);
-
 		try
 		{
 			// Where the image file names will be stored before sending.
@@ -32,7 +33,7 @@ public class ImageServlet extends HttpServlet
 			ArrayList<String> uploadedImages = (ArrayList<String>) request.getSession().getAttribute("itemImages");
 
 			// Item currently edited if exists.
-			Item currentItem = ControllerSupport.getItemFromSession(request);
+			Item currentItem = ControllerSupport.getItemFromSession(managerFactory, request);
 
 			// For convenience, there is always one list, even if it is empty.
 			if (uploadedImages == null) uploadedImages = new ArrayList<>();
