@@ -1,13 +1,18 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.UserManager;
+import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.jboss.weld.junit5.auto.ActivateScopes;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
+import org.junit.jupiter.api.*;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -17,43 +22,59 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * This class is used to test functionalities of the user manager.
  */
 
+@EnableAutoWeld
+@ActivateScopes({RequestScoped.class})
+@AddPackages({ManagerFactory.class, DAOFactory.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserManagerTest
 {
+	/* ************* */
+	/* Class members */
+	/* ************* */
+
+	// Class used for test facilities.
+	private TestSupport<Bid> testSupport;
+
+	// Injected DAO factory by weld junit extension.
+	@Inject private DAOFactory daoFactory;
+
+	// Injected manager factory by weld junit extension.
+	@Inject private ManagerFactory managerFactory;
+
+	private static UserManager userManager;
+
 	private static User user;
 
-	private static TestSupport<User> testSupport;
-	private static ManagerFactory managerFactory;
-	private static UserManager userManager;
+	/* ******************************* */
+	/* Before and after tester methods */
+	/* ******************************* */
 
 	/**
 	 * Instantiate test helper and UserManager objects.
 	 */
 
-	@BeforeAll public static void beforeAll()
+	@BeforeAll public void beforeAll()
 	{
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
-		// Instantiate a manager factory object.
-		managerFactory = new ManagerFactory();
-
 		// Unique user manager instance.
 		userManager = managerFactory.getUserManager();
 
-		testSupport.action("Cleaning the database");
-
-		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
+		// Clean the database.
+		afterEach();
 	}
 
 	/**
-	 * Free used resources.
+	 * Clear the database after each test.
 	 */
 
-	@AfterAll public static void afterAll()
+	@AfterEach public void afterEach()
 	{
-		// Close the manager factory object.
-		managerFactory.close();
+		testSupport.action("Cleaning the database");
+
+		// Empty the database.
+		testSupport.clearDatabase(daoFactory);
 	}
 
 	/* ************** */
@@ -222,7 +243,7 @@ class UserManagerTest
 		testSupport.action("Populating the database");
 		/* ---------------------------------------- */
 
-		testSupport.populateDatabase(managerFactory.getDaoFactory());
+		testSupport.populateDatabase(daoFactory);
 
 		testSupport.action("Trying to find a user");
 		/* -------------------------------------- */
@@ -230,7 +251,7 @@ class UserManagerTest
 		assertDoesNotThrow(() -> user = userManager.find("Fabien", null, "P@ssw0rd"));
 
 		testSupport.action("Trying to archive the user");
-		/* ---------------------------------------- */
+		/* ------------------------------------------- */
 
 		assertDoesNotThrow(() -> userManager.delete(user, true));
 
@@ -238,10 +259,5 @@ class UserManagerTest
 		/* ------------------------------------------------- */
 
 		assertDoesNotThrow(() -> userManager.delete(user, false));
-
-		testSupport.action("Emptying the database");
-		/* -------------------------------------- */
-
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
 	}
 }

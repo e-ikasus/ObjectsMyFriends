@@ -1,10 +1,17 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.CategoryManager;
+import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
+import org.jboss.weld.junit5.auto.ActivateScopes;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,44 +21,48 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  * This class is used to test functionalities of the category manager.
  */
 
+@EnableAutoWeld
+@ActivateScopes({RequestScoped.class})
+@AddPackages({ManagerFactory.class, DAOFactory.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CategoryManagerTest
 {
-	private static List<Category> categories;
-	private static Category newCategory;
+	/* ************* */
+	/* Class members */
+	/* ************* */
 
-	private static TestSupport<Category> testSupport;
-	private static ManagerFactory managerFactory;
-	private static CategoryManager categoryManager;
+	// Class used for test facilities.
+	private TestSupport<Bid> testSupport;
+
+	// Injected DAO factory by weld junit extension.
+	@Inject private DAOFactory daoFactory;
+
+	// Injected manager factory by weld junit extension.
+	@Inject private ManagerFactory managerFactory;
+
+	private CategoryManager categoryManager;
+
+	private List<Category> categories;
+	private Category newCategory;
+
+	/* ******************************* */
+	/* Before and after tester methods */
+	/* ******************************* */
 
 	/**
 	 * Instantiate test helper and CategoryManager objects.
 	 */
 
-	@BeforeAll public static void beforeAll()
+	@BeforeAll public void beforeAll()
 	{
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
-		// Instantiate a manager factory object.
-		managerFactory = new ManagerFactory();
-
 		// Category manager instance.
 		categoryManager = managerFactory.getCategoryManager();
 
-		testSupport.action("Cleaning the database");
-
-		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
-	}
-
-	/**
-	 * Free used resources.
-	 */
-
-	@AfterAll public static void afterAll()
-	{
-		// Close the manager factory object.
-		managerFactory.close();
+		// Clean the database.
+		afterEach();
 	}
 
 	/**
@@ -62,7 +73,7 @@ class CategoryManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase(managerFactory.getDaoFactory());
+		testSupport.populateDatabase(daoFactory);
 	}
 
 	/**
@@ -74,7 +85,7 @@ class CategoryManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
+		testSupport.clearDatabase(daoFactory);
 	}
 
 	/* ************** */

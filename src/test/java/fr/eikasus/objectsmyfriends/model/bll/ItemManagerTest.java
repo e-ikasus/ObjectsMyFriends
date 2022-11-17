@@ -1,13 +1,20 @@
 package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.ItemManager;
+import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.*;
+import org.jboss.weld.junit5.auto.ActivateScopes;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,16 +25,32 @@ import static org.junit.jupiter.api.Assertions.*;
  * This class is used to test functionalities of the item manager.
  */
 
+@EnableAutoWeld
+@ActivateScopes({RequestScoped.class})
+@AddPackages({ManagerFactory.class, DAOFactory.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ItemManagerTest
 {
-	private static Item item;
-	private static User user;
-	private static List<Category> categories;
-	private static List<Item> items;
+	/* ************* */
+	/* Class members */
+	/* ************* */
 
-	private static TestSupport<Item> testSupport;
-	private static ManagerFactory managerFactory;
-	private static ItemManager itemManager;
+	// Class used for test facilities.
+	private TestSupport<Bid> testSupport;
+
+	// Injected DAO factory by weld junit extension.
+	@Inject private DAOFactory daoFactory;
+
+	// Injected manager factory by weld junit extension.
+	@Inject private ManagerFactory managerFactory;
+
+	private ItemManager itemManager;
+
+	private Item item;
+	private User user;
+
+	private List<Category> categories;
+	private List<Item> items;
 
 	private	String itemName;
 	private	String itemDescription;
@@ -37,35 +60,24 @@ class ItemManagerTest
 	private	User itemUser;
 	private	Category itemCategory;
 
+	/* ******************************* */
+	/* Before and after tester methods */
+	/* ******************************* */
+
 	/**
 	 * Instantiate test helper and ItemManager objects.
 	 */
 
-	@BeforeAll public static void beforeAll()
+	@BeforeAll public void beforeAll()
 	{
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
-		// Instantiate a manager factory object.
-		managerFactory = new ManagerFactory();
-
 		// Unique item manager instance.
 		itemManager = managerFactory.getItemManager();
 
-		testSupport.action("Cleaning the database");
-
-		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
-	}
-
-	/**
-	 * Free used resources.
-	 */
-
-	@AfterAll public static void afterAll()
-	{
-		// Close the manager factory object.
-		managerFactory.close();
+		// Clean the database.
+		afterEach();
 	}
 
 	/**
@@ -76,7 +88,7 @@ class ItemManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase(managerFactory.getDaoFactory());
+		testSupport.populateDatabase(daoFactory);
 	}
 
 	/**
@@ -88,7 +100,7 @@ class ItemManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
+		testSupport.clearDatabase(daoFactory);
 	}
 
 	/* ************** */

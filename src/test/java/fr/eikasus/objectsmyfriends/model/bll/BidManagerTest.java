@@ -4,11 +4,17 @@ import fr.eikasus.objectsmyfriends.model.bll.interfaces.BidManager;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
+import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
+import org.jboss.weld.junit5.auto.ActivateScopes;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,48 +22,52 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@EnableAutoWeld
+@ActivateScopes({RequestScoped.class})
+@AddPackages({ManagerFactory.class, DAOFactory.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BidManagerTest
 {
-	private static User buyer1, buyer2;
+	/* ************* */
+	/* Class members */
+	/* ************* */
+
+	// Class used for test facilities.
+	private TestSupport<Bid> testSupport;
+
+	// Injected DAO factory by weld junit extension.
+	@Inject private DAOFactory daoFactory;
+
+	// Injected manager factory by weld junit extension.
+	@Inject private ManagerFactory managerFactory;
+
+	private BidManager bidManager;
+
+	private User buyer1, buyer2;
 
 	private final List<String> tableHeader = new ArrayList<>();
 	private final List<List<String>> tableLines = new ArrayList<>();
 
 	HashMap<String, Object> sellerData = new HashMap<>();
 
-	private static TestSupport<Bid> testSupport;
-	private static ManagerFactory managerFactory;
-	private static BidManager bidManager;
+	/* ******************************* */
+	/* Before and after tester methods */
+	/* ******************************* */
 
 	/**
-	 * Instantiate test helper and PickupManager objects.
+	 * Instantiate test helper and BidManager objects.
 	 */
 
-	@BeforeAll public static void beforeAll()
+	@BeforeAll public void beforeAll()
 	{
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
 
-		// Instantiate a manager factory object.
-		managerFactory = new ManagerFactory();
-
-		// Unique category manager instance.
+		// Unique bid manager instance.
 		bidManager = managerFactory.getBidManager();
 
-		testSupport.action("Cleaning the database");
-
-		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
-	}
-
-	/**
-	 * Free used resources.
-	 */
-
-	@AfterAll public static void afterAll()
-	{
-		// Close the manager factory object.
-		managerFactory.close();
+		// Clean the database.
+		afterEach();
 	}
 
 	/**
@@ -68,7 +78,7 @@ public class BidManagerTest
 	{
 		testSupport.action("Populating the database");
 
-		testSupport.populateDatabase(managerFactory.getDaoFactory());
+		testSupport.populateDatabase(daoFactory);
 	}
 
 	/**
@@ -80,7 +90,7 @@ public class BidManagerTest
 		testSupport.action("Cleaning the database");
 
 		// Empty the database.
-		testSupport.clearDatabase(managerFactory.getDaoFactory());
+		testSupport.clearDatabase(daoFactory);
 	}
 
 	/* ************** */
@@ -144,7 +154,7 @@ public class BidManagerTest
 		try
 		{
 			// Search the actual max bid.
-			Bid maxBid = managerFactory.getDaoFactory().getBidDAO().findBestBid(item);
+			Bid maxBid = daoFactory.getBidDAO().findBestBid(item);
 
 			// Information message of what is doing.
 			sb.append(String.format("Trying to register a bid of <<%d>> made by <<%s>> on item <<%s>> currently at <<%d>> price. This operation should%s succeed",

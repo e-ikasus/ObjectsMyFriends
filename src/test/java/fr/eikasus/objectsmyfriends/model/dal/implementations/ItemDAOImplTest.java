@@ -13,9 +13,14 @@ import fr.eikasus.objectsmyfriends.model.misc.ItemState;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
 import fr.eikasus.objectsmyfriends.model.misc.TestSupport;
 import fr.eikasus.objectsmyfriends.model.misc.UserRole;
+import org.jboss.weld.junit5.auto.ActivateScopes;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,33 +30,48 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  * This class is used to test functionalities of the item data access object.
  */
 
+@EnableAutoWeld
+@ActivateScopes({RequestScoped.class})
+@AddPackages({DAOFactory.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ItemDAOImplTest
 {
-	private static DAOFactory daoFactory;
-	private static CategoryDAO categoryDAO;
-	private static UserDAO userDAO;
-	private static BidDAO bidDAO;
-	private static ItemDAO itemDAO;
+	/* ************* */
+	/* Class members */
+	/* ************* */
 
-	private static TestSupport<Item> testSupport;
-	private static List<Category> categories = new ArrayList<>();
-	private static List<User> users = new ArrayList<>();
-	private static List<Bid> bids = new ArrayList<>();
-	private static List<Item> items = new ArrayList<>();
+	// Class used for test facilities.
+	private TestSupport<Item> testSupport;
 
-	private static final List<Item> attendedItems = new ArrayList<>();
+	// Injected DAO factory by weld junit extension.
+	@Inject private DAOFactory daoFactory;
+
+	// DAO objects for accessing database.
+	private CategoryDAO categoryDAO;
+	private UserDAO userDAO;
+	private BidDAO bidDAO;
+	private ItemDAO itemDAO;
+
+	// Lists for handling objects database.
+	private List<Category> categories = new ArrayList<>();
+	private List<User> users = new ArrayList<>();
+	private List<Bid> bids = new ArrayList<>();
+	private List<Item> items = new ArrayList<>();
+
+	private final List<Item> attendedItems = new ArrayList<>();
+
+	/* ******************************* */
+	/* Before and after tester methods */
+	/* ******************************* */
 
 	/**
 	 * Instantiate test helper and DAO objects.
 	 */
 
-	@BeforeAll public static void beforeAll()
+	@BeforeAll public void beforeAll()
 	{
 		// Class used for testing purposes.
 		testSupport = new TestSupport<>();
-
-		// Instantiate a dao factory object;
-		daoFactory = new DAOFactory();
 
 		// Retrieve DAO objects.
 		categoryDAO = daoFactory.getCategoryDAO();
@@ -59,20 +79,8 @@ class ItemDAOImplTest
 		bidDAO = daoFactory.getBidDAO();
 		itemDAO = daoFactory.getItemDAO();
 
-		testSupport.action("Cleaning the database");
-
-		// Empty the database.
-		testSupport.clearDatabase(daoFactory);
-	}
-
-	/**
-	 * Free used resources.
-	 */
-
-	@AfterAll public static void afterAll()
-	{
-		// Close the dao factory object.
-		daoFactory.close();
+		// Clean the database.
+		afterEach();
 	}
 
 	/**
