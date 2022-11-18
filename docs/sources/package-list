@@ -1,0 +1,13 @@
+fr.eikasus.objectsmyfriends.controller
+fr.eikasus.objectsmyfriends.misc
+fr.eikasus.objectsmyfriends.model.bll
+fr.eikasus.objectsmyfriends.model.bll.annotations
+fr.eikasus.objectsmyfriends.model.bll.implementations
+fr.eikasus.objectsmyfriends.model.bll.interfaces
+fr.eikasus.objectsmyfriends.model.bo
+fr.eikasus.objectsmyfriends.model.dal
+fr.eikasus.objectsmyfriends.model.dal.annotations
+fr.eikasus.objectsmyfriends.model.dal.implementations
+fr.eikasus.objectsmyfriends.model.dal.interfaces
+fr.eikasus.objectsmyfriends.model.dal.misc
+fr.eikasus.objectsmyfriends.model.misc
