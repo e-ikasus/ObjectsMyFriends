@@ -82,7 +82,7 @@ public abstract class GenericDAOImpl<T, U>
 
 	/**
 	 * Retrieve entities by specific property.
-	 * <p></>
+	 * <p></p>
 	 * This method is used to retrieve an entity or many from the database whose
 	 * one of their property is equal to the value supplied in parameter.
 	 *
