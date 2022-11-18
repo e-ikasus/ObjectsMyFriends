@@ -12,9 +12,15 @@ import javax.persistence.TypedQuery;
 
 /**
  * Class used to implement the user data access object.
+ * <p>
+ * This class supplies all the necessary methods to handle user objects within
+ * the data access layer. It is supplied by the DAO factory object and used by
+ * its corresponding manager.
+ * <p>
+ * This is the implementation for database.
  *
- * @see #findByUsername(String) findByUsername()
- * @see #findByEmail(String) findByEmail()
+ * @see #findByUsername(String)
+ * @see #findByEmail(String)
  */
 
 @ApplicationScoped @UserDAODB
@@ -34,6 +40,10 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
 	/* Constructors */
 	/* ************ */
 
+	/**
+	 * Constructor of the class used to pass object type to the upper constructor.
+	 */
+
 	public UserDAOImpl()
 	{
 		super(User.class);
@@ -45,7 +55,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
 
 	/**
 	 * Find a user by name.
-	 * <p></p>
+	 * <p>
 	 * This method is used to find a particular user in the database from its
 	 * username.
 	 *
@@ -73,7 +83,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
 
 	/**
 	 * Find a user by email.
-	 * <p></p>
+	 * <p>
 	 * This method is used to find a particular user in the database from its
 	 * email.
 	 *

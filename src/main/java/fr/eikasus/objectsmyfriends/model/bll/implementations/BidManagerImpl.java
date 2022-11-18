@@ -5,20 +5,18 @@ import fr.eikasus.objectsmyfriends.model.bll.interfaces.BidManager;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Bid manager class.
- * <p></p>
+ * <p>
  * This class is used to manage bids according to the business logic. It should
  * be used by the controllers to handle bids like adding, deleting and so. The
  * access of one of data access object method by the controllers is strictly
@@ -26,8 +24,8 @@ import java.util.List;
  * are contained in the item itself. Retrieving an item allow then access to its
  * bids.
  *
- * @see #add(User, Item, int) add()
- * @see #delete(User) delete()
+ * @see #add(User, Item, int)
+ * @see #delete(User)
  */
 
 @ApplicationScoped @BidManagerDB
@@ -39,7 +37,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 
 	/**
 	 * Make a bid on an item.
-	 * <p></p>
+	 * <p>
 	 * This method is used to create a bid made by a user on an item with the
 	 * supplied price. There are some reasons why this operation can't be done.
 	 * See the {@code validate()} method for more details.
@@ -96,7 +94,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 
 	/**
 	 * Delete bids.
-	 * <p></p>
+	 * <p>
 	 * This method delete all the bids that belongs to the supplied user.
 	 *
 	 * @param user User for which delete the bids.
@@ -142,7 +140,7 @@ public class BidManagerImpl extends GenericManagerImpl implements BidManager
 
 	/**
 	 * Verify a bid.
-	 * <p></p>
+	 * <p>
 	 * This method check the validity of a bid that will be saved in the database.
 	 * If one of these properties is invalid, an exception occur which contain
 	 * errors detected. A bid is considered invalid if one of these properties is

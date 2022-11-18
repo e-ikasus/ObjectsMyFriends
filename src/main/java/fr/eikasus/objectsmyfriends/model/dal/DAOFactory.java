@@ -8,6 +8,9 @@ import javax.inject.Inject;
 
 /**
  * Class handling Data Access objects.
+ * <p>
+ * This class is used to retrieve a particular data access object. By default,
+ * implementation of the data access object class are for database.
  */
 
 @ApplicationScoped

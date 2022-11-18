@@ -20,17 +20,17 @@ import java.util.regex.Pattern;
 
 /**
  * Class used to handle users.
- * <p></p>
+ * <p>
  * This class is used to manage users according to the business logic. It should
  * be used by the controllers to handle users like adding, deleting and so. The
  * access of one of data access object method by the controllers is strictly
  * forbidden.
  *
  * @see #add(String, String, String, String, String, String, String, String,
- * String, int, boolean) add()
- * @see #find(String, String, String) find()
- * @see #update(User, HashMap) update()
- * @see #delete(User, boolean) delete()
+ * String, int, boolean)
+ * @see #find(String, String, String)
+ * @see #update(User, HashMap)
+ * @see #delete(User, boolean)
  */
 
 @ApplicationScoped @UserManagerDB
@@ -144,7 +144,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 
 	/**
 	 * Try to find a user.
-	 * <p></p>
+	 * <p>
 	 * This method try to find a user either by its username or email. If the
 	 * username parameter is not null, then it will be used to find the user by is
 	 * username. If the email parameter is not null, it will find the user by its
@@ -194,7 +194,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 
 	/**
 	 * Search a specific user.
-	 * <p></p>
+	 * <p>
 	 * Search a specific user in the database whose identifier is the one supplied
 	 * in parameter. If this supplied parameter is null, then all users are
 	 * returned by this method.
@@ -325,7 +325,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 
 	/**
 	 * Delete  user.
-	 * <p></p>
+	 * <p>
 	 * This method delete a user from the database. Whether it is really deleted
 	 * depends on the archived parameter. If true, the user is only marked as
 	 * archived, remaining in the database. If false, the user and all is related
@@ -335,7 +335,7 @@ public class UserManagerImpl extends GenericManagerImpl implements UserManager
 	 * @param user     User to delete.
 	 * @param archived If the User should be marked as archived.
 	 *
-	 * @throws ModelException IN case of proglem.
+	 * @throws ModelException In case of problem.
 	 */
 
 	public void delete(User user, boolean archived) throws ModelException

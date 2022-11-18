@@ -17,13 +17,13 @@ import java.util.regex.Pattern;
 
 /**
  * Pickup pLace manager class.
- * <p></p>
+ * <p>
  * This class is used to manage pickup places according to the business logic.
  * It should be used by the controllers to handle pickup places like adding,
  * deleting and so. The access of one of data access object method by the
  * controllers is strictly forbidden.
  *
- * @see #add(Item, String, String, String) add()
+ * @see #add(Item, String, String, String)
  * @see #find(Item)
  * @see #update(PickupPlace, HashMap)
  * @see #delete(PickupPlace)
@@ -72,7 +72,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 
 	/**
 	 * Create a pickup place.
-	 * <p></p>
+	 * <p>
 	 * This method create a pickup place and save it into the database. The newly
 	 * created pickup place is attached to the supplied item after successfully
 	 * saved. Creating a pickup place for an item not in waiting or active state
@@ -124,7 +124,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 
 	/**
 	 * Find the pickup place that belong to an item.
-	 * <p></p>
+	 * <p>
 	 * This method find the pickup place related to the item supplied in parameter.
 	 * If no pickup place is found, that means the item should be picked up at the
 	 * seller address.
@@ -195,7 +195,7 @@ public class PickupManagerImpl extends GenericManagerImpl implements PickupManag
 
 	/**
 	 * Delete a pickup place.
-	 * <p></p>
+	 * <p>
 	 * This method delete a pickup place from the database. Only items that are in
 	 * waiting or active state can have their pickup place deleted. Once the
 	 * pickup place is deleted, his previously attached item is updated too.

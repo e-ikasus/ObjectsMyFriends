@@ -6,12 +6,10 @@ import fr.eikasus.objectsmyfriends.model.bo.Category;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.bo.PickupPlace;
 import fr.eikasus.objectsmyfriends.model.bo.User;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,19 +18,18 @@ import java.util.regex.Pattern;
 
 /**
  * Item manager class.
- * <p></p>
+ * <p>
  * This class is used to manage items according to the business logic. It should
  * be used by the controllers to handle items like adding, deleting and so. The
  * access of one of data access object method by the controllers is strictly
  * forbidden.
  *
- * @see #add(String, String, Date, Date, int, User, Category) add()
- * @see #find(Long) find()
+ * @see #add(String, String, Date, Date, int, User, Category)
+ * @see #find(Long)
  * @see #findByCriteria(User, UserRole, Search, Category, String)
- * findByCriteria()
- * @see #delete(List) delete()
+ * @see #update(Item, HashMap)
+ * @see #delete(List)
  * @see #deleteByCriteria(User, UserRole, Search, Category, String)
- * deleteByCriteria()
  */
 
 @ApplicationScoped @ItemManagerDB
@@ -82,7 +79,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 
 	/**
 	 * Create a full qualified item.
-	 * <p></p>
+	 * <p>
 	 * This method create and save an item into the database. All parameters are
 	 * required to complete the action. If one of that parameters is wrong, an
 	 * exception occurs and nothing is saved into the database.
@@ -124,7 +121,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 
 	/**
 	 * Search a specific item.
-	 * <p></p>
+	 * <p>
 	 * Search a specific item in the database whose identifier is the one supplied
 	 * in parameter. If this supplied parameter is null, then all items are
 	 * returned by this method.
@@ -158,7 +155,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 
 	/**
 	 * Search items using criteria.
-	 * <p></p>
+	 * <p>
 	 * Search items in the database thar are related to the supplied user. His
 	 * role determine the nature of the search criteria.
 	 *
@@ -307,7 +304,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 
 	/**
 	 * Delete items.
-	 * <p></p>
+	 * <p>
 	 * This method delete the supplied items from the database. This should be
 	 * used even if one item has to te deleted. Be aware that all associated
 	 * information will be deleted to, like images, bids and pickup place.
@@ -333,7 +330,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 
 	/**
 	 * Delete items using criteria.
-	 * <p></p>
+	 * <p>
 	 * This method delete items according to criteria supplied in parameter. The
 	 * relation between each criterion is a logical and. Except the user and its
 	 * role, all other parameters can be null.
@@ -367,7 +364,7 @@ public class ItemManagerImpl extends GenericManagerImpl implements ItemManager
 
 	/**
 	 * Verify the validity of the supplied item.
-	 * <p></p>
+	 * <p>
 	 * This method check the validity of an item to be inserted in the database.
 	 * If one of his properties is invalid, an exception occur containing errors
 	 * detected. If errors occur, the item state is not defined. If the state is

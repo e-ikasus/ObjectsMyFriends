@@ -89,7 +89,7 @@ public class Image implements Serializable
 
 	/**
 	 * Create a fully qualified image for an item.
-	 * <p></p>
+	 * <p>
 	 * Create an image for an item. If an item is supplied in parameter, then the
 	 * image is attached to it.
 	 *

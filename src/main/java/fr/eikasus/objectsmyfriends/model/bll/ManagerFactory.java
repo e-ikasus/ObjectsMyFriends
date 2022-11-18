@@ -7,6 +7,14 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+/**
+ * Class handling object managers.
+ * <p>
+ * This class is used to retrieve a particular object manager, like user, item
+ * or image for exemple. Because its instance is passed to each manager after
+ * creation, each manager can use other managers.
+ */
+
 @ApplicationScoped
 public class ManagerFactory
 {

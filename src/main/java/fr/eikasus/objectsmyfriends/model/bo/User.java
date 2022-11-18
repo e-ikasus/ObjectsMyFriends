@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /**
  * Class representing a user.
- * <p></p>
+ * <p>
  * This class define a user. Among standard methods like getters and setters or
  * constructors, the class define a useful method to hash the plain password.
  * This method is part of the User class instead of Business Logic Layer because
@@ -335,7 +335,7 @@ public class User implements Serializable
 	 * This method create a new user with all properties set but isArchived,
 	 * password and salt.
 	 *
-	 * @param username      Name of the user used to login (<= 32 cars).
+	 * @param username      Name of the user used to log in (<= 32 cars).
 	 * @param firstName     User first name (<= 32 cars).
 	 * @param lastName      User first name (<= 32 cars).
 	 * @param email         User email (<= 64 cars).
@@ -411,7 +411,7 @@ public class User implements Serializable
 
 	/**
 	 * Hash the plain password.
-	 * <p></p>
+	 * <p>
 	 * Hash the password for the user. The password need to be present and valide
 	 * in the object. After the operation, the password is hashed and a salt
 	 * specific to this user is created. Be aware that after the method succeed,

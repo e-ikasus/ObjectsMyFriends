@@ -4,18 +4,16 @@ import fr.eikasus.objectsmyfriends.model.bll.annotations.ImageManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.regex.Pattern;
 
 /**
  * Image manager class.
- * <p></p>
+ * <p>
  * This class is used to manage images according to the business logic. It
  * should be used by the controllers to handle images like adding, deleting and
  * so. The access of one of data access object method by the controllers is
@@ -23,8 +21,8 @@ import java.util.regex.Pattern;
  * because they are contained in the item itself. Retrieving an item allow then
  * access to its images.
  *
- * @see #add(Item, String) add()
- * @see #delete(Image) delete()
+ * @see #add(Item, String)
+ * @see #delete(Image)
  */
 
 @ApplicationScoped @ImageManagerDB
@@ -64,10 +62,10 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 
 	/**
 	 * Create an item image.
-	 * <p></p>
+	 * <p>
 	 * This method create an image into the database and attach it to the item
-	 * supplied in parameter. This method doesn't care about how the image is
-	 * retrieve and how it is saved in the system storage.
+	 * supplied in parameter. This method doesn't care about how the image file is
+	 * retrieved and how it is saved in the system storage.
 	 *
 	 * @param item Item that the new image belongs to.
 	 * @param path Path to the image file.
@@ -107,7 +105,7 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 
 	/**
 	 * Delete an image.
-	 * <p></p>
+	 * <p>
 	 * This method delete an image from the database and remove it from the item.
 	 *
 	 * @param image Image to delete from the database.
@@ -138,7 +136,7 @@ public class ImageManagerImpl extends GenericManagerImpl implements ImageManager
 
 	/**
 	 * Verify the validity of the supplied image.
-	 * <p></p>
+	 * <p>
 	 * This method check the validity of an image to be saved in the database. If
 	 * one of his properties is invalid, an exception occur containing errors
 	 * detected.

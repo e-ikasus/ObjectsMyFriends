@@ -14,9 +14,12 @@ import java.util.List;
 
 /**
  * Class used to implement the bid data access object.
- * <p></p>
- * This class content all the necessary stuff that is exclusively related to
- * handling bids.
+ * <p>
+ * This class supplies all the necessary methods to handle bid objects within
+ * the data access layer. It is supplied by the DAO factory object and used by
+ * its corresponding manager.
+ * <p>
+ * This is the implementation for database.
  *
  * @see #findBestBid(Item)
  */
@@ -34,6 +37,10 @@ public class BidDAOImpl extends GenericDAOImpl<Bid, BidId> implements BidDAO
 	/* Constructors */
 	/* ************ */
 
+	/**
+	 * Constructor of the class used to pass object type to the upper constructor.
+	 */
+
 	public BidDAOImpl()
 	{
 		super(Bid.class);
@@ -45,7 +52,7 @@ public class BidDAOImpl extends GenericDAOImpl<Bid, BidId> implements BidDAO
 
 	/**
 	 * Find the highest bid on an item.
-	 * <p></p>
+	 * <p>
 	 * This method find the highest bed made on the item supplied in parameter.
 	 * With the bid, it is then possible to access the user who made it.
 	 *

@@ -3,28 +3,26 @@ package fr.eikasus.objectsmyfriends.model.bll.implementations;
 import fr.eikasus.objectsmyfriends.model.bll.annotations.CategoryManagerDB;
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.CategoryManager;
 import fr.eikasus.objectsmyfriends.model.bo.Category;
-import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
 /**
  * Category manager class.
- * <p></p>
+ * <p>
  * This class is used to manage categories according to the business logic. It
  * should be used by the controllers to handle categories like adding, deleting
  * and so. The access of one of data access object method by the controllers is
  * strictly forbidden.
  *
- * @see #add(String) add()
- * @see #find(String) find()
- * @see #update(Category, HashMap) update()
+ * @see #add(String)
+ * @see #find(String)
+ * @see #update(Category, HashMap)
  * @see #delete(Category)
  * @see #delete(long)
  */
@@ -66,7 +64,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 
 	/**
 	 * Create a full qualified category.
-	 * <p></p>
+	 * <p>
 	 * This method create and save a category into the database. All parameters
 	 * are required to complete the action. If one of that parameters is wrong, an
 	 * exception occurs and nothing is saved into the database.
@@ -102,8 +100,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 
 	/**
 	 * Find a category.
-	 * <p></p>
-	 *
+	 * <p>
 	 * Try to find the category whose name is supplied in parameter. If the name
 	 * is null, then all categories will be returned.
 	 *
@@ -174,9 +171,9 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 
 	/**
 	 * Delete a category.
-	 * <p></p>
+	 * <p>
 	 * This method try to delete the category supplied in parameter. If this
-	 * category is used by items, then it can be deleted.
+	 * category is used by items, then it can't be deleted.
 	 *
 	 * @param category Category to delete
 	 * @throws ModelException In case of problem.
@@ -197,9 +194,9 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 
 	/**
 	 * Delete a category.
-	 * <p></p>
+	 * <p>
 	 * This method try to delete the category whose identifier is supplied in
-	 * parameter. If this category is used by items, then it can be deleted.
+	 * parameter. If this category is used by items, then it can't be deleted.
 	 *
 	 * @param id Identifier of the category to delete
 	 * @throws ModelException In case of problem.
@@ -224,7 +221,7 @@ public class CategoryManagerImpl extends GenericManagerImpl implements CategoryM
 
 	/**
 	 * Verify the validity of the supplied category.
-	 * <p></p>
+	 * <p>
 	 * This method check the validity of a category to be saved in the database.
 	 * If one of his properties is invalid, an exception occur containing errors
 	 * detected.

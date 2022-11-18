@@ -4,29 +4,30 @@ import fr.eikasus.objectsmyfriends.model.dal.misc.*;
 import fr.eikasus.objectsmyfriends.model.misc.ModelError;
 import fr.eikasus.objectsmyfriends.model.misc.ModelException;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.List;
 
 /**
  * Support for Data Access Objects.
- * <p></p>
+ * <p>
  * This abstract class is used to add meaningfully methods for implementing data
  * access objects as easy as possible with a minimum of redondent code. This
  * class also provide methods for accessible objects from database that are
  * common for all entities.
+ * <p>
+ * This is the implementation for database.
  *
- * @see #findByProperty(String, Object) findByProperty(property, value)
- * @see #find() find()
- * @see #find(Object) find(identifier)
- * @see #save(Object) save(Entity)
- * @see #update(Object) update(Entity)
- * @see #refresh(Object) refresh(Entity)
- * @see #detach(Object) detach(Entity)
- * @see #deleteByProperty(String, Object) deleteByProperty()
- * @see #delete(Object) delete(Entity)
- * @see #deleteById(Object) delete(identifier)
+ * @see #findByProperty(String, Object)
+ * @see #find()
+ * @see #find(Object)
+ * @see #save(Object)
+ * @see #update(Object)
+ * @see #refresh(Object)
+ * @see #detach(Object)
+ * @see #deleteByProperty(String, Object)
+ * @see #delete(Object)
+ * @see #deleteById(Object)
  */
 
 public abstract class GenericDAOImpl<T, U>
@@ -82,7 +83,7 @@ public abstract class GenericDAOImpl<T, U>
 
 	/**
 	 * Retrieve entities by specific property.
-	 * <p></p>
+	 * <p>
 	 * This method is used to retrieve an entity or many from the database whose
 	 * one of their property is equal to the value supplied in parameter.
 	 *
@@ -115,7 +116,7 @@ public abstract class GenericDAOImpl<T, U>
 	 * that this can take time and memory consomption if many entities need to be
 	 * retrieved.
 	 *
-	 * @return List of entyties.
+	 * @return List of entities.
 	 *
 	 * @throws ModelException In case of problem.
 	 */
@@ -128,7 +129,7 @@ public abstract class GenericDAOImpl<T, U>
 	/**
 	 * Retrieve one entity.
 	 * <p>
-	 * This method is used to retrieve a entity form the database whose
+	 * This method is used to retrieve an entity form the database whose
 	 * identifier is supplied in parameter.
 	 *
 	 * @return Asked entity.
@@ -209,10 +210,10 @@ public abstract class GenericDAOImpl<T, U>
 
 	/**
 	 * Delete entities by specific property.
-	 * <p></p>
+	 * <p>
 	 * This method is used to delete an entity or many from the database whose one
 	 * of their property is equal to the value supplied in parameter.
-	 * <p></p>
+	 * <p>
 	 * NO PERSISTENCE CONTEXT SHOULD BE ACTIVE TO USE THIS METHOD.
 	 *
 	 * @param property Name of the property.
@@ -270,6 +271,10 @@ public abstract class GenericDAOImpl<T, U>
 			entityManager.remove(entity);
 		});
 	}
+
+	/* ************** */
+	/* Helper methods */
+	/* ************** */
 
 	/**
 	 * Execute an action related to the database.

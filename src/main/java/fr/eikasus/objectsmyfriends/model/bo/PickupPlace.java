@@ -130,7 +130,7 @@ public class PickupPlace implements Serializable
 
 	/**
 	 * Create a pickup place for an item.
-	 * <p></p>
+	 * <p>
 	 *
 	 * Create a pickup place for an item. If an item is supplied in parameter,
 	 * then this newly created pickup place is attached to it.

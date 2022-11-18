@@ -123,7 +123,7 @@ public class Bid implements Serializable
 
 	/**
 	 * Create a bid on an item.
-	 *<p></p>
+	 *<p>
 	 * Create a bid for an item. If an item is supplied in parameter, then this
 	 * newly created bid is attached to it.
 	 *

@@ -16,11 +16,15 @@ import java.util.List;
 
 /**
  * Class used to implement the item data access object.
+ * <p>
+ * This class supplies all the necessary methods to handle item objects within
+ * the data access layer. It is supplied by the DAO factory object and used by
+ * its corresponding manager.
+ * <p>
+ * This is the implementation for database.
  *
- * @see #find(Object) find()
  * @see #findByCriteria(User, UserRole, Search, Category, String)
- * findByCriteria()
- * @see #deleteByCriteria(User, UserRole, Search, Category, String) delete()
+ * @see #deleteByCriteria(User, UserRole, Search, Category, String)
  */
 
 @ApplicationScoped @ItemDAODB
@@ -67,6 +71,10 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	/* Constructors */
 	/* ************ */
 
+	/**
+	 * Constructor of the class used to pass object type to the upper constructor.
+	 */
+
 	public ItemDAOImpl()
 	{
 		super(Item.class);
@@ -78,7 +86,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 
 	/**
 	 * Search items using criteria.
-	 * <p></p>
+	 * <p>
 	 * This method search items according to criteria supplied in parameter. The
 	 * relation between each criterion is a logical and. Except the user and its
 	 * role, all other parameters can be null.
@@ -124,11 +132,11 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 
 	/**
 	 * Delete items using criteria.
-	 * <p></p>
+	 * <p>
 	 * This method delete items according to criteria supplied in parameter. The
 	 * relation between each criterion is a logical and. Except the user and its
 	 * role, all other parameters can be null.
-	 * <p></p>
+	 * <p>
 	 * NO PERSISTENCE CONTEXT SHOULD BE ACTIVE TO USE THIS METHOD.
 	 *
 	 * @param user     User to search for.

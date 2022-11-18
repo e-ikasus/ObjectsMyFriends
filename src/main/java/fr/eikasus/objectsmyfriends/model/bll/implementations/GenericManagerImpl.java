@@ -11,11 +11,11 @@ import java.util.HashMap;
 
 /**
  * Generic manager class.
- * <p></p>
+ * <p>
  * This class is an abstract class used to provide common methods for avoiding
  * redondance in the code. All entity manager must extend it.
  *
- * @see #setEntityProperty(Object, HashMap, String, boolean) setEntityProperty()
+ * @see #setEntityProperty(Object, HashMap, String, boolean)
  */
 
 public abstract class GenericManagerImpl
@@ -50,7 +50,7 @@ public abstract class GenericManagerImpl
 
 	/**
 	 * Set an entity property.
-	 * <p></p>
+	 * <p>
 	 * This method is used to change an entity property whose name and value are
 	 * stored in the supplied list. This is a helper method to prevent for using
 	 * redondent code.

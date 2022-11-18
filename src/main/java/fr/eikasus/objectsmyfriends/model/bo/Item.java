@@ -367,7 +367,7 @@ public class Item implements Serializable
 
 	/**
 	 * Add an image to the item.
-	 * <p></p>
+	 * <p>
 	 * An image is added to the item and his corresponding property in the image
 	 * is updated to guaranty the bidirectional relation. Note that this is the
 	 * only way to add an image. Trying to add an image in the list returned by
@@ -390,7 +390,7 @@ public class Item implements Serializable
 
 	/**
 	 * Remove an image from the item.
-	 * <p></p>
+	 * <p>
 	 * An image is removed from the item and his corresponding property in the
 	 * image is updated to guaranty the bidirectional relation. Note that this is
 	 * the only way to remove an image. Trying to remove an image in the list
@@ -413,7 +413,7 @@ public class Item implements Serializable
 
 	/**
 	 * Add a bid to the item.
-	 * <p></p>
+	 * <p>
 	 * A bid is added to the item and his corresponding property in the bid is
 	 * updated to guaranty the bidirectional relation. Note that this is the only
 	 * way to add a bid. Trying to add a bid in the list returned by getBids() is
@@ -436,7 +436,7 @@ public class Item implements Serializable
 
 	/**
 	 * Remove a bid from the item.
-	 * <p></p>
+	 * <p>
 	 * A bid is removed from the item and his corresponding property in the bid is
 	 * updated to guaranty the bidirectional relation. Note that this is the only
 	 * way to remove a bid. Trying to remove a bid in the list returned by
