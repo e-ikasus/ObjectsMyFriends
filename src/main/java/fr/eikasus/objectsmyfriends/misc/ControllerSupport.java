@@ -23,28 +23,24 @@ import java.util.List;
 
 /**
  * Class used to simplify handling HTML form.
- * <p></p>
+ * <p>
  * This class is used to minimize code repetition for managing HTML form and
  * then simplify the controllers code. For exemple, this class give access to
  * method for simplify error handling in forms.
  *
  * @see #addUploadedImagesToItem(ManagerFactory, HttpServletRequest, Item, List)
- * addUploadedImagesToItem()
- * @see #loadImage(HttpServletRequest, String) loadImage()
- * @see #getUrlImage(HttpServletRequest, String) getUrlImage()
- * @see #getUrlImageHandler(HttpServletRequest) getUrlImageHandler()
- * @see #getUrlServlet(HttpServletRequest, String) getUrlServlet()
- * @see #parseDateParameter(HttpServletRequest, String) parseDateParameter()
+ * @see #loadImage(HttpServletRequest, String)
+ * @see #getUrlImage(HttpServletRequest, String)
+ * @see #getUrlImageHandler(HttpServletRequest)
+ * @see #getUrlServlet(HttpServletRequest, String)
+ * @see #parseDateParameter(HttpServletRequest, String)
  * @see #parseIntegerParameter(HttpServletRequest, String)
- * parseIntegerParameter()
- * @see #parseLongParameter(HttpServletRequest, String) parseLongParameter()
- * @see #saveForm(HttpServletRequest, HashMap) saveForm()
+ * @see #parseLongParameter(HttpServletRequest, String)
+ * @see #saveForm(HttpServletRequest, HashMap)
  * @see #putFormError(ModelException, HttpServletRequest, HashMap)
- * putFormError()
  * @see #putFormError(ControllerException, HttpServletRequest, HashMap)
- * putFormError()
- * @see #getUserFromSession(ManagerFactory, HttpServletRequest) getUserFromSession()
- * @see #getItemFromSession(ManagerFactory, HttpServletRequest) getItemFromSession()
+ * @see #getUserFromSession(ManagerFactory, HttpServletRequest)
+ * @see #getItemFromSession(ManagerFactory, HttpServletRequest)
  */
 
 public class ControllerSupport
@@ -82,7 +78,7 @@ public class ControllerSupport
 
 	/**
 	 * Add images to the item.
-	 * <p></p>
+	 * <p>
 	 * This method add the supplied images to the item. The images list only
 	 * contain file names and those files should be present in the local storage.
 	 * When each image is successfully added to the item, its corresponding image
@@ -92,6 +88,7 @@ public class ControllerSupport
 	 * are deleted. If something goes wrong during the process, no error is
 	 * returned.
 	 *
+	 * @param managerFactory Instance of the manager factory to use.
 	 * @param request        Request used to get context.
 	 * @param item           Item to add image to.
 	 * @param uploadedImages Images to add to the item.
@@ -170,7 +167,7 @@ public class ControllerSupport
 
 	/**
 	 * Retrieve an image.
-	 * <p></p>
+	 * <p>
 	 * This method retrieve an image sent via the multipart/form-data request and
 	 * store it in the location returned by the {@code getImagePath} method. Only
 	 * jpg and png file formats are allowed.
@@ -230,7 +227,7 @@ public class ControllerSupport
 
 	/**
 	 * Compute the url of an image.
-	 * <p></p>
+	 * <p>
 	 * This method is used to create the url used to access the image from the
 	 * client. Because the image entities only store the image filename and the
 	 * place where those images are stored is not hardcoded, this function should
@@ -253,7 +250,7 @@ public class ControllerSupport
 
 	/**
 	 * Compute the url of the image handler.
-	 * <p></p>
+	 * <p>
 	 * This method is used to create the url used to access the image handler from
 	 * the client. This is the address from which the client retrieves images item
 	 * and to which images are uploaded.
@@ -274,11 +271,12 @@ public class ControllerSupport
 
 	/**
 	 * Compute the url of a servlet.
-	 * <p></p>
+	 * <p>
 	 * This method is used to create the url needed to access a servlet from the
 	 * client. The name of this servlet is supplied in parameter.
 	 *
-	 * @param request Request needed to retrieve context.
+	 * @param request     Request needed to retrieve context.
+	 * @param servletName Servlet name.
 	 *
 	 * @return Url to the servlet.
 	 */
@@ -294,7 +292,7 @@ public class ControllerSupport
 
 	/**
 	 * Get a date parameter.
-	 * <p></p>
+	 * <p>
 	 * This method take a parameter from an HttpServletRequest request. This
 	 * parameter is expected to be a date inside a String. If the content of that
 	 * string doesn't conform to a date, no exception is generated but a null
@@ -323,7 +321,7 @@ public class ControllerSupport
 
 	/**
 	 * Get an integer parameter.
-	 * <p></p>
+	 * <p>
 	 * This method take a parameter from an HttpServletRequest request. This
 	 * parameter is expected to be an integer inside a String. If the content of
 	 * that string doesn't conform to an integer, no exception is generated but a
@@ -349,7 +347,7 @@ public class ControllerSupport
 
 	/**
 	 * Get a long parameter.
-	 * <p></p>
+	 * <p>
 	 * This method take a parameter from an HttpServletRequest request. This
 	 * parameter is expected to be a long inside a String. If the content of that
 	 * string doesn't conform to a long, no exception is generated but a zero
@@ -455,14 +453,15 @@ public class ControllerSupport
 
 	/**
 	 * Read the user stored in the session.
-	 * <p></p>
+	 * <p>
 	 * This method read the user that is stored in a session attribute. Because
 	 * the hibernate session was closed after the user was saved in a previous
 	 * http request, it is necessary to read it again from the database, because
 	 * it is not in the persistence context anymore. No exception is generated and
-	 * null is returned if none if found or in case of problem.
+	 * null is returned if none is found or in case of problem.
 	 *
-	 * @param request Request to deal with.
+	 * @param managerFactory Instance of the manager factpry to use.
+	 * @param request        Request to deal with.
 	 *
 	 * @return User found and present in the persistence context or null if none.
 	 */
@@ -497,14 +496,15 @@ public class ControllerSupport
 
 	/**
 	 * Read the item stored in the session.
-	 * <p></p>
+	 * <p>
 	 * This method read the item that is stored in a session attribute. Because
 	 * the hibernate session was closed after the item was saved in a previous
 	 * http request, it is necessary to read it again from the database, because
 	 * it is not in the persistence context anymore. No exception is generated and
-	 * null is returned if none if found or in case of problem.
+	 * null is returned if none is found or in case of problem.
 	 *
-	 * @param request Request to deal with.
+	 * @param managerFactory Instance of the manager factpry to use.
+	 * @param request        Request to deal with.
 	 *
 	 * @return Item found and present in the persistence context or null if none.
 	 */
@@ -543,7 +543,7 @@ public class ControllerSupport
 
 	/**
 	 * Put a UI field as invalid.
-	 * <p></p>
+	 * <p>
 	 * This method remove an attribute from the request which lead to emptying his
 	 * corresponding field in an HTML form. AT the same time, it put an error
 	 * message into the corresponding error field. If the property is null, this
@@ -571,7 +571,7 @@ public class ControllerSupport
 
 	/**
 	 * Determine the item image folder.
-	 * <p></p>
+	 * <p>
 	 * This method return the folder where the uploaded images will be stored.
 	 * This location is determined by the "item_images_folder" parameter from the
 	 * "web.xml" file. If it is not defined, then the default location point to a

@@ -32,7 +32,7 @@ public class LogInServlet extends HttpServlet
 
 	/**
 	 * Display the login form.
-	 * <p></p>
+	 * <p>
 	 * This method display the login form. No parameter is required to do this
 	 * operation. The state of the "Remember me" button is updated in the JSP
 	 * according to the presence of the appropriate cookie. Due to the filter
@@ -47,7 +47,7 @@ public class LogInServlet extends HttpServlet
 
 	/**
 	 * Log in a user.
-	 * <p></p>
+	 * <p>
 	 * This method try to connect a user whose login information are supplied in
 	 * parameter. If this user is found in the database, its instance is saved in
 	 * the session, otherwise the form is displayed again by calling the doGet

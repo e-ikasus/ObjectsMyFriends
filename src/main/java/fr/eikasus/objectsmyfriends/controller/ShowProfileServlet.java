@@ -20,7 +20,7 @@ public class ShowProfileServlet extends HttpServlet
 
 	/**
 	 * Show user profile.
-	 * <p></p>
+	 * <p>
 	 * This method is used to display a user profile. If an identifier is supplied
 	 * to the request, then the profile of the user whose identifier match is
 	 * displayed. If none is supplied, then this is the current user profile which
@@ -70,7 +70,7 @@ public class ShowProfileServlet extends HttpServlet
 
 	/**
 	 * Handle actions from the user.
-	 * <p></p>
+	 * <p>
 	 * This method is used to handle actions like "return" and "modify" from the
 	 * show profile form. A user can only modify his profile, that is when it is
 	 * log in and the identifier supplied with the request is whose of the user or

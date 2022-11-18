@@ -34,7 +34,7 @@ public class SubscribeServlet extends HttpServlet
 
 	/**
 	 * Initialise the servlet.
-	 * <p></p>
+	 * <p>
 	 * This method does initialisation stuff for the controller handling the
 	 * subscription form. It fills the formParameters property of links between
 	 * error codes and fields in the form that references user data and the HTML
@@ -61,7 +61,7 @@ public class SubscribeServlet extends HttpServlet
 
 	/**
 	 * Display the subscription form.
-	 * <p></p>
+	 * <p>
 	 * This method display the subscription form. There is no parameter needed to
 	 * do that. Due to the filter servlet, this method can't be called when a user
 	 * is already connected.
@@ -75,7 +75,7 @@ public class SubscribeServlet extends HttpServlet
 
 	/**
 	 * Subscribe a user.
-	 * <p></p>
+	 * <p>
 	 * According to the parameters supplied, this method try to add a user in the
 	 * database. If the operation succeed, the user is automatically login and
 	 * redirected to the welcome page. If an error occurred during the process,

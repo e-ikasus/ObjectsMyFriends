@@ -8,7 +8,6 @@ public enum ControllerError
 
 	PASSWORD_DOESNT_MATCH(0x10410);
 
-
 	private final int value;
 
 	ControllerError(int value) {this.value = value;}

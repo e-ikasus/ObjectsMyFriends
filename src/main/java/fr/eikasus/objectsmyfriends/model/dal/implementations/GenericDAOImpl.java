@@ -132,6 +132,8 @@ public abstract class GenericDAOImpl<T, U>
 	 * This method is used to retrieve an entity form the database whose
 	 * identifier is supplied in parameter.
 	 *
+	 * @param identifier Identifier of the entity to find.
+	 *
 	 * @return Asked entity.
 	 *
 	 * @throws ModelException In case of problem.
@@ -283,9 +285,11 @@ public abstract class GenericDAOImpl<T, U>
 	 * database. The action represent the code that will be executed inside a
 	 * transaction or not. This method is used to avoid redondance in code.
 	 *
-	 * @param errorCode Error returned with the ModelException object in case of
-	 *                  problem.
-	 * @param action    Action to realize.
+	 * @param transaction Whether to use a transaction to perform the desired
+	 *                    action.
+	 * @param errorCode   Error returned with the ModelException object in case of
+	 *                    problem.
+	 * @param action      Action to realize.
 	 *
 	 * @throws ModelException In case of problem, contain the error code supplied
 	 *                        in parameter.
@@ -383,9 +387,11 @@ public abstract class GenericDAOImpl<T, U>
 	 * database. The action represent the code that will be executed inside a
 	 * transaction or not. This method is used to avoid redondance in code.
 	 *
-	 * @param errorCode Error returned with the ModelException object in case of
-	 *                  problem.
-	 * @param action    Action to realize.
+	 * @param transaction Whether to use a transaction to perform the desired
+	 *                    action.
+	 * @param errorCode   Error returned with the ModelException object in case of
+	 *                    problem.
+	 * @param action      Action to realize.
 	 *
 	 * @return Result of the operation, depending on the action performed.
 	 *

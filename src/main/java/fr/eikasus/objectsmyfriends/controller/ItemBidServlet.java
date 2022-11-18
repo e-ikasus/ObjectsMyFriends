@@ -36,7 +36,7 @@ public class ItemBidServlet extends HttpServlet
 
 	/**
 	 * Initialise the servlet.
-	 * <p></p>
+	 * <p>
 	 * This method does initialisation stuff for the controller handling the bid
 	 * form. It fills the formParameters property of links between error codes and
 	 * fields in the form that references user data and HTML elements containing
@@ -53,7 +53,7 @@ public class ItemBidServlet extends HttpServlet
 
 	/**
 	 * Display the bid form.
-	 * <p></p>
+	 * <p>
 	 * This method is used to display the item bid form to allow the current user
 	 * to make an offer on the item which identifier is supplied in attribute. The
 	 * method also compute the initial price of the possible offer. If there is no
@@ -106,7 +106,7 @@ public class ItemBidServlet extends HttpServlet
 
 	/**
 	 * Handle the bid form to register a bid.
-	 * <p></p>
+	 * <p>
 	 * This method is called when tue user press the make offer button. his offer
 	 * is the only parameter retrieved for the request. If there is an error in
 	 * the bid process, the form is displayed again showing the cause of the

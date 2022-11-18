@@ -44,7 +44,7 @@ public class ItemSellServlet extends HttpServlet
 
 	/**
 	 * Initialise the servlet.
-	 * <p></p>
+	 * <p>
 	 * This method does initialisation stuff for the controller handling the item
 	 * sell form. It fills the formParameters property of links between error
 	 * codes and fields in the form that references user data and HTML elements
@@ -71,7 +71,7 @@ public class ItemSellServlet extends HttpServlet
 
 	/**
 	 * Display the creation/update item form.
-	 * <p></p>
+	 * <p>
 	 * When called without parameter, This method display the form for the user to
 	 * create an item. In that case, all fields are empty except the pickup place
 	 * which contains the address of the curent user. When a parameter is supplied
@@ -152,7 +152,7 @@ public class ItemSellServlet extends HttpServlet
 
 	/**
 	 * Update or create an item.
-	 * <p></p>
+	 * <p>
 	 * This method is called when the user presses the save button of the HTML
 	 * form. All form parameters are then retrieved from the request. If an item
 	 * already exists in the user session, then it is updated with the parameters

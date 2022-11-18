@@ -374,6 +374,8 @@ public class Item implements Serializable
 	 * getImages() is not possible as this list is read only.
 	 *
 	 * @param image Image to add.
+	 *
+	 * @return Instance of the item for setters chaining.
 	 */
 
 	public Item addImage(Image image)
@@ -397,6 +399,8 @@ public class Item implements Serializable
 	 * returned by getImages() is not possible as this list is read only.
 	 *
 	 * @param image Image to remove.
+	 *
+	 * @return Instance of the item for setters chaining.
 	 */
 
 	public Item removeImage(Image image)
@@ -420,6 +424,8 @@ public class Item implements Serializable
 	 * not possible as this list is read only.
 	 *
 	 * @param bid Bid to add.
+	 *
+	 * @return Instance of the item for setters chaining.
 	 */
 
 	public Item addBid(Bid bid)
@@ -443,6 +449,8 @@ public class Item implements Serializable
 	 * getBids() is not possible as this list is read only.
 	 *
 	 * @param bid Bid to remove.
+	 *
+	 * @return Instance of the item for setters chaining.
 	 */
 
 	public Item removeBid(Bid bid)

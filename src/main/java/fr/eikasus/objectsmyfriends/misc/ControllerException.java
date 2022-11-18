@@ -157,6 +157,8 @@ public class ControllerException extends Exception
 	/**
 	 * Convert an error code to a localised string.
 	 *
+	 * @param code Error code to deal with.
+	 *
 	 * @return Error message corresponding to the supplied error code.
 	 */
 
@@ -171,7 +173,7 @@ public class ControllerException extends Exception
 
 	/**
 	 * Get the error messages.
-	 * <p></p>
+	 * <p>
 	 * Get all the error messages containing in the exception.
 	 *
 	 * @return Error messages

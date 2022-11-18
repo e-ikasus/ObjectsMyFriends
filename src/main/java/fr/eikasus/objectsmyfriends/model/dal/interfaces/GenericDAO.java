@@ -62,6 +62,8 @@ public interface GenericDAO<T, U>
 	 * This method is used to retrieve an entity form the database whose
 	 * identifier is supplied in parameter.
 	 *
+	 * @param identifier Identifier of the entity to find.
+	 *
 	 * @return Asked entity.
 	 *
 	 * @throws ModelException In case of problem.

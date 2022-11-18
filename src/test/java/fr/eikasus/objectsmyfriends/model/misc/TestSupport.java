@@ -20,20 +20,20 @@ import static org.junit.jupiter.api.Assertions.*;
  * application. It contains method that create data to save into the database
  * for this purpose. Data created can't be used to test application running.
  *
- * @see #createCategoryList() createCategoryList()
- * @see #createPickupPlaceList(List) createPickupPlaceList()
- * @see #createImageList(List) createImageList()
- * @see #createBidList(List, List) createBidList()
- * @see #createUserList() createUserList()
- * @see #createItemList(List, List) createItemList()
- * @see #enterFunction() enterFunction()
- * @see #action(String) action()
- * @see #populateDatabase(DAOFactory) populateDatabase()
- * @see #clearDatabase(DAOFactory) clearDatabase()
- * @see #executeAndCompare(String, List, ResultList) executeAndCompare()
- * @see #daysAfter(Date, int) daysAfter()
- * @see #daysBefore(Date, int) daysBefore()
- * @see #searchItem(ManagerFactory, UserRole, String, String, Search) searchIem()
+ * @see #createCategoryList()
+ * @see #createPickupPlaceList(List)
+ * @see #createImageList(List)
+ * @see #createBidList(List, List)
+ * @see #createUserList()
+ * @see #createItemList(List, List)
+ * @see #enterFunction()
+ * @see #action(String)
+ * @see #populateDatabase(DAOFactory)
+ * @see #clearDatabase(DAOFactory)
+ * @see #executeAndCompare(String, List, ResultList)
+ * @see #daysAfter(Date, int)
+ * @see #daysBefore(Date, int)
+ * @see #searchItem(ManagerFactory, UserRole, String, String, Search)
  * @see #displayTable(List, List)
  */
 
@@ -76,7 +76,7 @@ public class TestSupport<T>
 
 	/**
 	 * Constructor of the class.
-	 * <p></p>
+	 * <p>
 	 * After object instanced, default items are generated to be used later for
 	 * appropriate methods of the class.
 	 */
@@ -137,7 +137,7 @@ public class TestSupport<T>
 
 	/**
 	 * Create a list of pickup places.
-	 * <p></p>
+	 * <p>
 	 * Create a predefined list of pickup places used for debug purpose. Because a
 	 * pickup place belongs to an item, a list of items need to be supplied in
 	 * parameters.
@@ -170,7 +170,7 @@ public class TestSupport<T>
 
 	/**
 	 * Create a list of images.
-	 * <p></p>
+	 * <p>
 	 * Create a predefined list of images used for debug purpose. Because an image
 	 * belongs to an item, a list of items need to be supplied in parameters.
 	 *
@@ -201,7 +201,7 @@ public class TestSupport<T>
 
 	/**
 	 * Create a list of bids.
-	 * <p></p>
+	 * <p>
 	 * Create a predefined list of bids used for debug purpose. Because a bid
 	 * belongs to an item owned by someone and made by someone, a list of items
 	 * and user need to be supplied in parameters.
@@ -253,7 +253,7 @@ public class TestSupport<T>
 
 	/**
 	 * Create a list of users.
-	 * <p></p>
+	 * <p>
 	 * Create a predefined list of users used for debug purpose.
 	 *
 	 * @return List of users.
@@ -284,7 +284,7 @@ public class TestSupport<T>
 
 	/**
 	 * Create a list of items.
-	 * <p></p>
+	 * <p>
 	 * Create a predefined list of items used for debug purpose. Because an item
 	 * should belong to a buyer and is contained in a category, this information
 	 * need to be supplied in parameters.
@@ -457,7 +457,7 @@ public class TestSupport<T>
 
 	/**
 	 * Fill the database.
-	 * <p></p>
+	 * <p>
 	 * This method fill the database with data. It will add categories, user,
 	 * items, images, bids and pickup places. All data are in good associated.
 	 * See {@code clearDatabase()} to clear the database.
@@ -490,7 +490,7 @@ public class TestSupport<T>
 
 	/**
 	 * Clear the database.
-	 * <p></p>
+	 * <p>
 	 * This method will remove all data in the database with the respect of all
 	 * associations, which means images, bids and pickup places will be removed
 	 * before items, and items before users and categories. See
@@ -527,8 +527,9 @@ public class TestSupport<T>
 	/**
 	 * Display an action message and execute the supplied function.
 	 *
-	 * @param message Message to display
-	 * @param action Function to execute
+	 * @param attended List of attended objects after operation.
+	 * @param message  Message to display
+	 * @param action   Function to execute
 	 */
 
 	public void executeAndCompare(String message, @NotNull List<T> attended, @NotNull ResultList<T> action)
@@ -551,7 +552,7 @@ public class TestSupport<T>
 
 	/**
 	 * Compute a date that is days after.
-	 * <p></p>
+	 * <p>
 	 * This method compute a date that is {@code Nbr} days after the supplied
 	 * date. If this date is null, then the current date is used.
 	 *
@@ -580,7 +581,7 @@ public class TestSupport<T>
 
 	/**
 	 * Compute a date that is days before.
-	 * <p></p>
+	 * <p>
 	 * This method compute a date that is {@code Nbr} days before the supplied
 	 * date. If this date is null, then the current date is used.
 	 *
@@ -609,16 +610,17 @@ public class TestSupport<T>
 
 	/**
 	 * Search items related to a user.
-	 * <p></p>
+	 * <p>
 	 * This method search items owen by u user according to criteria supplied in
 	 * parameter. The result is a HashMap containing in the form of key/value
 	 * pairs the result, one for the user found name "user", and the other for the
 	 * items named "items".
 	 *
-	 * @param role     User role (seller or buyer).
-	 * @param name     User name.
-	 * @param password User password.
-	 * @param criteria Search criteria.
+	 * @param managerFactory Instance of the manager factory to use.
+	 * @param role           User role (seller or buyer).
+	 * @param name           User name.
+	 * @param password       User password.
+	 * @param criteria       Search criteria.
 	 *
 	 * @return Found user and items.
 	 */
