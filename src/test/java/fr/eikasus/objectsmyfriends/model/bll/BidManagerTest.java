@@ -115,13 +115,23 @@ public class BidManagerTest
 
 		doBid(buyer1, items.get(0), 200, false);
 
+		testSupport.waitFor(500);
+
 		doBid(buyer1, items.get(0), 500, true);
+
+		testSupport.waitFor(500);
 
 		doBid(buyer1, items.get(0), 600, false);
 
+		testSupport.waitFor(500);
+
 		doBid(buyer2, items.get(0), 600, true);
 
+		testSupport.waitFor(500);
+
 		doBid(buyer2, items.get(1), 700, false);
+
+		testSupport.waitFor(500);
 
 		doBid(buyer1, items.get(0), 900, true);
 
@@ -166,8 +176,7 @@ public class BidManagerTest
 				(attended) ? ("") : ("n't")));
 
 			// If a bid is defined, display the actual winner.
-			if (maxBid != null)
-				sb.append(String.format(" currently owned by %s", maxBid.getUser().getUsername()));
+			if (maxBid != null) sb.append(String.format(" currently owned by %s", maxBid.getUser().getUsername()));
 
 			// Retrieve the "old" state information.
 			beforeBid = user.getCredit();

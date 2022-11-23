@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see #daysBefore(Date, int)
  * @see #searchItem(ManagerFactory, UserRole, String, String, Search)
  * @see #displayTable(List, List)
+ * @see #waitFor(long)
  */
 
 public class TestSupport<T>
@@ -729,5 +730,31 @@ public class TestSupport<T>
 
 		// Display the last table line.
 		System.out.printf("%s\n\n", separation);
+	}
+
+	/**
+	 * Wait for a certain among of time.
+	 * <p>
+	 * This method waits for the specified among of time expressed in milliseconds.
+	 * During this time, interrupts that can occur are handled. So, the method can
+	 * wait a little more time than expected, but not less.
+	 *
+	 * @param ms Time to wait in milliseconds
+	 */
+
+	public void waitFor(long ms)
+	{
+		// Wait for the asked time and handle interrupts that can occur.
+		for (long start = System.currentTimeMillis(); ms > 0; ms -= (System.currentTimeMillis() - start))
+		{
+			try
+			{
+				Thread.sleep(ms);
+			}
+			catch (InterruptedException ie)
+			{
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 }
