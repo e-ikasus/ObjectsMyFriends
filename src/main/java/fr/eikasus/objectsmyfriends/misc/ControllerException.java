@@ -1,5 +1,7 @@
 package fr.eikasus.objectsmyfriends.misc;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -11,7 +13,7 @@ public class ControllerException extends Exception
 	/* ************* */
 
 	// List of error codes.
-	private List<ControllerError> errorCodes;
+	private final List<ControllerError> errorCodes;
 
 	// Resource containing localized error messages.
 	private static final ResourceBundle resourceBundle;
@@ -162,7 +164,7 @@ public class ControllerException extends Exception
 	 * @return Error message corresponding to the supplied error code.
 	 */
 
-	static public String getMessageFromCode(ControllerError code)
+	static public String getMessageFromCode(@NotNull ControllerError code)
 	{
 		String key;
 
@@ -179,6 +181,7 @@ public class ControllerException extends Exception
 	 * @return Error messages
 	 */
 
+	@SuppressWarnings(value="StringBufferMayBeStringBuilder")
 	@Override public String getMessage()
 	{
 		StringBuffer sb = new StringBuffer();

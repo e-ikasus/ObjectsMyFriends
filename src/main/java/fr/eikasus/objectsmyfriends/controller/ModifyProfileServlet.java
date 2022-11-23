@@ -154,7 +154,7 @@ public class ModifyProfileServlet extends HttpServlet
 				ControllerSupport.saveForm(request, formParameters);
 
 				// Put the error in the form.
-				ControllerSupport.putFormError((ModelException) exc, request, formParameters);
+				ControllerSupport.putFormError(exc, request, formParameters);
 
 				// Return to the profile update page and display errors.
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/modifyProfile.jsp");

@@ -24,6 +24,7 @@ public class WelcomeServlet extends HttpServlet
 {
 	@Inject ManagerFactory managerFactory;
 
+	@SuppressWarnings("unchecked")
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		HashMap<String, String> savedParams = new HashMap<>();

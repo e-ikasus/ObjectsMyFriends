@@ -19,7 +19,7 @@ public class ModelException extends Exception
 	/* ************* */
 
 	// List of error codes.
-	private List<ModelError> errorCodes;
+	private final List<ModelError> errorCodes;
 
 	// Resource containing localized error messages.
 	private static final ResourceBundle resourceBundle;
@@ -187,6 +187,7 @@ public class ModelException extends Exception
 	 * @return Error messages
 	 */
 
+	@SuppressWarnings("StringBufferMayBeStringBuilder")
 	@Override public String getMessage()
 	{
 		StringBuffer sb = new StringBuffer();

@@ -97,6 +97,7 @@ public class BidManagerTest
 	/* Tester methods */
 	/* ************** */
 
+	@SuppressWarnings("unchecked")
 	@Test void all()
 	{
 		testSupport.enterFunction();

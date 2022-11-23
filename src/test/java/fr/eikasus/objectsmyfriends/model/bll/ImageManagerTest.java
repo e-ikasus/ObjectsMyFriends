@@ -2,7 +2,6 @@ package fr.eikasus.objectsmyfriends.model.bll;
 
 import fr.eikasus.objectsmyfriends.model.bll.interfaces.ImageManager;
 import fr.eikasus.objectsmyfriends.model.bo.Bid;
-import fr.eikasus.objectsmyfriends.model.bo.Image;
 import fr.eikasus.objectsmyfriends.model.bo.Item;
 import fr.eikasus.objectsmyfriends.model.dal.DAOFactory;
 import fr.eikasus.objectsmyfriends.model.misc.Search;
@@ -88,6 +87,7 @@ public class ImageManagerTest
 	/* Tester methods */
 	/* ************** */
 
+	@SuppressWarnings("unchecked")
 	@Test void all()
 	{
 		testSupport.enterFunction();

@@ -22,6 +22,7 @@ public class ImageServlet extends HttpServlet
 	@Inject
 	ManagerFactory managerFactory;
 
+	@SuppressWarnings("unchecked")
 	@Override protected void doGet(@NotNull HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		try
@@ -77,6 +78,7 @@ public class ImageServlet extends HttpServlet
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override protected void doPost(HttpServletRequest request, @NotNull HttpServletResponse response) throws IOException
 	{
 		response.setContentType("text/html;charset=UTF-8");

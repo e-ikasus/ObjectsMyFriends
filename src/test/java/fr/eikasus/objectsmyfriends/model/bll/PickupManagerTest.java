@@ -129,6 +129,7 @@ public class PickupManagerTest
 	 * @param criteria Search criteria
 	 */
 
+	@SuppressWarnings("SameParameterValue")
 	private void searchIem(String name, String password, Search criteria)
 	{
 		testSupport.action(String.format("Searching for a particular item owned by %s", name));

@@ -192,6 +192,7 @@ class ItemManagerTest
 	 * @param action   Action performed.
 	 */
 
+	@SuppressWarnings("cast")
 	private void addItem(@NotNull String property, Object value, String action)
 	{
 		testSupport.action(String.format("Trying to add item with %s", action));
@@ -242,6 +243,7 @@ class ItemManagerTest
 	 * @param criteria Search criteria
 	 */
 
+	@SuppressWarnings({"unchecked", "SameParameterValue"})
 	private void searchIem(String name, String password, Search criteria)
 	{
 		// Search for seller and its items.

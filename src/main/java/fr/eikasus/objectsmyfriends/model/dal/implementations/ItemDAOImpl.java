@@ -183,6 +183,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * @return Query used to process the request.
 	 */
 
+	@SuppressWarnings({"StringBufferMayBeStringBuilder", "unchecked"})
 	private @Nullable TypedQuery<Item> createJPQLForSeller(String clauseStart, @NotNull User user, @NotNull Search search, Category category, String keywords)
 	{
 		StringBuffer request = new StringBuffer();
@@ -201,7 +202,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 		if (search.isMyEndedSales()) nbrCriteria++;
 		if (search.isMyCanceledSales()) nbrCriteria++;
 
-		// Put the parameter place in the rquest.
+		// Put the parameter place in the request.
 		for (int i = 0; i < nbrCriteria; i++)
 		{
 			// If this statement is not the first.
@@ -247,7 +248,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 
 		// If items canceled need to be retrieved.
 		if (search.isMyCanceledSales())
-			query.setParameter(String.format("c%d", nbrCriteria++), ItemState.CA);
+			query.setParameter(String.format("c%d", nbrCriteria), ItemState.CA);
 
 		// Return the found items.
 		return (TypedQuery<Item>) query;
@@ -269,6 +270,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * @return Query used to process the request.
 	 */
 
+	@SuppressWarnings("StringBufferMayBeStringBuilder")
 	private @Nullable TypedQuery<Item> createJPQLForBuyer(String clauseStart, User user, @NotNull Search search, Category category, String keywords)
 	{
 		StringBuffer request = new StringBuffer();
@@ -348,6 +350,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * @return String to add to the database request.
 	 */
 
+	@SuppressWarnings("StringBufferMayBeStringBuilder")
 	private @NotNull String addKeywords(@NotNull String keywords)
 	{
 		StringBuffer sb = new StringBuffer();

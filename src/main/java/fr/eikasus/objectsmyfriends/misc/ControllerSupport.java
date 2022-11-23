@@ -94,6 +94,7 @@ public class ControllerSupport
 	 * @param uploadedImages Images to add to the item.
 	 */
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void addUploadedImagesToItem(@NotNull ManagerFactory managerFactory, @NotNull HttpServletRequest request, @NotNull Item item, List<String> uploadedImages)
 	{
 		ImageManager imageManager = managerFactory.getImageManager();

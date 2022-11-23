@@ -104,7 +104,7 @@ public class TestSupport<T>
 		defaultItems.add(new SmallItem("Disque dur SSD", "Disque dur SSD interne SAMSUNG 870 EVO 500Go", 0, 50, 3, "ssd_samsung.jpg"));
 		defaultItems.add(new SmallItem("RAM Crucial DDR3", "RAM Crucial 8GB DDR3L 1600 1.35v CT102464BF160B Laptop neuve", 0, 30, 4, "ram_crucial.jpg"));
 		defaultItems.add(new SmallItem("Call of duty modern warfare 2", "Vends Call of duty modern warfare 2 ps5. Le jeu est comme neuf", 2, 54, 1, "call_of_duty.jpg"));
-		defaultItems.add(new SmallItem("Final Fantasy Vii 7 Ps1", "Final Fantasy Vii 7 Ps1.Complet, bon etat, version francaise", 2, 40, 4, "ff7_ps1.jpg"));
+		defaultItems.add(new SmallItem("Final Fantasy Vii 7 Ps1", "Final Fantasy Vii 7 Ps1.Complet, bon état, version française", 2, 40, 4, "ff7_ps1.jpg"));
 		defaultItems.add(new SmallItem("The Elder Scrolls V: Skyrim", "The Elder Scrolls V: Skyrim VR (Sony PlayStation 4, 2017)", 2, 10, 2, "skyrim.jpg"));
 		defaultItems.add(new SmallItem("Station de soudage", "Station de soudage,JBC CD-2BQF numérique 130 W 90 - 450 °C", 1, 500, 1, "station_soudage_jbc.jpg"));
 		defaultItems.add(new SmallItem("METRIX AX 322", "Alimentation de laboratoire réglable 2 x 30V 2 x 2.5A", 1, 150, 3, "ax322.jpg"));
@@ -433,7 +433,7 @@ public class TestSupport<T>
 		stringBuilder.append(" *");
 
 		System.out.printf("\n%s\n", separation);
-		System.out.printf("%s\n", stringBuilder.toString());
+		System.out.printf("%s\n", stringBuilder);
 		System.out.printf("%s\n\n", separation);
 	}
 
@@ -452,7 +452,7 @@ public class TestSupport<T>
 
 		// Display the action.
 		System.out.printf("\n%s\n", message);
-		System.out.printf("%s\n\n", sb.toString());
+		System.out.printf("%s\n\n", sb);
 	}
 
 	/**
@@ -683,7 +683,7 @@ public class TestSupport<T>
 		while (tableWidth-- != 0) separation.append("-");
 
 		// Display the first table line.
-		System.out.printf("\n%s\n", separation.toString());
+		System.out.printf("\n%s\n", separation);
 
 		// Create a StringBuilder for the table header.
 		tableLine = new StringBuilder();
@@ -699,10 +699,10 @@ public class TestSupport<T>
 		}
 
 		// Finish the line and display it.
-		System.out.println(tableLine.append("|").toString());
+		System.out.println(tableLine.append("|"));
 
 		// Display a separation between, header and body.
-		System.out.printf("%s\n", separation.toString());
+		System.out.printf("%s\n", separation);
 
 		// Display each line of the table.
 		for (List<String> line : lines)
@@ -724,10 +724,10 @@ public class TestSupport<T>
 			}
 
 			// Finish the line and display it.
-			System.out.println(tableLine.append("|").toString());
+			System.out.println(tableLine.append("|"));
 		}
 
 		// Display the last table line.
-		System.out.printf("%s\n\n", separation.toString());
+		System.out.printf("%s\n\n", separation);
 	}
 }

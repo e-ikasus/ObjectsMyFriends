@@ -169,6 +169,7 @@ public class ItemSellServlet extends HttpServlet
 	 * the form.
 	 */
 
+	@SuppressWarnings("unchecked")
 	@Override protected void doPost(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		request.setCharacterEncoding("UTF-8");
