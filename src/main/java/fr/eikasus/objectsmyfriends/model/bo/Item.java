@@ -14,6 +14,18 @@ import java.util.Objects;
  * Class representing an item being sold.
  */
 
+@NamedStoredProcedureQuery(
+	name = "CheckItems",
+	procedureName = "check_items",
+	parameters = {
+		@StoredProcedureParameter(name = "asked_item", type = long.class, mode = ParameterMode.IN),
+		@StoredProcedureParameter(name = "trace", type = boolean.class, mode = ParameterMode.IN),
+		@StoredProcedureParameter(name = "simulate", type = boolean.class, mode = ParameterMode.IN),
+		@StoredProcedureParameter(name = "append", type = boolean.class, mode = ParameterMode.IN),
+		@StoredProcedureParameter(name = "result", type = boolean.class, mode = ParameterMode.OUT)
+	}
+)
+
 @Entity(name="Item") @Table(name = "items")
 public class Item implements Serializable
 {

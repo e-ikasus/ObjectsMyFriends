@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -107,9 +106,18 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 		List<Item> result;
 		TypedQuery<Item> query;
 
+		// Create the call of the check procedure.
+		StoredProcedureQuery storedProcedureQuery = entityManager.createNamedStoredProcedureQuery("CheckItems")
+			.setParameter("asked_item", 0L)
+			.setParameter("trace", true)
+			.setParameter("simulate", false)
+			.setParameter("append", true);
+
+		// Scan items to check their state against the current date.
+		storedProcedureQuery.execute();
+
 		// Create the request for searching requested items.
-		if (role == UserRole.BUYER)
-			query = createJPQLForBuyer(JPQL_SELECT10, user, search, category, keywords);
+		if (role == UserRole.BUYER) query = createJPQLForBuyer(JPQL_SELECT10, user, search, category, keywords);
 		else query = createJPQLForSeller(JPQL_SELECT10, user, search, category, keywords);
 
 		// If an error occurred while generating the query.
@@ -153,8 +161,7 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 		Query query;
 
 		// Create the request for searching requested items.
-		if (role == UserRole.BUYER)
-			query = createJPQLForBuyer(JPQL_SELECT11, user, search, category, keywords);
+		if (role == UserRole.BUYER) query = createJPQLForBuyer(JPQL_SELECT11, user, search, category, keywords);
 		else query = createJPQLForSeller(JPQL_SELECT11, user, search, category, keywords);
 
 		// If an error occurred while generating the query.
@@ -175,10 +182,10 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * instead.
 	 *
 	 * @param clauseStart Start of the clause.
-	 * @param user         User for which a search is related to.
-	 * @param search       Search criteria.
-	 * @param category     Category of items searched.
-	 * @param keywords     Keywords for name items
+	 * @param user        User for which a search is related to.
+	 * @param search      Search criteria.
+	 * @param category    Category of items searched.
+	 * @param keywords    Keywords for name items
 	 *
 	 * @return Query used to process the request.
 	 */
@@ -262,10 +269,10 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 	 * instead.
 	 *
 	 * @param clauseStart Start of the clause.
-	 * @param user     User for which a search is related to.
-	 * @param search   Search criteria.
-	 * @param category Category of items searched.
-	 * @param keywords Keywords for name items
+	 * @param user        User for which a search is related to.
+	 * @param search      Search criteria.
+	 * @param category    Category of items searched.
+	 * @param keywords    Keywords for name items
 	 *
 	 * @return Query used to process the request.
 	 */
