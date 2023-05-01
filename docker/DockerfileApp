@@ -1,0 +1,7 @@
+FROM jboss/wildfly:20.0.1.Final
+
+ADD ../target/ObjectsMyFriends-1.0-SNAPSHOT.war /opt/jboss/wildfly/standalone/deployments/
+
+RUN /opt/jboss/wildfly/bin/add-user.sh -m -u admin -p Password1! --silent
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+EXPOSE 9990
