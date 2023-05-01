@@ -257,6 +257,9 @@ public class ItemDAOImpl extends GenericDAOImpl<Item, Long> implements ItemDAO
 		if (search.isMyCanceledSales())
 			query.setParameter(String.format("c%d", nbrCriteria), ItemState.CA);
 
+		// Add the category if required.
+		if (category != null) query.setParameter("p3", category);
+
 		// Return the found items.
 		return (TypedQuery<Item>) query;
 	}
