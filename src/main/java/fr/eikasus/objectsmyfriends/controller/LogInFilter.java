@@ -30,12 +30,12 @@ public class LogInFilter implements Filter
 
 		// Determine the target of the request.
 		boolean resource = (url.lastIndexOf(".jsp") != -1);
-		boolean modifyProfile = url.contains("modify_profile");
-		boolean subscribe = url.contains("subscribe");
-		boolean logout = url.contains("logout");
-		boolean login = url.contains("login");
-		boolean itemSell = url.contains("item_sell");
-		boolean showProfile = url.contains("show_profile");
+		boolean modifyProfile = (url.contains("modify_profile") && resource);
+		boolean subscribe = (url.contains("subscribe") && resource);
+		boolean logout = (url.contains("logout") && resource);
+		boolean login = (url.contains("login") && resource);
+		boolean itemSell = (url.contains("item_sell") && resource);
+		boolean showProfile = (url.contains("show_profile") && resource);
 
 		// Is the target reachable.
 		boolean redirect = (connected && (subscribe || login)) || ((!connected) && (logout || itemSell || showProfile || modifyProfile));
