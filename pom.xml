@@ -84,7 +84,12 @@
             <version>2.0.2.Final</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+	</dependencies>
 
     <build>
         <plugins>
@@ -92,6 +97,33 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <version>7.0.0.Final</version>
+                <configuration>
+                    <feature-pack-location>
+                        wildfly@maven(org.jboss.universe:community-universe)#20.0.1.Final
+                    </feature-pack-location>
+                    <layers>
+                        <layer>base-server</layer>
+                        <layer>datasources</layer>
+                        <layer>cdi</layer>
+                        <layer>jpa</layer>
+                    </layers>
+                    <plugin-options>
+                        <jboss-maven-dist/>
+                    </plugin-options>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
